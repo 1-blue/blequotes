@@ -5,6 +5,9 @@ import { Provider } from "react-redux";
 
 // css
 import "@src/css/tailwind.css";
+import "@src/css/react-slick.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 // store
 import store from "@src/store/configureStore";

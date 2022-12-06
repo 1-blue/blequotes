@@ -1,1 +1,1 @@
-export { fetchUser } from "./user";
+export { fetchMovie } from "./movie";

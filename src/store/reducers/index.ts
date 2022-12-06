@@ -1,13 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 // reducers
-import countReducer from "./countReducer";
-import userReducer from "./userReducer";
+import movieReducer from "./movieReducer";
 
 // root reducer
 const rootReducer = combineReducers({
-  count: countReducer,
-  user: userReducer,
+  movie: movieReducer,
 });
 
 export default rootReducer;

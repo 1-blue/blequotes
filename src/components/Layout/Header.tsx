@@ -34,7 +34,7 @@ const Header = () => {
   return (
     <header
       className={combineClassNames(
-        "fixed inset-0 duration-200",
+        "fixed inset-0 bottom-auto duration-200 z-10",
         isHide ? "-translate-y-full" : "translate-y-0"
       )}
     >

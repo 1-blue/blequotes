@@ -2,19 +2,22 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
 // api
-import { apiFetchUser } from "../apis";
+import { apiFetchMovie } from "../apis";
+
+// type
+import type { FetchMoive } from "../types";
 
 /**
- * >>> 예시
+ * 2022/12/05 - 영화 패치 요청 thunk - by 1-blue
  */
-export const fetchUser = createAsyncThunk(
+export const fetchMovie = createAsyncThunk(
   // 액션 타입 결정
-  "user/fetch",
+  "fetch/movie",
 
   // promise를 반환하는 액션 작성
-  async (id: number, { rejectWithValue }) => {
+  async ({ category, language }: FetchMoive, { rejectWithValue }) => {
     try {
-      const { data } = await apiFetchUser(id);
+      const { data } = await apiFetchMovie({ category, language });
 
       return data;
     } catch (error) {
