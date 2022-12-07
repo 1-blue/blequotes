@@ -29,7 +29,7 @@ const BackgroundImage = ({
       <img src={path} alt={alt} hidden />
       <div className="absolute inset-0 bg-black/20 text-white text-center flex flex-col justify-end">
         <h4 className="my-2 text-2xl font-bold">{title}</h4>
-        <p className="w-[600px] mx-auto mb-8">{description}</p>
+        <p className="max-w-[600px] px-4 mx-auto mb-8">{description}</p>
       </div>
     </figure>
   );

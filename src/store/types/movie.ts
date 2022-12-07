@@ -44,3 +44,15 @@ export type ReceiveMoive = {
   total_results: number;
   results: Movie[];
 };
+
+/**
+ * 2022/12/07 - 영화 검색 송신 타입 - by 1-blue
+ */
+export type SearchMoiveRequest = {
+  title: string;
+  language?: MovieLanguage;
+};
+/**
+ * 2022/12/07 - 영화 검색 수신 타입 - by 1-blue
+ */
+export type SearchMoiveResponse = ReceiveMoive;

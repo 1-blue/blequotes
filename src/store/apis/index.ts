@@ -1,14 +1,14 @@
 import axios from "axios";
 
 /**
- * 2022/12/05 - 영화 관련 axios 인스턴스 ( 기본 URL : https://api.themoviedb.org/3/movie ) - by 1-blue
+ * 2022/12/05 - "movieDB" axios 인스턴스 ( 기본 URL : https://api.themoviedb.org/3 ) - by 1-blue
  */
-const movieInstance = axios.create({
-  baseURL: process.env.REACT_APP_MOVIE_API_URL,
+const movieDBInstance = axios.create({
+  baseURL: process.env.REACT_APP_MOVIE_DB_API_URL,
   withCredentials: false,
   timeout: 10000,
 });
 
-export { movieInstance };
+export { movieDBInstance };
 
-export { apiFetchMovie } from "./movie";
+export { apiFetchMovie, apiSaerchMovie } from "./movie";

@@ -45,7 +45,7 @@ const Header = () => {
         <Link to="/">
           <img src="/logo.png" alt="" className="w-10 h-10" />
         </Link>
-        <Link to="/search">
+        <Link to="/search" state={{ isShow: true }}>
           <Icon shape="search" className="w-6 h-6" />
         </Link>
       </section>
