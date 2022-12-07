@@ -8,6 +8,7 @@ import { getMovieImagePath, throttleHelper } from "@src/utils";
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
+import Spinner from "../Common/Spinner";
 
 const Movie = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,9 @@ const Movie = () => {
     return () => window.removeEventListener("resize", throttleResize);
   }, []);
 
-  if (!popular || !top_rated || !now_playing) return <div>로딩중</div>;
+  // 영화를 패치하는 중이라면
+  if (!popular || !top_rated || !now_playing) return <Spinner />;
+  if (fetchMovieLoading) return <Spinner />;
 
   // 메인 이미지로 사용할 랜덤한 영화 선택
   const index0To2 = Math.floor(Math.random() * 3);
@@ -45,69 +48,63 @@ const Movie = () => {
 
   return (
     <>
-      {fetchMovieLoading ? (
-        <div>로딩중</div>
-      ) : (
-        <>
-          <Image.BackgroundImage
-            className="w-full h-[80vh]"
-            path={randomImage}
-            title={target.results[index0To19].title}
-            description={target.results[index0To19].overview}
-            alt={target.results[index0To19].title + " 포스터 이미지"}
-          />
+      <Image.BackgroundImage
+        className="w-full h-[80vh]"
+        path={randomImage}
+        title={target.results[index0To19].title}
+        description={target.results[index0To19].overview}
+        alt={target.results[index0To19].title + " 포스터 이미지"}
+      />
 
-          <div className="py-6" />
+      <div className="py-6" />
 
-          {/* 인기 */}
-          <section>
-            <h3 className="font-jua text-4xl px-4 pb-2">인기 영화들</h3>
-            <SlickSlider
-              datas={popular.results.map((v) => ({
-                path: getMovieImagePath(
-                  innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-                ),
-                title: v.title,
-                description: v.overview,
-              }))}
-            />
-          </section>
+      {/* 인기 */}
+      <section>
+        <h3 className="font-jua text-4xl px-4 pb-2">인기 영화들</h3>
+        <SlickSlider
+          datas={popular.results.map((v) => ({
+            path: getMovieImagePath(
+              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+            ),
+            title: v.title,
+            description: v.overview,
+          }))}
+        />
+      </section>
 
-          <div className="py-6" />
+      <div className="py-6" />
 
-          {/* 최신 영화들 */}
-          <section>
-            <h3 className="font-jua text-4xl px-4 pb-2">최신 영화들</h3>
-            <SlickSlider
-              datas={now_playing.results.map((v) => ({
-                path: getMovieImagePath(
-                  innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-                ),
-                title: v.title,
-                description: v.overview,
-              }))}
-            />
-          </section>
+      {/* 최신 영화들 */}
+      <section>
+        <h3 className="font-jua text-4xl px-4 pb-2">최신 영화들</h3>
+        <SlickSlider
+          datas={now_playing.results.map((v) => ({
+            path: getMovieImagePath(
+              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+            ),
+            title: v.title,
+            description: v.overview,
+          }))}
+        />
+      </section>
 
-          <div className="py-6" />
+      <div className="py-6" />
 
-          {/* 지속적 인기 */}
-          <section>
-            <h3 className="font-jua text-4xl px-4 pb-2">꾸준한 인기 영화들</h3>
-            <SlickSlider
-              datas={top_rated.results.map((v) => ({
-                path: getMovieImagePath(
-                  innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-                ),
-                title: v.title,
-                description: v.overview,
-              }))}
-            />
+      {/* 지속적 인기 */}
+      <section>
+        <h3 className="font-jua text-4xl px-4 pb-2">꾸준한 인기 영화들</h3>
+        <SlickSlider
+          datas={top_rated.results.map((v) => ({
+            path: getMovieImagePath(
+              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+            ),
+            title: v.title,
+            description: v.overview,
+          }))}
+        />
 
-            <div className="py-6" />
-          </section>
-        </>
-      )}
+        <div className="py-6" />
+      </section>
     </>
   );
 };
