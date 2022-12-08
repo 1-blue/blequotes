@@ -58,7 +58,7 @@ const Poster = ({
       onMouseOver={() => setIsShow(true)}
       onMouseLeave={() => setIsShow(false)}
     >
-      <img src={path} alt={alt} hidden className="" />
+      <img src={path} alt={alt} />
       {(isCenter || isShow) && title && (
         <div className="absolute inset-0 w-full h-full bg-black/50 text-white p-4">
           <h4 className="my-2 text-xl font-bold text-center">{title}</h4>

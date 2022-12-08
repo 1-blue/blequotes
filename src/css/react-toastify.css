@@ -1,0 +1,13 @@
+.Toastify__toast {
+  border-radius: 10px !important;
+}
+
+@media screen and (max-width: 486px) {
+  .Toastify__toast {
+    width: 80vw;
+    min-width: 200px;
+    
+    margin: 0 auto;
+    margin-bottom: 10px !important;
+  }
+}

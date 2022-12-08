@@ -41,7 +41,17 @@ const initialState: MovieState = {
 const movieSlice = createSlice({
   name: "movie",
   initialState,
-  reducers: {},
+  reducers: {
+    resetMessage(state) {
+      state.fetchMovieLoading = false;
+      state.fetchMovieDone = null;
+      state.fetchMovieError = null;
+
+      state.searchMovieLoading = false;
+      state.searchMovieDone = null;
+      state.searchMovieError = null;
+    },
+  },
 
   // "thunk"가 적용된 액션 ( 비동기 액션 )
   extraReducers(builder) {

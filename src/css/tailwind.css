@@ -7,6 +7,11 @@
     font-family: 'Nanum Gothic', sans-serif;
   }
 
+  /*  */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500;
+  }
+
   /* 포스터 hover시 나타나는 글자 5라인 제한 */
   .poster-description {
     overflow: hidden;

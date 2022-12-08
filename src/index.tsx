@@ -2,12 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ToastContainer } from "react-toastify";
 
 // css
 import "@src/css/tailwind.css";
 import "@src/css/react-slick.css";
+import "@src/css/react-toastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // store
 import store from "@src/store/configureStore";
@@ -38,6 +41,12 @@ root.render(
             <Route path="/search" element={<Search />}></Route>
             <Route path="*" element={<div>경로없음</div>}></Route>
           </Routes>
+
+          <ToastContainer
+            position="bottom-center"
+            autoClose={2500}
+            theme="dark"
+          />
         </Layout>
       </BrowserRouter>
     </Provider>

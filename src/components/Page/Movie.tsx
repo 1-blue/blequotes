@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import { fetchMovie } from "@src/store/thunks";
 
 // util
-import { getMovieImagePath, throttleHelper } from "@src/utils";
+import { getMovieImagePath } from "@src/utils";
+
+// hook
+import useInnerSize from "@src/hooks/useInnerSize";
 
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
-import Spinner from "../Common/Spinner";
+import Spinner from "@src/components/Common/Spinner";
 
 const Movie = () => {
   const dispatch = useAppDispatch();
@@ -24,16 +27,7 @@ const Movie = () => {
   }, [dispatch, popular, top_rated, now_playing]);
 
   // 2022/12/06 - 현재 width 구하기 - by 1-blue
-  const [innerWidth, setInnerWidth] = useState(0);
-  useEffect(() => {
-    const handleResize = () => setInnerWidth(window.innerWidth);
-
-    const throttleResize = throttleHelper(handleResize, 100);
-    throttleResize();
-
-    window.addEventListener("resize", throttleResize);
-    return () => window.removeEventListener("resize", throttleResize);
-  }, []);
+  const [innerWidth] = useInnerSize();
 
   // 영화를 패치하는 중이라면
   if (!popular || !top_rated || !now_playing) return <Spinner />;
