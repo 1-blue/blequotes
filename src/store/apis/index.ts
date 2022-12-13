@@ -11,4 +11,4 @@ const movieDBInstance = axios.create({
 
 export { movieDBInstance };
 
-export { apiFetchMovie, apiSaerchMovie } from "./movie";
+export { apiFetchMovie, apiSaerchMovie, apiSuggestedMovie } from "./movie";

@@ -6,6 +6,8 @@ import type {
   ReceiveMoive,
   SearchMoiveRequest,
   SearchMoiveResponse,
+  SuggestMoiveRequest,
+  SuggestMoiveResponse,
 } from "../types";
 
 /**
@@ -35,4 +37,19 @@ export const apiSaerchMovie = async ({
     `/search/movie?api_key=${
       process.env.REACT_APP_MOVIE_API_KEY
     }&language=${language}&query=${encodeURI(title)}`
+  );
+
+/**
+ * 2022/12/13 - 추천 영화 검색어 요청 - by 1-blue
+ * @param title 영화 제목 ( 전체 or 일부분 )
+ * @returns 검색된 추천 영화 검색어들
+ */
+export const apiSuggestedMovie = async ({
+  keyword,
+  language = "ko-kr",
+}: SuggestMoiveRequest) =>
+  await movieDBInstance.get<SuggestMoiveResponse>(
+    `/search/movie?api_key=${
+      process.env.REACT_APP_MOVIE_API_KEY
+    }&language=${language}&query=${encodeURI(keyword)}`
   );
