@@ -11,7 +11,7 @@ import useInnerSize from "@src/hooks/useInnerSize";
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
-import Spinner from "@src/components/Common/Spinner";
+import Loading from "@src/components/Common/Loading";
 
 const Movie = () => {
   const dispatch = useAppDispatch();
@@ -30,8 +30,8 @@ const Movie = () => {
   const [innerWidth] = useInnerSize();
 
   // 영화를 패치하는 중이라면
-  if (!popular || !top_rated || !now_playing) return <Spinner />;
-  if (fetchMovieLoading) return <Spinner />;
+  if (!popular || !top_rated || !now_playing) return <Loading.Movie />;
+  if (fetchMovieLoading) return <Loading.Movie />;
 
   // 메인 이미지로 사용할 랜덤한 영화 선택
   const index0To2 = Math.floor(Math.random() * 3);
@@ -43,7 +43,7 @@ const Movie = () => {
   return (
     <>
       <Image.BackgroundImage
-        className="w-full h-[80vh]"
+        className="w-full h-screen"
         path={randomImage}
         title={target.results[index0To19].title}
         description={target.results[index0To19].overview}

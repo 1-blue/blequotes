@@ -12,13 +12,13 @@
     @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500;
   }
 
-  /* 포스터 hover시 나타나는 글자 5라인 제한 */
+  /* 포스터 hover시 나타나는 글자 4라인 제한 */
   .poster-description {
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     word-break: keep-all;
   }

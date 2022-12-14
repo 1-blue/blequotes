@@ -21,13 +21,13 @@ const BackgroundImage = ({
   return (
     <figure
       className={combineClassNames(
-        "relative bg-center bg-no-repeat bg-zinc-800 bg-fixed bg-contain flex justify-center",
+        "relative bg-center bg-no-repeat bg-zinc-800 bg-contain bg-fixed flex justify-center",
         className
       )}
       style={{ backgroundImage: `url("${path}")` }}
     >
       <img src={path} alt={alt} hidden />
-      <div className="absolute inset-0 bg-black/20 text-white text-center flex flex-col justify-end">
+      <div className="absolute inset-0 text-white text-center flex flex-col justify-end bg-gradient-to-b from-black/0 to-black/80">
         <h4 className="my-2 text-2xl font-bold">{title}</h4>
         <p className="max-w-[600px] px-4 mx-auto mb-8">{description}</p>
       </div>

@@ -21,8 +21,8 @@ import useToastify from "@src/hooks/useToastify";
 import Image from "@src/components/Common/Image";
 import RHF from "@src/components/Common/RHF";
 import Icon from "@src/components/Common/Icon";
-import Spinner from "@src/components/Common/Spinner";
 import SlickSlider from "@src/components/Common/SlickSlider";
+import Loading from "@src/components/Common/Loading";
 
 /// >>>
 type SearchCategroy = "movie" | "drama" | "book";
@@ -42,6 +42,7 @@ const Search = () => {
     searchMovieLoading,
     searchMovieDone,
     searchMovieError,
+    suggestedMovieLoading,
   } = useAppSelector(({ movie }) => movie);
   const { register, handleSubmit, watch, setValue } = useForm<SearchForm>();
 
@@ -197,7 +198,7 @@ const Search = () => {
   );
 
   // 영화 검색중
-  if (searchMovieLoading) return <Spinner />;
+  if (searchMovieLoading) return <Loading.Movie />;
 
   // 검색 결과
   const target = search?.results[0];
@@ -245,9 +246,12 @@ const Search = () => {
                 </RHF.Button>
               </div>
 
-              {isOpenKeyword && suggested && (
+              {/* 추천 검색어 패치중 */}
+              {isOpenKeyword && suggestedMovieLoading && <Loading.Keyword />}
+              {/* 추천 검색어 패치완료 */}
+              {isOpenKeyword && !suggestedMovieLoading && suggested && (
                 <div
-                  className="flex flex-col mt-1 rounded-b-sm overflow-hidden"
+                  className="flex flex-col mt-1 rounded-b-sm overflow-hidden bg-white"
                   ref={linkContainerRef}
                 >
                   {suggested.results.map((result, index) => (
@@ -256,12 +260,21 @@ const Search = () => {
                       to={`/search?category=${watch("category")}&title=${
                         result.title
                       }`}
-                      className="bg-white px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
+                      className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
                       onFocus={() => setFocusIndex(index)}
                     >
                       {result.title}
                     </Link>
                   ))}
+
+                  {/* 추천 검색어가 없다면 */}
+                  {suggested.results.length === 0 && (
+                    <div className="p-4">
+                      <span>
+                        <b>검색되는 영화가 없습니다.</b>
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -272,7 +285,7 @@ const Search = () => {
       {target ? (
         <>
           <Image.BackgroundImage
-            className="w-full h-[80vh]"
+            className="w-full h-screen"
             path={getMovieImagePath(target.poster_path)}
             title={target.title}
             description={target.overview}
@@ -287,13 +300,17 @@ const Search = () => {
               <section>
                 <h3 className="font-jua text-4xl px-4 pb-2">검색된 영화들</h3>
                 <SlickSlider
-                  datas={search.results.map((v) => ({
-                    path: getMovieImagePath(
+                  datas={search.results
+                    .filter((v) =>
                       innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-                    ),
-                    title: v.title,
-                    description: v.overview,
-                  }))}
+                    )
+                    .map((v) => ({
+                      path: getMovieImagePath(
+                        innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+                      ),
+                      title: v.title,
+                      description: v.overview,
+                    }))}
                 />
               </section>
 

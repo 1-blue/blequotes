@@ -5,3 +5,8 @@
 .slick-slide {
   padding-right: 10px;
 }
+
+.slick-dots {
+  white-space: nowrap;
+  overflow: hidden;
+}
