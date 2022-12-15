@@ -28,6 +28,7 @@ type Props = {
     path: string;
     title?: string;
     description?: string;
+    date: string;
   }[];
 } & Partial<Settings>;
 
@@ -45,7 +46,7 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
       afterChange={afterChange}
       className="bg-zinc-300"
     >
-      {datas.map(({ path, title, description }, i) => (
+      {datas.map(({ path, title, description, date }, i) => (
         <Image.Poster
           key={path}
           path={path}
@@ -53,6 +54,7 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
           alt={title + " 이미지"}
           title={title}
           description={description}
+          date={date}
         />
       ))}
     </Slider>

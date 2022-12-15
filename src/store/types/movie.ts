@@ -68,3 +68,15 @@ export type SuggestMoiveRequest = {
  * 2022/12/13 - 추천 영화 검색어 검색 수신 타입 - by 1-blue
  */
 export type SuggestMoiveResponse = ReceiveMoive;
+
+/**
+ * 2022/12/15 - 유사 영화 검색어 검색 송신 타입 - by 1-blue
+ */
+export type SimilarMoiveRequest = {
+  movieId: number;
+  language?: MovieLanguage;
+};
+/**
+ * 2022/12/15 - 유사 영화 검색어 검색 수신 타입 - by 1-blue
+ */
+export type SimilarMoiveResponse = ReceiveMoive;

@@ -10,3 +10,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+body .slick-dots li {
+  margin: 0;
+}

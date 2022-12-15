@@ -7,6 +7,17 @@
     font-family: 'Nanum Gothic', sans-serif;
   }
 
+  /* 스크롤바 스타일링 */
+  body::-webkit-scrollbar {
+    @apply w-3
+  }
+  body::-webkit-scrollbar-thumb {
+    @apply h-1/4 bg-teal-400 rounded-sm hover:bg-teal-500
+  }
+  body::-webkit-scrollbar-track {
+    @apply bg-slate-200
+  }
+
   /*  */
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500;

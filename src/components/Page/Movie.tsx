@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import { fetchMovie } from "@src/store/thunks";
 
 // util
-import { getMovieImagePath } from "@src/utils";
+import { getMovieDBImagePath } from "@src/utils";
 
 // hook
 import useInnerSize from "@src/hooks/useInnerSize";
@@ -29,6 +29,51 @@ const Movie = () => {
   // 2022/12/06 - 현재 width 구하기 - by 1-blue
   const [innerWidth] = useInnerSize();
 
+  // 2022/12/15 - 인기 / 꾸준한 인기 / 현재 상영중인 영화들 필터링 ( 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
+  const filteredPopularDatas = useMemo(
+    () =>
+      popular?.results
+        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
+        .map((v) => ({
+          path: getMovieDBImagePath(
+            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+          ),
+          title: v.title,
+          description: v.overview,
+          date: v.release_date,
+        })),
+    [popular, innerWidth]
+  );
+  const filteredTopRatedDatas = useMemo(
+    () =>
+      top_rated?.results
+        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
+        .map((v) => ({
+          path: getMovieDBImagePath(
+            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+          ),
+          title: v.title,
+          description: v.overview,
+          date: v.release_date,
+        })),
+    [top_rated, innerWidth]
+  );
+
+  const filteredNowPlayingDatas = useMemo(
+    () =>
+      now_playing?.results
+        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
+        .map((v) => ({
+          path: getMovieDBImagePath(
+            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
+          ),
+          title: v.title,
+          description: v.overview,
+          date: v.release_date,
+        })),
+    [now_playing, innerWidth]
+  );
+
   // 영화를 패치하는 중이라면
   if (!popular || !top_rated || !now_playing) return <Loading.Movie />;
   if (fetchMovieLoading) return <Loading.Movie />;
@@ -38,7 +83,9 @@ const Movie = () => {
   const index0To19 = Math.floor(Math.random() * 20);
   const target =
     index0To2 === 0 ? popular : index0To2 === 1 ? top_rated : now_playing;
-  const randomImage = getMovieImagePath(target.results[index0To19].poster_path);
+  const randomImage = getMovieDBImagePath(
+    target.results[index0To19].poster_path
+  );
 
   return (
     <>
@@ -47,58 +94,41 @@ const Movie = () => {
         path={randomImage}
         title={target.results[index0To19].title}
         description={target.results[index0To19].overview}
+        date={target.results[index0To19].release_date}
         alt={target.results[index0To19].title + " 포스터 이미지"}
       />
 
       <div className="py-6" />
 
       {/* 인기 */}
-      <section>
-        <h3 className="font-jua text-4xl px-4 pb-2">인기 영화들</h3>
-        <SlickSlider
-          datas={popular.results.map((v) => ({
-            path: getMovieImagePath(
-              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-            ),
-            title: v.title,
-            description: v.overview,
-          }))}
-        />
-      </section>
+      {filteredPopularDatas && (
+        <section>
+          <h3 className="font-jua text-4xl px-4 pb-2">인기 영화들</h3>
+          <SlickSlider datas={filteredPopularDatas} />
 
-      <div className="py-6" />
+          <div className="py-6" />
+        </section>
+      )}
 
       {/* 최신 영화들 */}
-      <section>
-        <h3 className="font-jua text-4xl px-4 pb-2">최신 영화들</h3>
-        <SlickSlider
-          datas={now_playing.results.map((v) => ({
-            path: getMovieImagePath(
-              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-            ),
-            title: v.title,
-            description: v.overview,
-          }))}
-        />
-      </section>
+      {filteredNowPlayingDatas && (
+        <section>
+          <h3 className="font-jua text-4xl px-4 pb-2">최신 영화들</h3>
+          <SlickSlider datas={filteredNowPlayingDatas} />
 
-      <div className="py-6" />
+          <div className="py-6" />
+        </section>
+      )}
 
       {/* 지속적 인기 */}
-      <section>
-        <h3 className="font-jua text-4xl px-4 pb-2">꾸준한 인기 영화들</h3>
-        <SlickSlider
-          datas={top_rated.results.map((v) => ({
-            path: getMovieImagePath(
-              innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-            ),
-            title: v.title,
-            description: v.overview,
-          }))}
-        />
+      {filteredTopRatedDatas && (
+        <section>
+          <h3 className="font-jua text-4xl px-4 pb-2">꾸준한 인기 영화들</h3>
+          <SlickSlider datas={filteredTopRatedDatas} />
 
-        <div className="py-6" />
-      </section>
+          <div className="py-6" />
+        </section>
+      )}
     </>
   );
 };

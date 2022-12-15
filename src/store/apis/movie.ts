@@ -8,6 +8,8 @@ import type {
   SearchMoiveResponse,
   SuggestMoiveRequest,
   SuggestMoiveResponse,
+  SimilarMoiveRequest,
+  SimilarMoiveResponse,
 } from "../types";
 
 /**
@@ -21,7 +23,7 @@ export const apiFetchMovie = async ({
   language = "ko-kr",
 }: FetchMoive) =>
   await movieDBInstance.get<ReceiveMoive>(
-    `/movie/${category}?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&language=${language}`
+    `/movie/${category}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}&language=${language}`
   );
 
 /**
@@ -35,7 +37,7 @@ export const apiSaerchMovie = async ({
 }: SearchMoiveRequest) =>
   await movieDBInstance.get<SearchMoiveResponse>(
     `/search/movie?api_key=${
-      process.env.REACT_APP_MOVIE_API_KEY
+      process.env.REACT_APP_MOVIE_DB_API_KEY
     }&language=${language}&query=${encodeURI(title)}`
   );
 
@@ -50,6 +52,19 @@ export const apiSuggestedMovie = async ({
 }: SuggestMoiveRequest) =>
   await movieDBInstance.get<SuggestMoiveResponse>(
     `/search/movie?api_key=${
-      process.env.REACT_APP_MOVIE_API_KEY
+      process.env.REACT_APP_MOVIE_DB_API_KEY
     }&language=${language}&query=${encodeURI(keyword)}`
+  );
+
+/**
+ * 2022/12/15 - 유사 영화 검색어 요청 - by 1-blue
+ * @param movieId "MovieDB"에서 받은 영화 식별자
+ * @returns 유사한 영화들
+ */
+export const apiSimilarMovie = async ({
+  movieId,
+  language = "ko-kr",
+}: SimilarMoiveRequest) =>
+  await movieDBInstance.get<SimilarMoiveResponse>(
+    `/movie/${movieId}/similar?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}&language=${language}`
   );

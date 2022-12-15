@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // thunk
-import { fetchMovie, searchMovie, suggestedMovie } from "../thunks";
+import {
+  fetchMovie,
+  searchMovie,
+  similarMovie,
+  suggestedMovie,
+} from "../thunks";
 
 // type
 import type {
   ReceiveMoive,
   SearchMoiveResponse,
+  SimilarMoiveResponse,
   SuggestMoiveResponse,
 } from "../types";
 
@@ -16,6 +22,7 @@ interface MovieState {
   now_playing: ReceiveMoive | null;
   search: SearchMoiveResponse | null;
   suggested: SuggestMoiveResponse | null;
+  similar: SimilarMoiveResponse | null;
 
   // 특정 카테고리의 영화들 요청
   fetchMovieLoading: boolean;
@@ -31,6 +38,11 @@ interface MovieState {
   suggestedMovieLoading: boolean;
   suggestedMovieDone: null | string;
   suggestedMovieError: null | string;
+
+  // 유사 검색어
+  similarMovieLoading: boolean;
+  similarMovieDone: null | string;
+  similarMovieError: null | string;
 }
 
 const initialState: MovieState = {
@@ -39,6 +51,7 @@ const initialState: MovieState = {
   now_playing: null,
   search: null,
   suggested: null,
+  similar: null,
 
   fetchMovieLoading: false,
   fetchMovieDone: null,
@@ -51,6 +64,10 @@ const initialState: MovieState = {
   suggestedMovieLoading: false,
   suggestedMovieDone: null,
   suggestedMovieError: null,
+
+  similarMovieLoading: false,
+  similarMovieDone: null,
+  similarMovieError: null,
 };
 
 const movieSlice = createSlice({
@@ -114,6 +131,22 @@ const movieSlice = createSlice({
     builder.addCase(suggestedMovie.rejected, (state, action) => {
       state.suggestedMovieLoading = false;
       state.suggestedMovieError = `추천 영화 검색어들을 찾는데 실패했습니다.`;
+
+      console.error("suggestedMovie >> ", action);
+    });
+
+    // 유사 영화 검색
+    builder.addCase(similarMovie.pending, (state) => {
+      state.similarMovieLoading = true;
+    });
+    builder.addCase(similarMovie.fulfilled, (state, action) => {
+      state.similarMovieLoading = false;
+      state.similarMovieDone = `유사 영화들을 검색했습니다.`;
+      state.similar = action.payload;
+    });
+    builder.addCase(similarMovie.rejected, (state, action) => {
+      state.similarMovieLoading = false;
+      state.similarMovieError = `유사 영화들의 검색에 실패했습니다.`;
 
       console.error("suggestedMovie >> ", action);
     });

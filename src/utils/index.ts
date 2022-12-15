@@ -1,9 +1,9 @@
 /**
- * 2022/12/05 - 영화 이미지 경로 얻기 - by 1-blue
+ * 2022/12/05 - "MovieDB"에서 사용하는 이미지 경로 얻기 - by 1-blue
  * @param name 영화 이미지 이름
  * @returns 영화 이미지 경로
  */
-export const getMovieImagePath = (name: string) =>
+export const getMovieDBImagePath = (name: string) =>
   process.env.REACT_APP_MOVIE_IMAGE_URL + name;
 
 /**

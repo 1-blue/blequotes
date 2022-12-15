@@ -5,4 +5,6 @@ export type {
   SearchMoiveResponse,
   SuggestMoiveRequest,
   SuggestMoiveResponse,
+  SimilarMoiveRequest,
+  SimilarMoiveResponse,
 } from "./movie";
