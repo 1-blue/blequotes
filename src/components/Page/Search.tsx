@@ -1,34 +1,21 @@
-import { useCallback, useEffect, useState, useRef, useMemo } from "react";
-import {
-  useSearchParams,
-  useNavigate,
-  useLocation,
-  Link,
-} from "react-router-dom";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
-import { searchMovie, similarMovie, suggestedMovie } from "@src/store/thunks";
-import { movieActions } from "@src/store/reducers/movieReducer";
-
-// util
-import { getMovieDBImagePath } from "@src/utils";
-
-// hook
-import useInnerSize from "@src/hooks/useInnerSize";
-import useToastify from "@src/hooks/useToastify";
+import { suggestedDrama, suggestedMovie } from "@src/store/thunks";
 
 // component
-import Image from "@src/components/Common/Image";
 import RHF from "@src/components/Common/RHF";
 import Icon from "@src/components/Common/Icon";
-import SlickSlider from "@src/components/Common/SlickSlider";
 import Loading from "@src/components/Common/Loading";
+import SearchKinds from "@src/components/SearchKinds";
+import Suggested from "@src/components/Suggested";
 
-/// >>>
-type SearchCategroy = "movie" | "drama" | "book";
+// type
+import type { SearchCategory } from "@src/types";
 
 type SearchForm = {
-  category: SearchCategroy;
+  category: SearchCategory;
   title: string;
 };
 
@@ -36,34 +23,28 @@ const Search = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const {
-    search,
-    suggested,
-    similar,
-    searchMovieLoading,
-    searchMovieDone,
-    searchMovieError,
-    suggestedMovieLoading,
-    similarMovieLoading,
-  } = useAppSelector(({ movie }) => movie);
-  const { register, handleSubmit, watch, setValue } = useForm<SearchForm>();
+  const [queryTitle] = searchParams.getAll("title");
+  const [queryCategory] = searchParams.getAll("category");
 
-  // 2022/12/06 - 현재 width 구하기 - by 1-blue
-  const [innerWidth] = useInnerSize();
+  const { suggestedMovies, suggestedMovieLoading } = useAppSelector(
+    ({ movie }) => movie
+  );
+  const { suggestedDramas, suggestedDramaLoading } = useAppSelector(
+    ({ drama }) => drama
+  );
+  const { register, handleSubmit, watch, setValue } = useForm<SearchForm>();
+  const currentCategory = watch("category");
 
   // 2022/12/07 - 링크 이동 ( 히스토리 남기기 위함 ) - by 1-blue
   const onSumbit = handleSubmit(
     useCallback(
       ({ category, title }: SearchForm) => {
-        const [queryCategory] = searchParams.getAll("category");
-        const [queryTitle] = searchParams.getAll("title");
-
         // 첫 검색이라면 현재 페이지 히스토리에 남기지 않기 ( 즉 "/search"인 경우에는 기록 남기지 않기 )
         navigate(`/search?category=${category}&title=${title}`, {
           replace: !queryCategory && !queryTitle,
         });
       },
-      [searchParams, navigate]
+      [navigate, queryTitle, queryCategory]
     )
   );
 
@@ -80,36 +61,11 @@ const Search = () => {
     []
   );
 
-  // 2022/12/07 - 영화 / 드라마 / 도서 검색 - by 1-blue
+  // 2022/12/16 - 검색 후 처리 - by 1-blue
   useEffect(() => {
-    const [category] = searchParams.getAll("category");
-    const [title] = searchParams.getAll("title");
-
-    switch (category) {
-      case "movie":
-        dispatch(searchMovie({ title }));
-        break;
-
-      case "drama":
-        console.log("드라마 검색 >> ", title);
-        break;
-
-      case "book":
-        console.log("도서 검색 >> ", title);
-        break;
-    }
-
-    setValue("title", title);
+    setValue("title", queryTitle);
     setIsShowSearchForm(false);
-  }, [searchParams, dispatch, setValue, setIsShowSearchForm]);
-
-  //2022/12/08 - 검색 토스트 처리 - by 1-blue
-  const [title] = searchParams.getAll("title");
-  useToastify({
-    doneMessage: searchMovieDone && `"${title}"인 ${searchMovieDone}`,
-    errorMessage: searchMovieError,
-    callback: () => dispatch(movieActions.resetMessage()),
-  });
+  }, [dispatch, queryTitle, setValue, setIsShowSearchForm]);
 
   // 2022/12/07 - 네비게이션 바에서 검색링크를 누른 경우 검색창 렌더링 - by 1-blue
   const { state } = useLocation();
@@ -130,7 +86,7 @@ const Search = () => {
   // 2022/12/13 - 현재 포커싱중인 추천 검색어 - by 1-blue
   const [focusIndex, setFocusIndex] = useState(-1);
 
-  // 2022/12/13 - 디바운스를 적용한 추천 검색어 요청 - by 1-blue
+  // 2022/12/16 - 디바운스를 적용한 추천 검색어 요청 - by 1-blue
   const timerId = useRef<null | NodeJS.Timeout>(null);
   const keyword = watch("title");
   useEffect(() => {
@@ -138,11 +94,18 @@ const Search = () => {
     if (timerId.current !== null) clearTimeout(timerId.current);
 
     timerId.current = setTimeout(() => {
-      dispatch(suggestedMovie({ keyword }));
+      if (currentCategory === "movie") {
+        dispatch(suggestedMovie({ keyword }));
+      } else if (currentCategory === "drama") {
+        dispatch(suggestedDrama({ keyword }));
+      } else if (currentCategory === "book") {
+        // >>> book
+      }
+
       timerId.current = null;
       setIsOpenKeyword(true);
     }, 200);
-  }, [timerId, keyword, dispatch]);
+  }, [timerId, keyword, dispatch, currentCategory]);
 
   // 2022/12/13 - 외부 클릭 시 추천 검색어 닫기 - by 1-blue
   const inputContainerRef = useRef<null | HTMLDivElement>(null);
@@ -152,6 +115,7 @@ const Search = () => {
     // >>> input의 ref를 얻어내기 힘들어서 아래와 같이 처리
     if (inputContainerRef.current?.firstElementChild === e.target) {
       setIsOpenKeyword(true);
+      setFocusIndex(-1);
     } else {
       setIsOpenKeyword(false);
     }
@@ -166,15 +130,27 @@ const Search = () => {
   // 2022/12/13 - 검색에서 키보드 방향키 및 ESC 누른 경우 추천 검색어 이동 이벤트 - by 1-blue
   const onMoveKeyword = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!suggested) return;
       if (!linkContainerRef.current) return;
-      const links = [...linkContainerRef.current.childNodes].filter(
-        (v): v is HTMLElement => v instanceof HTMLElement
-      );
+      if (!linkContainerRef.current.firstElementChild) return;
+
+      // 추천 검색어 링크들 ( 방향키로 포커싱을 이동하기 위함 )
+      const links = [
+        ...linkContainerRef.current.firstElementChild.childNodes,
+      ].filter((v): v is HTMLElement => v instanceof HTMLElement);
+
+      // 추천 검색어의 길이
+      let targetLength = 0;
+      if (currentCategory === "movie") {
+        targetLength = suggestedMovies?.results.length || 0;
+      } else if (currentCategory === "drama") {
+        targetLength = suggestedDramas?.results.length || 0;
+      } else if (currentCategory === "book") {
+        // >>> book
+      }
 
       switch (e.key) {
         case "ArrowDown":
-          if (focusIndex + 1 >= suggested.results.length) {
+          if (focusIndex + 1 >= targetLength) {
             setFocusIndex(0);
             links[0].focus();
           } else {
@@ -184,8 +160,8 @@ const Search = () => {
           break;
         case "ArrowUp":
           if (focusIndex - 1 <= -1) {
-            setFocusIndex(suggested.results.length - 1);
-            links[suggested.results.length - 1].focus();
+            setFocusIndex(targetLength - 1);
+            links[targetLength - 1].focus();
           } else {
             setFocusIndex((prev) => prev - 1);
             links[focusIndex - 1].focus();
@@ -209,52 +185,14 @@ const Search = () => {
           break;
       }
     },
-    [suggested, linkContainerRef, focusIndex]
+    [
+      linkContainerRef,
+      currentCategory,
+      suggestedMovies,
+      suggestedDramas,
+      focusIndex,
+    ]
   );
-
-  // 검색 결과
-  const target = search?.results[0];
-
-  // 2022/12/15 - 유사 영화 요청 - by 1-blue
-  useEffect(() => {
-    if (!target) return;
-
-    dispatch(similarMovie({ movieId: target.id }));
-  }, [target, dispatch]);
-
-  // 2022/12/15 - 같이 검색된 / 유사 영화 필터링 ( 메인으로 검색된 영화 제외, 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
-  const filteredSearchDatas = useMemo(
-    () =>
-      search?.results
-        .filter((v) => v.id !== target?.id)
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.title,
-          description: v.overview,
-          date: v.release_date,
-        })),
-    [search, innerWidth, target]
-  );
-  const filteredSimilarDatas = useMemo(
-    () =>
-      similar?.results
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.title,
-          description: v.overview,
-          date: v.release_date,
-        })),
-    [similar, innerWidth]
-  );
-
-  // 영화 / 유사 영화 검색중
-  if (searchMovieLoading || similarMovieLoading) return <Loading.Movie />;
 
   return (
     <>
@@ -299,101 +237,29 @@ const Search = () => {
                 </RHF.Button>
               </div>
 
-              {/* 추천 검색어 패치중 */}
-              {isOpenKeyword && suggestedMovieLoading && <Loading.Keyword />}
-              {/* 추천 검색어 패치완료 */}
-              {isOpenKeyword && !suggestedMovieLoading && suggested && (
-                <div
-                  className="flex flex-col mt-1 rounded-b-sm overflow-hidden bg-white"
-                  ref={linkContainerRef}
-                >
-                  {suggested.results.map((result, index) => (
-                    <Link
-                      key={result.id}
-                      to={`/search?category=${watch("category")}&title=${
-                        result.title
-                      }`}
-                      className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
-                      onFocus={() => setFocusIndex(index)}
-                    >
-                      {result.title}
-                    </Link>
-                  ))}
-
-                  {/* 추천 검색어가 없다면 */}
-                  {suggested.results.length === 0 && (
-                    <div className="p-4">
-                      <span>
-                        <b>검색되는 영화가 없습니다.</b>
-                      </span>
-                    </div>
+              <div ref={linkContainerRef}>
+                {/* 추천 검색어 패치중 */}
+                {isOpenKeyword &&
+                  (suggestedMovieLoading || suggestedDramaLoading) && (
+                    <Loading.Keyword />
                   )}
-                </div>
-              )}
+                {/* 추천 검색어 패치완료 */}
+                {isOpenKeyword && currentCategory === "movie" && (
+                  <Suggested.Movie setFocusIndex={setFocusIndex} />
+                )}
+                {isOpenKeyword && currentCategory === "drama" && (
+                  <Suggested.Drama setFocusIndex={setFocusIndex} />
+                )}
+              </div>
             </div>
           </div>
         </RHF.Form>
       )}
 
-      {target ? (
-        <>
-          {/* 검색된 영화 배경화면 */}
-          <>
-            <Image.BackgroundImage
-              className="w-full h-screen"
-              path={getMovieDBImagePath(target.poster_path)}
-              title={target.title}
-              description={target.overview}
-              date={target.release_date}
-              alt={target.title + " 포스터 이미지"}
-            />
-
-            <div className="py-6" />
-          </>
-
-          {/* 같이 검색된 영화들 */}
-          {filteredSearchDatas && filteredSearchDatas.length >= 1 && (
-            <>
-              <section>
-                <h3 className="font-jua text-4xl px-4 pb-2">검색된 영화들</h3>
-                <SlickSlider datas={filteredSearchDatas} />
-              </section>
-
-              <div className="py-6" />
-            </>
-          )}
-
-          {/* 유사 영화들 */}
-          {filteredSimilarDatas && filteredSimilarDatas.length >= 1 && (
-            <>
-              <section>
-                <h3 className="font-jua text-4xl px-4 pb-2">유사한 영화들</h3>
-                <SlickSlider datas={filteredSimilarDatas} />
-              </section>
-
-              <div className="py-6" />
-            </>
-          )}
-        </>
-      ) : (
-        <section className="absolute inset-0 w-screen h-screen flex flex-col justify-center items-center">
-          <h4 className="font-extrabold text-2xl px-4 mb-6">
-            "{searchParams.getAll("title")}"(으)로 검색된 영화가 없습니다.
-          </h4>
-
-          <Icon shape="arrowDown" className="w-10 h-10 animate-bounce mb-2" />
-
-          <Link
-            to="/search"
-            state={{ isShow: true }}
-            className="bg-teal-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-teal-600 focus-ring transition-colors"
-          >
-            다시 검색하기
-          </Link>
-        </section>
-      )}
+      {queryCategory === "movie" && <SearchKinds.Movie />}
+      {queryCategory === "drama" && <SearchKinds.Drama />}
     </>
   );
 };
 
-export default Search;
+export default React.memo(Search);

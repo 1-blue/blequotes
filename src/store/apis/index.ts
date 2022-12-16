@@ -17,3 +17,10 @@ export {
   apiSuggestedMovie,
   apiSimilarMovie,
 } from "./movie";
+
+export {
+  apiFetchDrama,
+  apiSaerchDrama,
+  apiSuggestedDrama,
+  apiSimilarDrama,
+} from "./drama";

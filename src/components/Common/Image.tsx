@@ -66,7 +66,7 @@ const Poster = ({
       <img src={path} alt={alt} />
       {(isCenter || isShow) && title && (
         <div className="absolute inset-0 w-full h-full bg-black/50 text-white p-4 flex flex-col">
-          <h4 className="my-2 text-xl font-bold text-center">{title}</h4>
+          <h4 className="mb-2 text-xl font-bold text-center">{title}</h4>
           <p className="poster-description">{description}</p>
           <div className="flex-1" />
           <time className="text-center text-sm">{date}</time>

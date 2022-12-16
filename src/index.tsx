@@ -17,6 +17,7 @@ import store from "@src/store/configureStore";
 
 // page
 import Movie from "@src/components/Page/Movie";
+import Drama from "@src/components/Page/Drama";
 import Search from "@src/components/Page/Search";
 
 // component
@@ -38,6 +39,7 @@ root.render(
           <Routes>
             <Route path="/" element={<App />}></Route>
             <Route path="/movie" element={<Movie />}></Route>
+            <Route path="/drama" element={<Drama />}></Route>
             <Route path="/search" element={<Search />}></Route>
             <Route path="*" element={<div>경로없음</div>}></Route>
           </Routes>

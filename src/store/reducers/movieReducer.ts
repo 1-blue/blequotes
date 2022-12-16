@@ -20,9 +20,9 @@ interface MovieState {
   popular: ReceiveMoive | null;
   top_rated: ReceiveMoive | null;
   now_playing: ReceiveMoive | null;
-  search: SearchMoiveResponse | null;
-  suggested: SuggestMoiveResponse | null;
-  similar: SimilarMoiveResponse | null;
+  searchedMovies: SearchMoiveResponse | null;
+  suggestedMovies: SuggestMoiveResponse | null;
+  similarMovies: SimilarMoiveResponse | null;
 
   // 특정 카테고리의 영화들 요청
   fetchMovieLoading: boolean;
@@ -49,9 +49,9 @@ const initialState: MovieState = {
   popular: null,
   top_rated: null,
   now_playing: null,
-  search: null,
-  suggested: null,
-  similar: null,
+  searchedMovies: null,
+  suggestedMovies: null,
+  similarMovies: null,
 
   fetchMovieLoading: false,
   fetchMovieDone: null,
@@ -110,7 +110,7 @@ const movieSlice = createSlice({
     builder.addCase(searchMovie.fulfilled, (state, action) => {
       state.searchMovieLoading = false;
       state.searchMovieDone = `영화를 검색했습니다.`;
-      state.search = action.payload;
+      state.searchedMovies = action.payload;
     });
     builder.addCase(searchMovie.rejected, (state, action) => {
       state.searchMovieLoading = false;
@@ -126,7 +126,7 @@ const movieSlice = createSlice({
     builder.addCase(suggestedMovie.fulfilled, (state, action) => {
       state.suggestedMovieLoading = false;
       state.suggestedMovieDone = `추천 영화 검색어들을 검색했습니다.`;
-      state.suggested = action.payload;
+      state.suggestedMovies = action.payload;
     });
     builder.addCase(suggestedMovie.rejected, (state, action) => {
       state.suggestedMovieLoading = false;
@@ -142,7 +142,7 @@ const movieSlice = createSlice({
     builder.addCase(similarMovie.fulfilled, (state, action) => {
       state.similarMovieLoading = false;
       state.similarMovieDone = `유사 영화들을 검색했습니다.`;
-      state.similar = action.payload;
+      state.similarMovies = action.payload;
     });
     builder.addCase(similarMovie.rejected, (state, action) => {
       state.similarMovieLoading = false;
