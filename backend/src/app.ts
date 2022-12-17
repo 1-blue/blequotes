@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 
 // router
@@ -11,6 +11,9 @@ import bookRouter from "./routes/book";
 
 // hanlder
 import { errorHandler } from "./handler";
+
+// type
+import type { Request, Response } from "express";
 
 const app = express();
 app.set("port", 3050);
