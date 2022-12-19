@@ -76,15 +76,7 @@ const suggestedDramasThunk = createAsyncThunk(
         language,
       });
 
-      // 제목이 같은 드라마는 추천 검색어에서 하나만 표시하도록 제외
-      const uniqueData = {
-        ...data,
-        results: data.data.dramas.filter(
-          (drama, i, arr) => i === arr.findIndex((v) => v.name === drama.name)
-        ),
-      };
-
-      return uniqueData;
+      return data;
     } catch (error) {
       console.error("error >> ", error);
 

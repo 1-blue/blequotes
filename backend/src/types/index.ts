@@ -12,14 +12,6 @@ export type ApiResponse<T> = {
  */
 export type ApiErrorResponse = ApiResponse<{}>;
 
-// book type
-export {
-  SearchBookRequest,
-  SearchBookResponse,
-  ApiSearchBookRequest,
-  ApiSearchBookResponse,
-} from "./book";
-
 export type {
   //
   ApiFetchMoviesRequest,
@@ -65,3 +57,22 @@ export type {
   SimilarDramasRequest,
   SimilarDramasResponse,
 } from "./drama";
+
+// book type
+export {
+  //
+  ApiSearchBooksRequest,
+  ApiSearchBooksResponse,
+  SearchBooksRequest,
+  SearchBooksResponse,
+  //
+  ApiSuggestedBooksRequest,
+  ApiSuggestedBooksResponse,
+  SuggestedBooksRequest,
+  SuggestedBooksResponse,
+  //
+  ApiSimilarBooksRequest,
+  ApiSimilarBooksResponse,
+  SimilarBooksRequest,
+  SimilarBooksResponse,
+} from "./book";

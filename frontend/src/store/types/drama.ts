@@ -66,9 +66,8 @@ export type SuggestDramasRequest = {
 };
 /**
  * 2022/12/17 - 드라마들 검색 요청 수신 타입 ( B -> F ) - by 1-blue
- * >>> 오늘(12/17)에 나중에 필요한 것만 가져가도록 수정하기
  */
-export type SuggestDramasResponse = ApiResponse<{ dramas: Drama[] }>;
+export type SuggestDramasResponse = ApiResponse<{ titles: string[] }>;
 
 // ============================== 현재 검색된 드라마와 유사한 드라마들 관련 ==============================
 /**

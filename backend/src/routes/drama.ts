@@ -63,7 +63,7 @@ dramaRouter.get(
     try {
       const { title, language } = req.query;
 
-      const { data } = await dramaService.apiSaerchDramas({ title, language });
+      const { data } = await dramaService.apiSearchDramas({ title, language });
 
       return res.status(200).json({
         meta: { ok: true },
@@ -98,7 +98,7 @@ dramaRouter.get(
         meta: { ok: true },
         data: {
           message: `"${keyword}"의 추천 검색어입니다."`,
-          dramas: data.results,
+          titles: [...new Set(data.results.map((v) => v.name))],
         },
       });
     } catch (error) {

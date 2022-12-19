@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
-import { movieThunkService, dramaThunkService } from "@src/store/thunks";
+import {
+  movieThunkService,
+  dramaThunkService,
+  bookThunkService,
+} from "@src/store/thunks";
 
 // component
 import RHF from "@src/components/Common/RHF";
@@ -31,6 +35,9 @@ const Search = () => {
   );
   const { suggestedDramas, suggestedDramasLoading } = useAppSelector(
     ({ drama }) => drama
+  );
+  const { suggestedBooks, suggestedBooksLoading } = useAppSelector(
+    ({ book }) => book
   );
   const { register, handleSubmit, watch, setValue } = useForm<SearchForm>();
   const currentCategory = watch("category");
@@ -99,7 +106,7 @@ const Search = () => {
       } else if (currentCategory === "drama") {
         dispatch(dramaThunkService.suggestedDramasThunk({ keyword }));
       } else if (currentCategory === "book") {
-        // >>> book
+        dispatch(bookThunkService.suggestedBooksThunk({ keyword }));
       }
 
       timerId.current = null;
@@ -145,7 +152,7 @@ const Search = () => {
       } else if (currentCategory === "drama") {
         targetLength = suggestedDramas.length || 0;
       } else if (currentCategory === "book") {
-        // >>> book
+        targetLength = suggestedBooks.length || 0;
       }
 
       switch (e.key) {
@@ -190,6 +197,7 @@ const Search = () => {
       currentCategory,
       suggestedMovies,
       suggestedDramas,
+      suggestedBooks,
       focusIndex,
     ]
   );
@@ -240,15 +248,18 @@ const Search = () => {
               <div ref={linkContainerRef}>
                 {/* 추천 검색어 패치중 */}
                 {isOpenKeyword &&
-                  (suggestedMoviesLoading || suggestedDramasLoading) && (
-                    <Loading.Keyword />
-                  )}
+                  (suggestedMoviesLoading ||
+                    suggestedDramasLoading ||
+                    suggestedBooksLoading) && <Loading.Keyword />}
                 {/* 추천 검색어 패치완료 */}
                 {isOpenKeyword && currentCategory === "movie" && (
                   <Suggested.Movie setFocusIndex={setFocusIndex} />
                 )}
                 {isOpenKeyword && currentCategory === "drama" && (
                   <Suggested.Drama setFocusIndex={setFocusIndex} />
+                )}
+                {isOpenKeyword && currentCategory === "book" && (
+                  <Suggested.Book setFocusIndex={setFocusIndex} />
                 )}
               </div>
             </div>
@@ -258,6 +269,7 @@ const Search = () => {
 
       {queryCategory === "movie" && <SearchKinds.Movie />}
       {queryCategory === "drama" && <SearchKinds.Drama />}
+      {queryCategory === "book" && <SearchKinds.Book />}
     </>
   );
 };

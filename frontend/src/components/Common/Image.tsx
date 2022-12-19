@@ -59,11 +59,11 @@ const Poster = ({
 
   return (
     <figure
-      className="relative cursor-pointer"
+      className="relative cursor-pointer flex justify-center bg-slate-400"
       onMouseOver={() => setIsShow(true)}
       onMouseLeave={() => setIsShow(false)}
     >
-      <img src={path} alt={alt} />
+      <img src={path} alt={alt} className="h-60" />
       {(isCenter || isShow) && title && (
         <div className="absolute inset-0 w-full h-full bg-black/50 text-white p-4 flex flex-col">
           <h4 className="mb-2 text-xl font-bold text-center">{title}</h4>

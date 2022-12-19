@@ -27,11 +27,11 @@ const apiFetchDramas = async ({
   );
 
 /**
- * 2022/12/17 - 드라마 검색 요청 - by 1-blue
+ * 2022/12/17 - 드라마들 검색 요청 - by 1-blue
  * @param title 드라마 제목
- * @returns 검색된 드라마
+ * @returns 검색된 드라마들
  */
-const apiSaerchDramas = async ({
+const apiSearchDramas = async ({
   title,
   language = "ko-kr",
 }: ApiSearchDramasRequest) =>
@@ -42,7 +42,7 @@ const apiSaerchDramas = async ({
   );
 
 /**
- * 2022/12/17 - 추천 드라마 검색어 요청 - by 1-blue
+ * 2022/12/17 - 추천 드라마 검색어들 요청 - by 1-blue
  * @param title 드라마 제목 ( 전체 or 일부분 )
  * @returns 검색된 추천 드라마 검색어들
  */
@@ -57,7 +57,7 @@ const apiSuggestedDramas = async ({
   );
 
 /**
- * 2022/12/17 - 유사 드라마 검색어 요청 - by 1-blue
+ * 2022/12/17 - 유사한 드라마들 요청 - by 1-blue
  * @param movieId "DramaDB"에서 받은 드라마 식별자
  * @returns 유사한 드라마들
  */
@@ -74,7 +74,7 @@ const apiSimilarDramas = async ({
  */
 export const dramaService = {
   apiFetchDramas,
-  apiSaerchDramas,
+  apiSearchDramas,
   apiSuggestedDramas,
   apiSimilarDramas,
 };

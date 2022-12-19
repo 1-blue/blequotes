@@ -27,11 +27,11 @@ const apiFetchMovies = async ({
   );
 
 /**
- * 2022/12/17 - 영화 검색 요청 - by 1-blue
+ * 2022/12/17 - 영화들 검색 요청 - by 1-blue
  * @param title 영화 제목
- * @returns 검색된 영화
+ * @returns 검색된 영화들
  */
-const apiSaerchMovies = async ({
+const apiSearchMovies = async ({
   title,
   language = "ko-kr",
 }: ApiSearchMoviesRequest) =>
@@ -42,9 +42,9 @@ const apiSaerchMovies = async ({
   );
 
 /**
- * 2022/12/17 - 추천 영화 검색어 요청 - by 1-blue
+ * 2022/12/17 - 영화 추천 검색어들 요청 - by 1-blue
  * @param title 영화 제목 ( 전체 or 일부분 )
- * @returns 검색된 추천 영화 검색어들
+ * @returns 영화 추천 검색어들
  */
 const apiSuggestedMovies = async ({
   keyword,
@@ -57,7 +57,7 @@ const apiSuggestedMovies = async ({
   );
 
 /**
- * 2022/12/17 - 유사 영화 검색어 요청 - by 1-blue
+ * 2022/12/17 - 유사한 영화들 요청 - by 1-blue
  * @param movieId "MovieDB"에서 받은 영화 식별자
  * @returns 유사한 영화들
  */
@@ -74,7 +74,7 @@ const apiSimilarMovies = async ({
  */
 export const movieService = {
   apiFetchMovies,
-  apiSaerchMovies,
+  apiSearchMovies,
   apiSuggestedMovies,
   apiSimilarMovies,
 };

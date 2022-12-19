@@ -12,7 +12,7 @@ interface MovieState {
   now_playing: Movie[];
 
   searchedMovies: Movie[];
-  suggestedMovies: Movie[];
+  suggestedMovies: string[];
   similarMovies: Movie[];
 
   // 특정 카테고리의 영화들 요청
@@ -131,7 +131,7 @@ const movieSlice = createSlice({
       (state, action) => {
         state.suggestedMoviesLoading = false;
         state.suggestedMoviesDone = action.payload.data.message;
-        state.suggestedMovies = action.payload.data.movies;
+        state.suggestedMovies = action.payload.data.titles;
       }
     );
     builder.addCase(

@@ -22,4 +22,4 @@ export const bookInstance = axios.create({
 
 export { movieService } from "./moive";
 export { dramaService } from "./drama";
-export { apiFetchBook } from "./book";
+export { bookService } from "./book";

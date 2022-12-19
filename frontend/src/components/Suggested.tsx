@@ -13,16 +13,16 @@ const Movie = ({ setFocusIndex }: Props) => {
 
   return (
     <>
-      {!suggestedMoviesLoading && suggestedMovies && (
+      {!suggestedMoviesLoading && (
         <div className="flex flex-col mt-1 rounded-b-sm overflow-hidden bg-white">
-          {suggestedMovies.map((movie, index) => (
+          {suggestedMovies.map((title, index) => (
             <Link
-              key={movie.id}
-              to={`/search?category=movie&title=${movie.title}`}
+              key={title}
+              to={`/search?category=movie&title=${title}`}
               className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
               onFocus={() => setFocusIndex(index)}
             >
-              {movie.title}
+              {title}
             </Link>
           ))}
 
@@ -48,16 +48,16 @@ const Drama = ({ setFocusIndex }: Props) => {
 
   return (
     <>
-      {!suggestedDramasLoading && suggestedDramas && (
+      {!suggestedDramasLoading && (
         <div className="flex flex-col mt-1 rounded-b-sm overflow-hidden bg-white">
-          {suggestedDramas.map((drama, index) => (
+          {suggestedDramas.map((title, index) => (
             <Link
-              key={drama.id}
-              to={`/search?category=movie&title=${drama.name}`}
+              key={title}
+              to={`/search?category=drama&title=${title}`}
               className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
               onFocus={() => setFocusIndex(index)}
             >
-              {drama.name}
+              {title}
             </Link>
           ))}
 
@@ -75,13 +75,50 @@ const Drama = ({ setFocusIndex }: Props) => {
   );
 };
 
+// 추천 검색어 ( 도서 )
+const Book = ({ setFocusIndex }: Props) => {
+  const { suggestedBooks, suggestedBooksLoading } = useAppSelector(
+    ({ book }) => book
+  );
+
+  return (
+    <>
+      {!suggestedBooksLoading && (
+        <div className="flex flex-col mt-1 rounded-b-sm overflow-hidden bg-white">
+          {suggestedBooks.map((title, index) => (
+            <Link
+              key={title}
+              to={`/search?category=book&title=${title}`}
+              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
+              onFocus={() => setFocusIndex(index)}
+            >
+              {title}
+            </Link>
+          ))}
+
+          {/* 추천 검색어가 없다면 */}
+          {suggestedBooks.length === 0 && (
+            <div className="p-4">
+              <span>
+                <b>검색되는 도서가 없습니다.</b>
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
 type SuggestedType = {
   Movie: typeof Movie;
   Drama: typeof Drama;
+  Book: typeof Book;
 };
 const Suggested: SuggestedType = {
   Movie,
   Drama,
+  Book,
 };
 
 export default Suggested;

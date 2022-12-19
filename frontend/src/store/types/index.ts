@@ -31,3 +31,13 @@ export type {
   SimilarDramasRequest,
   SimilarDramasResponse,
 } from "./drama";
+
+export type {
+  Book,
+  SearchBooksRequest,
+  SearchBooksResponse,
+  SuggestBooksRequest,
+  SuggestBooksResponse,
+  SimilarBooksRequest,
+  SimilarBooksResponse,
+} from "./book";

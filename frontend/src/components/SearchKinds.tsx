@@ -1,23 +1,27 @@
 import { useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { movieThunkService, dramaThunkService } from "@src/store/thunks";
+import {
+  movieThunkService,
+  dramaThunkService,
+  bookThunkService,
+} from "@src/store/thunks";
 import { movieActions } from "@src/store/reducers/movieReducer";
+import { dramaActions } from "@src/store/reducers/dramaReducer";
+import { bookActions } from "@src/store/reducers/bookReducer";
 
 // util
-import { getMovieDBImagePath } from "@src/utils";
+import { dateFormat, getMovieDBImagePath } from "@src/utils";
 
 // hook
 import useInnerSize from "@src/hooks/useInnerSize";
 import useToastify from "@src/hooks/useToastify";
+import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 
 // components
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
 import Loading from "@src/components/Common/Loading";
 import SlickSlider from "@src/components/Common/SlickSlider";
-
-// type
-import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 
 // 영화
 const Movie = () => {
@@ -197,7 +201,7 @@ const Drama = () => {
   useToastify({
     doneMessage: searchDramasDone,
     errorMessage: searchDramasError,
-    callback: () => dispatch(movieActions.resetMessage()),
+    callback: () => dispatch(dramaActions.resetMessage()),
   });
 
   // 2022/12/16 - 검색 결과 중 메인으로 사용할 드라마 - by 1-blue
@@ -309,13 +313,170 @@ const Drama = () => {
   );
 };
 
+// 도서
+const Book = () => {
+  const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+  const [queryTitle] = searchParams.getAll("title");
+
+  const {
+    searchedBooks,
+    searchBooksDone,
+    searchBooksError,
+    searchBooksLoading,
+    similarBooks,
+    similarBooksLoading,
+  } = useAppSelector(({ book }) => book);
+
+  // 2022/12/16 - 도서 검색 - by 1-blue
+  useEffect(() => {
+    dispatch(bookThunkService.searchBooksThunk({ title: queryTitle }));
+  }, [dispatch, queryTitle]);
+
+  // 2022/12/16 - 현재 검색된 도서와 유사 도서들 검색 - by 1-blue
+  useEffect(() => {
+    if (!searchedBooks || searchedBooks.length === 0) return;
+
+    dispatch(
+      bookThunkService.similarBooksThunk({
+        author: searchedBooks[0].authors[0],
+      })
+    );
+  }, [searchedBooks, dispatch]);
+
+  //2022/12/16 - 검색 토스트 처리 - by 1-blue
+  useToastify({
+    doneMessage: searchBooksDone,
+    errorMessage: searchBooksError,
+    callback: () => dispatch(bookActions.resetMessage()),
+  });
+
+  // 2022/12/16 - 검색 결과 중 메인으로 사용할 도서 - by 1-blue
+  const target = useMemo(() => {
+    if (!searchedBooks || searchedBooks.length === 0) return null;
+
+    return searchedBooks[0];
+  }, [searchedBooks]);
+
+  // 2022/12/16 - 같이 검색된 / 유사 도서 필터링 ( 메인으로 검색된 도서 제외, 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
+  const filteredSearchBooks = useMemo(() => {
+    if (!searchedBooks) return null;
+
+    return searchedBooks
+      .filter((book) => book.isbn !== target?.isbn)
+      .map((book) => ({
+        path: book.thumbnail,
+        title: book.title,
+        description: book.contents,
+        date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),
+      }));
+  }, [searchedBooks, target]);
+  const filteredSimilarBooks = useMemo(() => {
+    if (!similarBooks) return null;
+
+    return similarBooks.map((book) => ({
+      path: book.thumbnail,
+      title: book.title,
+      description: book.contents,
+      date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),
+    }));
+  }, [similarBooks]);
+
+  // 도서 / 유사 도서 검색중
+  if (searchBooksLoading || similarBooksLoading) return <Loading.Book />;
+
+  return (
+    <>
+      {target ? (
+        <>
+          {/* 검색된 도서 배경화면 */}
+          <>
+            <Image.BackgroundImage
+              className="w-full h-screen"
+              path={target.thumbnail}
+              title={target.title}
+              description={target.contents}
+              date={dateFormat(new Date(target.datetime), "YYYY-MM-DD")}
+              alt={target.title + " 포스터 이미지"}
+            />
+
+            <div className="py-6" />
+          </>
+
+          {/* 같이 검색된 도서들 */}
+          {filteredSearchBooks && filteredSearchBooks.length >= 1 && (
+            <>
+              <section>
+                <h3 className="font-jua text-4xl px-4 pb-2">검색된 도서들</h3>
+                <SlickSlider
+                  datas={filteredSearchBooks}
+                  slidesToShow={5}
+                  responsive={[
+                    { breakpoint: 400, settings: { slidesToShow: 1 } },
+                    { breakpoint: 600, settings: { slidesToShow: 2 } },
+                    { breakpoint: 900, settings: { slidesToShow: 3 } },
+                    { breakpoint: 1024, settings: { slidesToShow: 4 } },
+                  ]}
+                />
+              </section>
+
+              <div className="py-6" />
+            </>
+          )}
+
+          {/* 유사 도서들 */}
+          {filteredSimilarBooks && filteredSimilarBooks.length >= 1 && (
+            <>
+              <section>
+                <h3 className="font-jua text-4xl px-4 pb-2">
+                  "{target.authors[0]}"님의 다른 도서들
+                </h3>
+                <SlickSlider
+                  datas={filteredSimilarBooks}
+                  slidesToShow={5}
+                  responsive={[
+                    { breakpoint: 400, settings: { slidesToShow: 1 } },
+                    { breakpoint: 600, settings: { slidesToShow: 2 } },
+                    { breakpoint: 900, settings: { slidesToShow: 3 } },
+                    { breakpoint: 1024, settings: { slidesToShow: 4 } },
+                  ]}
+                />
+              </section>
+
+              <div className="py-6" />
+            </>
+          )}
+        </>
+      ) : (
+        <section className="absolute inset-0 w-screen h-screen flex flex-col justify-center items-center">
+          <h4 className="font-extrabold text-2xl px-4 mb-6">
+            "{searchParams.getAll("title")}"(으)로 검색된 도서가 없습니다.
+          </h4>
+
+          <Icon shape="arrowDown" className="w-10 h-10 animate-bounce mb-2" />
+
+          <Link
+            to="/search"
+            state={{ isShow: true }}
+            className="bg-teal-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-teal-600 focus-ring transition-colors"
+          >
+            다시 검색하기
+          </Link>
+        </section>
+      )}
+    </>
+  );
+};
+
 type SearchKindsType = {
   Movie: typeof Movie;
   Drama: typeof Drama;
+  Book: typeof Book;
 };
 const SearchKinds: SearchKindsType = {
   Movie,
   Drama,
+  Book,
 };
 
 export default SearchKinds;

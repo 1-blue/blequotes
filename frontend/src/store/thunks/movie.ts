@@ -76,15 +76,7 @@ const suggestedMoviesThunk = createAsyncThunk(
         language,
       });
 
-      // 제목이 같은 영화는 추천 검색어에서 하나만 표시하도록 제외
-      const uniqueData = {
-        ...data,
-        results: data.data.movies.filter(
-          (movie, i, arr) => i === arr.findIndex((v) => v.title === movie.title)
-        ),
-      };
-
-      return uniqueData;
+      return data;
     } catch (error) {
       console.error("error >> ", error);
 

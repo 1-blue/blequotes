@@ -11,7 +11,7 @@ interface DramaState {
   top_rated: Drama[];
   on_the_air: Drama[];
   searchedDramas: Drama[];
-  suggestedDramas: Drama[];
+  suggestedDramas: string[];
   similarDramas: Drama[];
 
   // 특정 카테고리의 드라마들 요청
@@ -130,7 +130,7 @@ const dramaSlice = createSlice({
       (state, action) => {
         state.suggestedDramasLoading = false;
         state.suggestedDramasDone = action.payload.data.message;
-        state.suggestedDramas = action.payload.data.dramas;
+        state.suggestedDramas = action.payload.data.titles;
       }
     );
     builder.addCase(

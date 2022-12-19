@@ -63,7 +63,7 @@ movieRouter.get(
     try {
       const { title, language } = req.query;
 
-      const { data } = await movieService.apiSaerchMovies({ title, language });
+      const { data } = await movieService.apiSearchMovies({ title, language });
 
       return res.status(200).json({
         meta: { ok: true },
@@ -98,7 +98,7 @@ movieRouter.get(
         meta: { ok: true },
         data: {
           message: `"${keyword}"의 추천 검색어입니다."`,
-          movies: data.results,
+          titles: [...new Set(data.results.map((v) => v.title))],
         },
       });
     } catch (error) {
