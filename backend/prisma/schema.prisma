@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  MOVIE
+  DRAMA
+  BOOK
+}
+
+model Post {
+  idx Int @id @unique
+  category Category
+  speech String
+  like Int @default(0)
+  hate Int @default(0)
+  updatedAt DateTime @updatedAt
+  time String?
+  image String?
+}

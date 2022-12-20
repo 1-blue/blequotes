@@ -13,3 +13,6 @@
 
 # 
 *.js
+
+# prisma
+/prisma/migrations/*
