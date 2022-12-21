@@ -53,7 +53,7 @@ const BackgroundImage = ({
 
 // react-slick으로 사용할 포스터 이미지
 type SlickPosterProps = {
-  id: number;
+  id: string;
   category: PostCategory;
   paths: string[];
   isMainPoster: boolean;

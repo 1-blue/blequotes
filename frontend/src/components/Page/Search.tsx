@@ -215,7 +215,7 @@ const Search = () => {
             <RHF.Select
               register={register}
               name="category"
-              options={[
+              htmlOptions={[
                 { value: "movie", text: "영화" },
                 { value: "drama", text: "드라마" },
                 { value: "book", text: "도서" },

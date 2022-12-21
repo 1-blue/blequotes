@@ -47,7 +47,7 @@ const Drama = () => {
           }
 
           return {
-            id: drama.id,
+            id: drama.id + "",
             category: "DRAMA" as PostCategory,
             paths,
             title: drama.name,
@@ -72,7 +72,7 @@ const Drama = () => {
           }
 
           return {
-            id: drama.id,
+            id: drama.id + "",
             category: "DRAMA" as PostCategory,
             paths,
             title: drama.name,
@@ -97,7 +97,7 @@ const Drama = () => {
           }
 
           return {
-            id: drama.id,
+            id: drama.id + "",
             category: "DRAMA" as PostCategory,
             paths,
             title: drama.name,

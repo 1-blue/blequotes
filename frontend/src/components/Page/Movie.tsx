@@ -47,7 +47,7 @@ const Movie = () => {
           }
 
           return {
-            id: movie.id,
+            id: movie.id + "",
             category: "MOVIE" as PostCategory,
             paths,
             title: movie.title,
@@ -72,7 +72,7 @@ const Movie = () => {
           }
 
           return {
-            id: movie.id,
+            id: movie.id + "",
             category: "MOVIE" as PostCategory,
             paths,
             title: movie.title,
@@ -97,7 +97,7 @@ const Movie = () => {
           }
 
           return {
-            id: movie.id,
+            id: movie.id + "",
             category: "MOVIE" as PostCategory,
             paths,
             title: movie.title,

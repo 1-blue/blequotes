@@ -85,7 +85,7 @@ const Movie = () => {
         }
 
         return {
-          id: movie.id,
+          id: movie.id + "",
           category: "MOVIE" as PostCategory,
           paths,
           title: movie.title,
@@ -110,7 +110,7 @@ const Movie = () => {
         }
 
         return {
-          id: movie.id,
+          id: movie.id + "",
           category: "MOVIE" as PostCategory,
           paths,
           title: movie.title,
@@ -246,8 +246,8 @@ const Drama = () => {
         }
 
         return {
-          id: drama.id,
-          category: "MOVIE" as PostCategory,
+          id: drama.id + "",
+          category: "DRAMA" as PostCategory,
           paths,
           title: drama.name,
           description: drama.overview,
@@ -271,8 +271,8 @@ const Drama = () => {
         }
 
         return {
-          id: drama.id,
-          category: "MOVIE" as PostCategory,
+          id: drama.id + "",
+          category: "DRAMA" as PostCategory,
           paths,
           title: drama.name,
           description: drama.overview,
@@ -396,22 +396,20 @@ const Book = () => {
   const filteredSearchBooks = useMemo(() => {
     if (!searchedBooks) return null;
 
-    return searchedBooks
-      .filter((book) => book.isbn !== target?.isbn)
-      .map((book) => ({
-        id: +book.isbn,
-        category: "BOOK" as PostCategory,
-        paths: [book.thumbnail],
-        title: book.title,
-        description: book.contents,
-        date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),
-      }));
-  }, [searchedBooks, target]);
+    return searchedBooks.map((book) => ({
+      id: book.isbn,
+      category: "BOOK" as PostCategory,
+      paths: [book.thumbnail],
+      title: book.title,
+      description: book.contents,
+      date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),
+    }));
+  }, [searchedBooks]);
   const filteredSimilarBooks = useMemo(() => {
     if (!similarBooks) return null;
 
     return similarBooks.map((book) => ({
-      id: +book.isbn,
+      id: book.isbn,
       category: "BOOK" as PostCategory,
       paths: [book.thumbnail],
       title: book.title,

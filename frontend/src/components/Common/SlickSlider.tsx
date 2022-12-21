@@ -46,7 +46,7 @@ const settings: Settings = {
 
 type Props = {
   datas: {
-    id: number;
+    id: string;
     category: PostCategory;
     paths: string[];
     title?: string;

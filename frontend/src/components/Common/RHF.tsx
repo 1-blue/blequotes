@@ -1,8 +1,39 @@
+import { useCallback, useRef } from "react";
+
 // type
 import type { ReactNode } from "react";
-import type { FieldValues, UseFormRegister, Path } from "react-hook-form";
+import type {
+  FieldValues,
+  UseFormRegister,
+  Path,
+  RegisterOptions,
+  FieldError,
+} from "react-hook-form";
 
-// "react-hook-form"의 "form"
+// label
+type LabelProps = {
+  name: string;
+} & React.DetailedHTMLProps<
+  React.LabelHTMLAttributes<HTMLLabelElement>,
+  HTMLLabelElement
+>;
+const Label = ({ name, ...rest }: LabelProps) => {
+  return (
+    <label htmlFor={name} {...rest}>
+      {name}
+    </label>
+  );
+};
+
+// error message
+type ErrorMessageProps = {
+  text: string;
+};
+const ErrorMessage = ({ text }: ErrorMessageProps) => {
+  return <span className="text-sm text-red-500 font-bold">** {text} **</span>;
+};
+
+// 일반 "form"
 type FormProps = {
   children: ReactNode;
   onSubmit: () => void;
@@ -24,38 +55,111 @@ type InputProps<T extends FieldValues> = {
   register: UseFormRegister<T>;
   name: Path<T>;
   className?: string;
+  error?: FieldError;
+  options?: RegisterOptions;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 function Input<T extends FieldValues>({
   register,
   name,
   className,
+  error,
+  options,
   ...rest
 }: InputProps<T>) {
-  return <input {...register(name)} {...rest} className={className} />;
+  return (
+    <>
+      <div className="flex flex-col">
+        <Label name={name} hidden />
+
+        <input {...register(name, options)} {...rest} className={className} />
+
+        {error?.message && <ErrorMessage text={error.message} />}
+      </div>
+    </>
+  );
+}
+
+// "react-hook-form"의 "textarea"
+type TextAreaProps<T extends FieldValues> = {
+  register: UseFormRegister<T>;
+  name: Path<T>;
+  className?: string;
+  error?: FieldError;
+  options?: RegisterOptions;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+function TextArea<T extends FieldValues>({
+  register,
+  name,
+  className,
+  error,
+  options,
+  ...rest
+}: TextAreaProps<T>) {
+  const { ref: refSpeechRegister, ...restSpeechRegister } = register(
+    "speech" as Path<T>,
+    options
+  );
+  const speechRef = useRef<null | HTMLTextAreaElement>(null);
+  const handleResizeHeight = useCallback(() => {
+    if (!speechRef || !speechRef.current) return;
+
+    speechRef.current.style.height = "100px";
+    speechRef.current.style.height = speechRef.current.scrollHeight + "px";
+  }, []);
+
+  return (
+    <div className="flex flex-col">
+      <Label name={name} hidden />
+
+      <textarea
+        id={name}
+        {...restSpeechRegister}
+        {...rest}
+        className={className}
+        ref={(e) => {
+          refSpeechRegister(e);
+          speechRef.current = e;
+        }}
+        onInput={handleResizeHeight}
+      />
+
+      {error?.message && <ErrorMessage text={error.message} />}
+    </div>
+  );
 }
 
 // "react-hook-form"의 "Select"
 type SelectProps<T extends FieldValues> = {
   register: UseFormRegister<T>;
   name: Path<T>;
-  options: { value: string; text: string }[];
+  htmlOptions: { value: string; text: string }[];
   className?: string;
+  error?: FieldError;
+  options?: RegisterOptions;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 function Select<T extends FieldValues>({
   register,
   name,
-  options,
+  htmlOptions,
   className,
+  error,
+  options,
   ...rest
 }: SelectProps<T>) {
   return (
-    <select {...register(name)} {...rest} className={className}>
-      {options.map(({ value, text }) => (
-        <option key={value} value={value}>
-          {text}
-        </option>
-      ))}
-    </select>
+    <div className="flex flex-col">
+      <Label name={name} hidden />
+
+      <select {...register(name, options)} {...rest} className={className}>
+        {htmlOptions.map(({ value, text }) => (
+          <option key={value} value={value}>
+            {text}
+          </option>
+        ))}
+      </select>
+
+      {error?.message && <ErrorMessage text={error.message} />}
+    </div>
   );
 }
 
@@ -78,12 +182,14 @@ const Button = ({ children, className, ...rest }: ButtonProps) => {
 type RHFType = {
   Form: typeof Form;
   Input: typeof Input;
+  TextArea: typeof TextArea;
   Select: typeof Select;
   Button: typeof Button;
 };
 const RHF: RHFType = {
   Form,
   Input,
+  TextArea,
   Select,
   Button,
 };

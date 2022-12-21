@@ -34,3 +34,10 @@
     word-break: keep-all;
   }
 }
+
+@layer utilities {
+  /* "translate"를 이용한 센터 정렬 */
+  .translate-center {
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
