@@ -5,13 +5,13 @@ import { movieThunkService } from "@src/store/thunks";
 // util
 import { getMovieDBImagePath } from "@src/utils";
 
-// hook
-import useInnerSize from "@src/hooks/useInnerSize";
-
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
 import Loading from "@src/components/Common/Loading";
+
+// type
+import type { PostCategory } from "@src/types";
 
 const Movie = () => {
   const dispatch = useAppDispatch();
@@ -31,51 +31,81 @@ const Movie = () => {
     }
   }, [dispatch, popular, top_rated, now_playing]);
 
-  // 2022/12/06 - 현재 width 구하기 - by 1-blue
-  const [innerWidth] = useInnerSize();
-
-  // 2022/12/15 - 인기 / 꾸준한 인기 / 현재 상영중인 영화들 필터링 ( 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
+  // 2022/12/15 - 인기 / 꾸준한 인기 / 현재 상영중인 영화들 필터링 - by 1-blue
   const filteredPopularDatas = useMemo(
     () =>
       popular
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.title,
-          description: v.overview,
-          date: v.release_date,
-        })),
-    [popular, innerWidth]
+        .filter((movie) => movie.backdrop_path || movie.poster_path)
+        .map((movie) => {
+          const paths: string[] = [];
+
+          if (movie.poster_path) {
+            paths.push(getMovieDBImagePath(movie.poster_path));
+          }
+          if (movie.backdrop_path) {
+            paths.push(getMovieDBImagePath(movie.backdrop_path));
+          }
+
+          return {
+            id: movie.id,
+            category: "MOVIE" as PostCategory,
+            paths,
+            title: movie.title,
+            description: movie.overview,
+            date: movie.release_date,
+          };
+        }),
+    [popular]
   );
   const filteredTopRatedDatas = useMemo(
     () =>
       top_rated
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.title,
-          description: v.overview,
-          date: v.release_date,
-        })),
-    [top_rated, innerWidth]
+        .filter((movie) => movie.backdrop_path || movie.poster_path)
+        .map((movie) => {
+          const paths: string[] = [];
+
+          if (movie.poster_path) {
+            paths.push(getMovieDBImagePath(movie.poster_path));
+          }
+          if (movie.backdrop_path) {
+            paths.push(getMovieDBImagePath(movie.backdrop_path));
+          }
+
+          return {
+            id: movie.id,
+            category: "MOVIE" as PostCategory,
+            paths,
+            title: movie.title,
+            description: movie.overview,
+            date: movie.release_date,
+          };
+        }),
+    [top_rated]
   );
   const filteredNowPlayingDatas = useMemo(
     () =>
       now_playing
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.title,
-          description: v.overview,
-          date: v.release_date,
-        })),
-    [now_playing, innerWidth]
+        .filter((movie) => movie.backdrop_path || movie.poster_path)
+        .map((movie) => {
+          const paths: string[] = [];
+
+          if (movie.poster_path) {
+            paths.push(getMovieDBImagePath(movie.poster_path));
+          }
+          if (movie.backdrop_path) {
+            paths.push(getMovieDBImagePath(movie.backdrop_path));
+          }
+
+          return {
+            id: movie.id,
+            category: "MOVIE" as PostCategory,
+            paths,
+            title: movie.title,
+            description: movie.overview,
+            date: movie.release_date,
+          };
+        }),
+    [now_playing]
   );
 
   // 영화를 패치하는 중이라면

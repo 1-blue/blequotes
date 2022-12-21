@@ -6,6 +6,26 @@ import Image from "@src/components/Common/Image";
 
 // type
 import type { Settings } from "react-slick";
+import type { PostCategory } from "@src/types";
+
+type ArrowButtonProps = {
+  className?: string;
+  onClick?: () => void;
+};
+const ArrowButton = ({ className, onClick }: ArrowButtonProps) => {
+  return (
+    <div
+      className={className}
+      onClick={onClick}
+      style={{
+        height: "100%",
+        zIndex: 1,
+        backgroundColor: "#232323",
+        color: "white",
+      }}
+    />
+  );
+};
 
 const settings: Settings = {
   className: "center",
@@ -14,8 +34,9 @@ const settings: Settings = {
   infinite: true,
   slidesToShow: 3,
   speed: 500,
-  arrows: false,
+  arrows: true,
   dots: true,
+  touchMove: false,
   responsive: [
     { breakpoint: 400, settings: { slidesToShow: 1 } },
     { breakpoint: 700, settings: { slidesToShow: 2 } },
@@ -25,7 +46,9 @@ const settings: Settings = {
 
 type Props = {
   datas: {
-    path: string;
+    id: number;
+    category: PostCategory;
+    paths: string[];
     title?: string;
     description?: string;
     date: string;
@@ -45,12 +68,16 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
       {...rest}
       afterChange={afterChange}
       className="bg-zinc-300"
+      prevArrow={<ArrowButton />}
+      nextArrow={<ArrowButton />}
     >
-      {datas.map(({ path, title, description, date }, i) => (
-        <Image.Poster
-          key={path}
-          path={path}
-          isCenter={currentPoster === i}
+      {datas.map(({ id, category, paths, title, description, date }, i) => (
+        <Image.SlickPoster
+          key={id}
+          id={id}
+          category={category}
+          paths={paths}
+          isMainPoster={currentPoster === i}
           alt={title + " 이미지"}
           title={title}
           description={description}

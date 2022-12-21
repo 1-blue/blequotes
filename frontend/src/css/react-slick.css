@@ -14,3 +14,18 @@
 body .slick-dots li {
   margin: 0;
 }
+
+/* arrow 커스터마이징 */
+body .slick-prev { left: 0; width: 30px; }
+body .slick-next { right: 0; width: 40px; }
+body .slick-prev::before, body .slick-next::before {
+  position: absolute;
+  inset: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 10px;
+  height: 30px;
+  color: white;
+  font-weight: bold;
+}
+body .slick-prev::before { content: "⧼"; }
+body .slick-next::before { content: "⧽"; }

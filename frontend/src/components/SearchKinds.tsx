@@ -13,7 +13,6 @@ import { bookActions } from "@src/store/reducers/bookReducer";
 import { dateFormat, getMovieDBImagePath } from "@src/utils";
 
 // hook
-import useInnerSize from "@src/hooks/useInnerSize";
 import useToastify from "@src/hooks/useToastify";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 
@@ -22,6 +21,9 @@ import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
 import Loading from "@src/components/Common/Loading";
 import SlickSlider from "@src/components/Common/SlickSlider";
+
+// type
+import type { PostCategory } from "@src/types";
 
 // 영화
 const Movie = () => {
@@ -66,41 +68,57 @@ const Movie = () => {
     return searchedMovies[0];
   }, [searchedMovies]);
 
-  // 2022/12/16 - 현재 width 구하기 - by 1-blue
-  const [innerWidth] = useInnerSize();
-
   // 2022/12/16 - 같이 검색된 / 유사 영화 필터링 ( 메인으로 검색된 영화 제외, 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
   const filteredSearchMovies = useMemo(() => {
     if (!searchedMovies) return null;
 
     return searchedMovies
-      .filter((v) => v.id !== target?.id)
-      .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-      .map((v) => ({
-        path: getMovieDBImagePath(
-          innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-        ),
-        title: v.title,
-        description: v.overview,
-        date: v.release_date,
-      }));
-  }, [searchedMovies, innerWidth, target]);
+      .filter((movie) => movie.backdrop_path || movie.poster_path)
+      .map((movie) => {
+        const paths: string[] = [];
+
+        if (movie.poster_path) {
+          paths.push(getMovieDBImagePath(movie.poster_path));
+        }
+        if (movie.backdrop_path) {
+          paths.push(getMovieDBImagePath(movie.backdrop_path));
+        }
+
+        return {
+          id: movie.id,
+          category: "MOVIE" as PostCategory,
+          paths,
+          title: movie.title,
+          description: movie.overview,
+          date: movie.release_date,
+        };
+      });
+  }, [searchedMovies]);
   const filteredSimilarMovies = useMemo(() => {
     if (!similarMovies) return null;
 
     return similarMovies
-      .filter((movie) =>
-        innerWidth >= 1024 ? movie.backdrop_path : movie.poster_path
-      )
-      .map((movie) => ({
-        path: getMovieDBImagePath(
-          innerWidth >= 1024 ? movie.backdrop_path : movie.poster_path
-        ),
-        title: movie.title,
-        description: movie.overview,
-        date: movie.release_date,
-      }));
-  }, [similarMovies, innerWidth]);
+      .filter((movie) => movie.backdrop_path || movie.poster_path)
+      .map((movie) => {
+        const paths: string[] = [];
+
+        if (movie.poster_path) {
+          paths.push(getMovieDBImagePath(movie.poster_path));
+        }
+        if (movie.backdrop_path) {
+          paths.push(getMovieDBImagePath(movie.backdrop_path));
+        }
+
+        return {
+          id: movie.id,
+          category: "MOVIE" as PostCategory,
+          paths,
+          title: movie.title,
+          description: movie.overview,
+          date: movie.release_date,
+        };
+      });
+  }, [similarMovies]);
 
   // 영화 / 유사 영화 검색중
   if (searchMoviesLoading || similarMoviesLoading) return <Loading.Movie />;
@@ -211,41 +229,57 @@ const Drama = () => {
     return searchedDramas[0];
   }, [searchedDramas]);
 
-  // 2022/12/16 - 현재 width 구하기 - by 1-blue
-  const [innerWidth] = useInnerSize();
-
   // 2022/12/16 - 같이 검색된 / 유사 드라마 필터링 ( 메인으로 검색된 드라마 제외, 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
   const filteredSearchDramas = useMemo(() => {
     if (!searchedDramas) return null;
 
     return searchedDramas
-      .filter((v) => v.id !== target?.id)
-      .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-      .map((v) => ({
-        path: getMovieDBImagePath(
-          innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-        ),
-        title: v.name,
-        description: v.overview,
-        date: v.first_air_date,
-      }));
-  }, [searchedDramas, innerWidth, target]);
+      .filter((drama) => drama.backdrop_path || drama.poster_path)
+      .map((drama) => {
+        const paths: string[] = [];
+
+        if (drama.poster_path) {
+          paths.push(getMovieDBImagePath(drama.poster_path));
+        }
+        if (drama.backdrop_path) {
+          paths.push(getMovieDBImagePath(drama.backdrop_path));
+        }
+
+        return {
+          id: drama.id,
+          category: "MOVIE" as PostCategory,
+          paths,
+          title: drama.name,
+          description: drama.overview,
+          date: drama.first_air_date,
+        };
+      });
+  }, [searchedDramas]);
   const filteredSimilarDramas = useMemo(() => {
     if (!similarDramas) return null;
 
     return similarDramas
-      .filter((drama) =>
-        innerWidth >= 1024 ? drama.backdrop_path : drama.poster_path
-      )
-      .map((drama) => ({
-        path: getMovieDBImagePath(
-          innerWidth >= 1024 ? drama.backdrop_path : drama.poster_path
-        ),
-        title: drama.name,
-        description: drama.overview,
-        date: drama.first_air_date,
-      }));
-  }, [similarDramas, innerWidth]);
+      .filter((drama) => drama.backdrop_path || drama.poster_path)
+      .map((drama) => {
+        const paths: string[] = [];
+
+        if (drama.poster_path) {
+          paths.push(getMovieDBImagePath(drama.poster_path));
+        }
+        if (drama.backdrop_path) {
+          paths.push(getMovieDBImagePath(drama.backdrop_path));
+        }
+
+        return {
+          id: drama.id,
+          category: "MOVIE" as PostCategory,
+          paths,
+          title: drama.name,
+          description: drama.overview,
+          date: drama.first_air_date,
+        };
+      });
+  }, [similarDramas]);
 
   // 드라마 / 유사 드라마 검색중
   if (searchDramasLoading || similarDramasLoading) return <Loading.Movie />;
@@ -365,7 +399,9 @@ const Book = () => {
     return searchedBooks
       .filter((book) => book.isbn !== target?.isbn)
       .map((book) => ({
-        path: book.thumbnail,
+        id: +book.isbn,
+        category: "BOOK" as PostCategory,
+        paths: [book.thumbnail],
         title: book.title,
         description: book.contents,
         date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),
@@ -375,7 +411,9 @@ const Book = () => {
     if (!similarBooks) return null;
 
     return similarBooks.map((book) => ({
-      path: book.thumbnail,
+      id: +book.isbn,
+      category: "BOOK" as PostCategory,
+      paths: [book.thumbnail],
       title: book.title,
       description: book.contents,
       date: dateFormat(new Date(book.datetime), "YYYY-MM-DD"),

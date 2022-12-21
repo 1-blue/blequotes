@@ -5,13 +5,13 @@ import { dramaThunkService } from "@src/store/thunks";
 // util
 import { getMovieDBImagePath } from "@src/utils";
 
-// hook
-import useInnerSize from "@src/hooks/useInnerSize";
-
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
 import Loading from "@src/components/Common/Loading";
+
+// type
+import type { PostCategory } from "@src/types";
 
 const Drama = () => {
   const dispatch = useAppDispatch();
@@ -31,52 +31,81 @@ const Drama = () => {
       dispatch(dramaThunkService.fetchDramasThunk({ category: "on_the_air" }));
     }
   }, [dispatch, popular, top_rated, on_the_air]);
-
-  // 2022/12/15 - 현재 width 구하기 - by 1-blue
-  const [innerWidth] = useInnerSize();
-
   // 2022/12/15 - 인기 / 현재 상영중 / 꾸준한 인기 드라마들 필터링 ( 현재 브라우저 사이즈에 맞는 이미지 없는 경우 제외 ) - by 1-blue
   const filteredPopularDatas = useMemo(
     () =>
       popular
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.name,
-          description: v.overview,
-          date: v.first_air_date,
-        })),
-    [popular, innerWidth]
+        .filter((v) => v.backdrop_path || v.poster_path)
+        .map((drama) => {
+          const paths: string[] = [];
+
+          if (drama.poster_path) {
+            paths.push(getMovieDBImagePath(drama.poster_path));
+          }
+          if (drama.backdrop_path) {
+            paths.push(getMovieDBImagePath(drama.backdrop_path));
+          }
+
+          return {
+            id: drama.id,
+            category: "DRAMA" as PostCategory,
+            paths,
+            title: drama.name,
+            description: drama.overview,
+            date: drama.first_air_date,
+          };
+        }),
+    [popular]
   );
   const filteredOnTheAirDatas = useMemo(
     () =>
       on_the_air
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.name,
-          description: v.overview,
-          date: v.first_air_date,
-        })),
-    [on_the_air, innerWidth]
+        .filter((v) => v.backdrop_path || v.poster_path)
+        .map((drama) => {
+          const paths: string[] = [];
+
+          if (drama.poster_path) {
+            paths.push(getMovieDBImagePath(drama.poster_path));
+          }
+          if (drama.backdrop_path) {
+            paths.push(getMovieDBImagePath(drama.backdrop_path));
+          }
+
+          return {
+            id: drama.id,
+            category: "DRAMA" as PostCategory,
+            paths,
+            title: drama.name,
+            description: drama.overview,
+            date: drama.first_air_date,
+          };
+        }),
+    [on_the_air]
   );
   const filteredTopRatedDatas = useMemo(
     () =>
       top_rated
-        .filter((v) => (innerWidth >= 1024 ? v.backdrop_path : v.poster_path))
-        .map((v) => ({
-          path: getMovieDBImagePath(
-            innerWidth >= 1024 ? v.backdrop_path : v.poster_path
-          ),
-          title: v.name,
-          description: v.overview,
-          date: v.first_air_date,
-        })),
-    [top_rated, innerWidth]
+        .filter((v) => v.backdrop_path || v.poster_path)
+        .map((drama) => {
+          const paths: string[] = [];
+
+          if (drama.poster_path) {
+            paths.push(getMovieDBImagePath(drama.poster_path));
+          }
+          if (drama.backdrop_path) {
+            paths.push(getMovieDBImagePath(drama.backdrop_path));
+          }
+
+          return {
+            id: drama.id,
+            category: "DRAMA" as PostCategory,
+            paths,
+            title: drama.name,
+            description: drama.overview,
+            date: drama.first_air_date,
+          };
+        }),
+    [top_rated]
   );
 
   // 드라마를 패치하는 중이라면
