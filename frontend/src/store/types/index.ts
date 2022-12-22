@@ -41,3 +41,14 @@ export type {
   SimilarBooksRequest,
   SimilarBooksResponse,
 } from "./book";
+
+export type {
+  FetchPresignedURLRequest,
+  FetchPresignedURLResponse,
+  CreateImageRequest,
+  CreateImageResponse,
+  DeleteImageRequest,
+  DeleteImageResponse,
+} from "./image";
+
+export type { CreatePostRequest, CreatePostResponse } from "./post";

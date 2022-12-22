@@ -7,19 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Category {
+enum PostCategory {
   MOVIE
   DRAMA
   BOOK
 }
 
+// id -> 해당 게시글의 유일한 식별자
+// idx -> 해당 게시글의 주제( 영화, 드라마, 도서 )의 식별자 ( 영화, 드라마 -> movieDB에서 제공한 id, 도서 -> isbn )
 model Post {
-  idx Int @id @unique
-  category Category
+  id Int @id @unique @default(autoincrement())
+  idx String
+  category PostCategory
   speech String
   like Int @default(0)
   hate Int @default(0)
   updatedAt DateTime @updatedAt
   time String?
-  image String?
+  episode Int?
+  page Int?
+  thumbnail String?
 }

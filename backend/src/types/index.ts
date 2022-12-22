@@ -76,3 +76,18 @@ export {
   SimilarBooksRequest,
   SimilarBooksResponse,
 } from "./book";
+
+// s3(image) type
+export type {
+  ApiFetchPresignedURLRequest,
+  ApiFetchPresignedURLResponse,
+  FetchPresignedURLRequest,
+  FetchPresignedURLResponse,
+  ApiDeleteImageRequest,
+  ApiDeleteImageResponse,
+  DeleteImageRequest,
+  DeleteImageResponse,
+} from "./image";
+
+// post type
+export type { CreatePostRequest, CreatePostResponse } from "./post";

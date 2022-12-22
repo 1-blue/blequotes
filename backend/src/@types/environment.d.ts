@@ -7,5 +7,10 @@ namespace NodeJS {
 
     KAKAO_API_URL: string;
     KAKAO_API_KEY: string;
+
+    AWS_BUCKET: string;
+    AWS_REGION: string;
+    AWS_ACCESS_KEY: string;
+    AWS_ACCESS_SECRET_KEY: string;
   }
 }

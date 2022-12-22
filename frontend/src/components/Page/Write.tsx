@@ -1,14 +1,23 @@
-import { useState, useEffect, useMemo, useRef } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { postThunkService } from "@src/store/thunks";
+import { postActions } from "@src/store/reducers/postReducer";
+
+// api
+import { imageApiService } from "@src/store/apis";
 
 // hook
+import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import useInnerSize from "@src/hooks/useInnerSize";
+import useToastify from "@src/hooks/useToastify";
 
 // component
 import RHF from "@src/components/Common/RHF";
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
+import Loading from "@src/components/Common/Loading";
+import NotFountPost from "@src/components/NotFoundPost";
 
 // type
 import type { PostCategory, SStorageData } from "@src/types";
@@ -34,6 +43,8 @@ type PostForm = {
 };
 
 const Write = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { title } = useParams<ParamsType>();
   const {
     state: { id, category },
@@ -90,11 +101,96 @@ const Write = () => {
     }
   }, [thumbnailFiles]);
 
+  // 2022/12/22 - 게시글을 생성중인지 판단할 변수 - by 1-blue
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
+
+  //
+  const { createPostDone, createPostError } = useAppSelector(
+    (state) => state.post
+  );
+
+  // 2022/12/22 - 게시글 생성 요청 - by 1-blue
+  const createPost = useCallback(
+    async (e: PostForm) => {
+      // 게시글 생성 시작
+      setIsCreatingPost(true);
+
+      try {
+        let thumbnailPath: undefined | string = undefined;
+
+        // 썸네일이 있다면 업로드
+        if (e.thumbnail && e.thumbnail?.length > 0) {
+          // presignedURL 요청
+          const {
+            data: {
+              data: { preSignedURL },
+            },
+          } = await imageApiService.apiFetchPresinedURL({
+            name: e.thumbnail[0].name,
+          });
+
+          // 업로드된 이미지의 URL ( 이미지명에 "?"가 들어가 있지 않은 경우 "?"를 기준으로 나누면 됨 )
+          // >>> 이미지명에 "?"가 들어가 있는 경우 애초에 "?"를 제거하고 요청을 보내도록 수정하기
+          thumbnailPath = preSignedURL.slice(0, preSignedURL.indexOf("?"));
+
+          // 이미지 업로드 요청
+          await imageApiService.apiCreateImage({
+            preSignedURL,
+            file: e.thumbnail[0],
+          });
+        }
+
+        const { thumbnail, hour, minute, second, ...rest } = e;
+        let time: undefined | string = undefined;
+        const episode = rest.episode && +rest.episode;
+        const page = rest.page && +rest.page;
+
+        if (hour || minute || second) {
+          time = `${hour ? hour : 0}시간 ${minute ? minute : 0}분 ${
+            second ? second : 0
+          }초`;
+        }
+
+        dispatch(
+          postThunkService.createPostThunk({
+            ...rest,
+            time,
+            episode,
+            page,
+            thumbnail: thumbnailPath,
+          })
+        );
+      } catch (error) {
+        console.error("게시글 생성 or 이미지 업로드 실패 >> ", error);
+      } finally {
+        // 게시글 생성 끝
+        setIsCreatingPost(false);
+      }
+    },
+    [dispatch]
+  );
+
+  // 2022/12/22 - 게시글 생성 토스트 처리 - by 1-blue
+  useToastify({
+    doneMessage: createPostDone,
+    errorMessage: createPostError,
+    callback() {
+      navigate(`/post/${title}`, { state: { id, category } });
+      dispatch(postActions.resetMessage());
+    },
+  });
+
   // >>> 혹시 모르는 안전장치들
-  if (!title || !id || !category) return <h1>다시 접속해주세요!</h1>;
-  if (!data) return <h1>다시 접속해주세요!</h1>;
-  if (data.title !== title || data.id !== id || data.category !== category)
-    return <h1>다시 접속해주세요!</h1>;
+  if (
+    !title ||
+    !id ||
+    !category ||
+    !data ||
+    data.title !== title ||
+    data.id !== id ||
+    data.category !== category
+  )
+    return <NotFountPost title={title} />;
 
   return (
     <>
@@ -127,9 +223,7 @@ const Write = () => {
 
       {/* 하단 입력부 */}
       <RHF.Form
-        onSubmit={handleSubmit((e) => {
-          console.log("제출? >> ", e);
-        })}
+        onSubmit={handleSubmit(createPost)}
         className="flex flex-col w-[60vw] min-w-[300px] mx-auto space-y-2"
       >
         <RHF.TextArea
@@ -272,6 +366,11 @@ const Write = () => {
           </div>
         </div>
       </RHF.Form>
+
+      {/* 게시글 업로드 중 스피너 */}
+      {isCreatingPost && (
+        <Loading.FullScreen message="게시글을 생성하는 중입니다." />
+      )}
     </>
   );
 };

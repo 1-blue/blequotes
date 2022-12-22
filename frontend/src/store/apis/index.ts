@@ -12,3 +12,5 @@ export const serverInstance = axios.create({
 export { movieApiService } from "./movie";
 export { dramaApiService } from "./drama";
 export { bookApiService } from "./book";
+export { imageApiService } from "./image";
+export { postApiService } from "./post";
