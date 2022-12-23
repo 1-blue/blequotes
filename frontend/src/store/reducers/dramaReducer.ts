@@ -72,6 +72,14 @@ const dramaSlice = createSlice({
       state.searchDramasLoading = false;
       state.searchDramasDone = null;
       state.searchDramasError = null;
+
+      state.suggestedDramasLoading = false;
+      state.suggestedDramasDone = null;
+      state.suggestedDramasError = null;
+
+      state.similarDramasLoading = false;
+      state.similarDramasDone = null;
+      state.similarDramasError = null;
     },
   },
 

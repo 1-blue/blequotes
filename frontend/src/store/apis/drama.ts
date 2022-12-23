@@ -22,9 +22,9 @@ const apiFetchDramas = async ({
   category,
   language = "ko-kr",
 }: FetchDramasRequest) =>
-  await serverInstance.get<FetchDramasResponse>(
-    `/api/drama?category=${category}&language=${language}`
-  );
+  await serverInstance.get<FetchDramasResponse>(`/api/drama`, {
+    params: { category, language },
+  });
 
 /**
  * 2022/12/15 - 드라마 검색 요청 - by 1-blue
@@ -35,9 +35,9 @@ const apiSearchDramas = async ({
   title,
   language = "ko-kr",
 }: SearchDramasRequest) =>
-  await serverInstance.get<SearchDramasResponse>(
-    `/api/drama/search?title=${encodeURI(title)}&language=${language}`
-  );
+  await serverInstance.get<SearchDramasResponse>(`/api/drama/search`, {
+    params: { title, language },
+  });
 
 /**
  * 2022/12/15 - 추천 드라마 검색어 요청 - by 1-blue
@@ -48,9 +48,9 @@ const apiSuggestedDramas = async ({
   keyword,
   language = "ko-kr",
 }: SuggestDramasRequest) =>
-  await serverInstance.get<SuggestDramasResponse>(
-    `/api/drama/suggested?keyword=${encodeURI(keyword)}&language=${language}`
-  );
+  await serverInstance.get<SuggestDramasResponse>(`/api/drama/suggested`, {
+    params: { keyword, language },
+  });
 
 /**
  * 2022/12/15 - 유사 드라마 검색어 요청 - by 1-blue
@@ -61,9 +61,9 @@ const apiSimilarDramas = async ({
   dramaId,
   language = "ko-kr",
 }: SimilarDramasRequest) =>
-  await serverInstance.get<SimilarDramasResponse>(
-    `/api/drama/similar?dramaId=${dramaId}&language=${language}`
-  );
+  await serverInstance.get<SimilarDramasResponse>(`/api/drama/similar`, {
+    params: { dramaId, language },
+  });
 
 /**
  * 2022/12/17 - 드라마 api 요청 메서드들을 갖는 객체 - by 1-blue

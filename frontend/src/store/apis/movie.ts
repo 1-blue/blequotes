@@ -22,9 +22,9 @@ const apiFetchMovies = async ({
   category,
   language = "ko-kr",
 }: FetchMoviesRequest) =>
-  await serverInstance.get<FetchMoviesResponse>(
-    `/api/movie?category=${category}&language=${language}`
-  );
+  await serverInstance.get<FetchMoviesResponse>(`/api/movie`, {
+    params: { category, language },
+  });
 
 /**
  * 2022/12/17 - 영화 검색 요청 - by 1-blue
@@ -35,9 +35,9 @@ const apiSearchMovies = async ({
   title,
   language = "ko-kr",
 }: SearchMoviesRequest) =>
-  await serverInstance.get<SearchMoviesResponse>(
-    `/api/movie/search?language=${language}&title=${encodeURI(title)}`
-  );
+  await serverInstance.get<SearchMoviesResponse>(`/api/movie/search`, {
+    params: { title, language },
+  });
 
 /**
  * 2022/12/17 - 추천 영화 검색어 요청 - by 1-blue
@@ -48,9 +48,9 @@ const apiSuggestedMovies = async ({
   keyword,
   language = "ko-kr",
 }: SuggestMoviesRequest) =>
-  await serverInstance.get<SuggestMoviesResponse>(
-    `/api/movie/suggested?language=${language}&keyword=${encodeURI(keyword)}`
-  );
+  await serverInstance.get<SuggestMoviesResponse>(`/api/movie/suggested`, {
+    params: { keyword, language },
+  });
 
 /**
  * 2022/12/17 - 유사 영화들 요청 - by 1-blue
@@ -61,9 +61,9 @@ const apiSimilarMovies = async ({
   movieId,
   language = "ko-kr",
 }: SimilarMoviesRequest) =>
-  await serverInstance.get<SimilarMoviesResponse>(
-    `/api/movie/similar?movieId=${movieId}&language=${language}`
-  );
+  await serverInstance.get<SimilarMoviesResponse>(`/api/movie/similar`, {
+    params: { movieId, language },
+  });
 
 /**
  * 2022/12/17 - 영화 api 요청 메서드들을 갖는 객체 - by 1-blue

@@ -8,7 +8,7 @@ const Absolute = () => {
       style={{ perspective: "400px", perspectiveOrigin: "top" }}
     >
       <img
-        src="./logo.png"
+        src="/logo.png"
         alt="로고 이미지"
         className="w-full h-full animate-spinner-rotate"
       />
@@ -27,7 +27,7 @@ const Relative = ({ outerClassName, innerClassName }: RelativeProps) => {
       style={{ perspective: "400px", perspectiveOrigin: "top" }}
     >
       <img
-        src="./logo.png"
+        src="/logo.png"
         alt="로고 이미지"
         className={combineClassNames(
           "w-20 h-20 animate-spinner-rotate",

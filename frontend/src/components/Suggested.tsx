@@ -19,7 +19,7 @@ const Movie = ({ setFocusIndex }: Props) => {
             <Link
               key={title}
               to={`/search?category=movie&title=${title}`}
-              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
+              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-main-400 hover:text-white focus:outline-none focus:bg-main-400 focus:text-white"
               onFocus={() => setFocusIndex(index)}
             >
               {title}
@@ -54,7 +54,7 @@ const Drama = ({ setFocusIndex }: Props) => {
             <Link
               key={title}
               to={`/search?category=drama&title=${title}`}
-              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
+              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-main-400 hover:text-white focus:outline-none focus:bg-main-400 focus:text-white"
               onFocus={() => setFocusIndex(index)}
             >
               {title}
@@ -89,7 +89,7 @@ const Book = ({ setFocusIndex }: Props) => {
             <Link
               key={title}
               to={`/search?category=book&title=${title}`}
-              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-teal-400 hover:text-white focus:outline-none focus:bg-teal-400 focus:text-white"
+              className="px-4 py-1 transition-colors whitespace-nowrap text-ellipsis overflow-hidden break-keep hover:bg-main-400 hover:text-white focus:outline-none focus:bg-main-400 focus:text-white"
               onFocus={() => setFocusIndex(index)}
             >
               {title}

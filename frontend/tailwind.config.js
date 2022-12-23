@@ -17,6 +17,20 @@ module.exports = {
       animation: {
         "spinner-rotate": "spinner-rotate 2s ease-out infinite",
       },
+
+      // main-color
+      colors: {
+        "main-50": "#f0fdfa",
+        "main-100": "#ccfbf1",
+        "main-200": "#99f6e4",
+        "main-300": "#5eead4",
+        "main-400": "#2dd4bf",
+        "main-500": "#14b8a6",
+        "main-600": "#0d9488",
+        "main-700": "#0f766e",
+        "main-800": "#115e59",
+        "main-900": "#134e4a",
+      },
     },
     fontFamily: {
       nanumGothic: ["Nanum Gothic", "sans-serif"],

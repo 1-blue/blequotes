@@ -176,7 +176,7 @@ const Movie = () => {
           <Link
             to="/search"
             state={{ isShow: true }}
-            className="bg-teal-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-teal-600 focus-ring transition-colors"
+            className="bg-main-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-main-600 focus-ring transition-colors"
           >
             다시 검색하기
           </Link>
@@ -337,7 +337,7 @@ const Drama = () => {
           <Link
             to="/search"
             state={{ isShow: true }}
-            className="bg-teal-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-teal-600 focus-ring transition-colors"
+            className="bg-main-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-main-600 focus-ring transition-colors"
           >
             다시 검색하기
           </Link>
@@ -494,7 +494,7 @@ const Book = () => {
           <Link
             to="/search"
             state={{ isShow: true }}
-            className="bg-teal-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-teal-600 focus-ring transition-colors"
+            className="bg-main-500 px-4 py-2 font-bold text-lg rounded-sm text-white hover:bg-main-600 focus-ring transition-colors"
           >
             다시 검색하기
           </Link>

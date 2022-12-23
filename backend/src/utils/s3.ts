@@ -44,7 +44,7 @@ export const getPresignedURL = ({ name }: ApiFetchPresignedURLRequest) => {
     Expires: 20,
   });
 
-  return { preSignedURL, photoURL };
+  return { preSignedURL };
 };
 
 /**

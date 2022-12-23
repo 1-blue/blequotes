@@ -73,6 +73,14 @@ const movieSlice = createSlice({
       state.searchMoviesLoading = false;
       state.searchMoviesDone = null;
       state.searchMoviesError = null;
+
+      state.suggestedMoviesLoading = false;
+      state.suggestedMoviesDone = null;
+      state.suggestedMoviesError = null;
+
+      state.similarMoviesLoading = false;
+      state.similarMoviesDone = null;
+      state.similarMoviesError = null;
     },
   },
 

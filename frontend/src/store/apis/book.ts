@@ -15,7 +15,9 @@ import type {
  * @returns 검색된 도서들
  */
 const apiSearchBooks = async ({ title }: SearchBooksRequest) =>
-  await serverInstance.get(`/api/book/search?title=${encodeURI(title)}`);
+  await serverInstance.get(`/api/book/search`, {
+    params: { title },
+  });
 
 /**
  * 2022/12/18 - 추천 도서 검색어 요청 - by 1-blue
@@ -23,9 +25,9 @@ const apiSearchBooks = async ({ title }: SearchBooksRequest) =>
  * @returns 검색된 추천 도서 검색어들
  */
 const apiSuggestedBooks = async ({ keyword }: SuggestBooksRequest) =>
-  await serverInstance.get<SuggestBooksResponse>(
-    `/api/book/suggested?keyword=${encodeURI(keyword)}`
-  );
+  await serverInstance.get<SuggestBooksResponse>(`/api/book/suggested`, {
+    params: { keyword },
+  });
 
 /**
  * 2022/12/18 - 유사 도서들 요청 - by 1-blue
@@ -33,9 +35,9 @@ const apiSuggestedBooks = async ({ keyword }: SuggestBooksRequest) =>
  * @returns 검색된 유사 도서들
  */
 const apiSimilaredBooks = async ({ author }: SimilarBooksRequest) =>
-  await serverInstance.get<SimilarBooksResponse>(
-    `/api/book/similar?author=${encodeURI(author)}`
-  );
+  await serverInstance.get<SimilarBooksResponse>(`/api/book/similar`, {
+    params: { author },
+  });
 
 /**
  * 2022/12/18 - 도서 api 요청 메서드들을 갖는 객체 - by 1-blue

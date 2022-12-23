@@ -22,9 +22,9 @@ const apiFetchDramas = async ({
   category,
   language = "ko-kr",
 }: ApiFetchDramasRequest) =>
-  await movieDBInstance.get<ApiFetchDramasResponse>(
-    `/tv/${category}?api_key=${process.env.MOVIE_DB_API_KEY}&language=${language}`
-  );
+  await movieDBInstance.get<ApiFetchDramasResponse>(`/tv/${category}`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, language },
+  });
 
 /**
  * 2022/12/17 - 드라마들 검색 요청 - by 1-blue
@@ -35,11 +35,9 @@ const apiSearchDramas = async ({
   title,
   language = "ko-kr",
 }: ApiSearchDramasRequest) =>
-  await movieDBInstance.get<ApiSearchDramasResponse>(
-    `/search/tv?api_key=${
-      process.env.MOVIE_DB_API_KEY
-    }&language=${language}&query=${encodeURI(title)}`
-  );
+  await movieDBInstance.get<ApiSearchDramasResponse>(`/search/tv`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, query: title, language },
+  });
 
 /**
  * 2022/12/17 - 추천 드라마 검색어들 요청 - by 1-blue
@@ -50,11 +48,9 @@ const apiSuggestedDramas = async ({
   keyword,
   language = "ko-kr",
 }: ApiSuggestDramasRequest) =>
-  await movieDBInstance.get<ApiSuggestDramasResponse>(
-    `/search/tv?api_key=${
-      process.env.MOVIE_DB_API_KEY
-    }&language=${language}&query=${encodeURI(keyword)}`
-  );
+  await movieDBInstance.get<ApiSuggestDramasResponse>(`/search/tv`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, query: keyword, language },
+  });
 
 /**
  * 2022/12/17 - 유사한 드라마들 요청 - by 1-blue
@@ -66,7 +62,8 @@ const apiSimilarDramas = async ({
   language = "ko-kr",
 }: ApiSimilarDramasRequest) =>
   await movieDBInstance.get<ApiSimilarDramasResponse>(
-    `/tv/${dramaId}/similar?api_key=${process.env.MOVIE_DB_API_KEY}&language=${language}`
+    `/tv/${dramaId}/similar`,
+    { params: { api_key: process.env.MOVIE_DB_API_KEY, language } }
   );
 
 /**

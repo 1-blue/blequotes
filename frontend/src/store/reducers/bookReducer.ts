@@ -66,6 +66,14 @@ const bookSlice = createSlice({
       state.searchBooksLoading = false;
       state.searchBooksDone = null;
       state.searchBooksError = null;
+
+      state.suggestedBooksLoading = false;
+      state.suggestedBooksDone = null;
+      state.suggestedBooksError = null;
+
+      state.similarBooksLoading = false;
+      state.similarBooksDone = null;
+      state.similarBooksError = null;
     },
   },
 

@@ -10,11 +10,11 @@ import Spinner from "@src/components/Common/Spinner";
 const Keyword = () => {
   return (
     <aside className="w-full p-4 mt-1 flex flex-col justify-center items-center space-y-2 bg-white">
-      <div className="w-full h-6 bg-teal-200/80 rounded-sm" />
-      <div className="w-full h-6 bg-teal-200/80 rounded-sm" />
+      <div className="w-full h-6 bg-main-200/80 rounded-sm" />
+      <div className="w-full h-6 bg-main-200/80 rounded-sm" />
       <Spinner.Relative />
-      <div className="w-full h-6 bg-teal-200/80 rounded-sm" />
-      <div className="w-full h-6 bg-teal-200/80 rounded-sm" />
+      <div className="w-full h-6 bg-main-200/80 rounded-sm" />
+      <div className="w-full h-6 bg-main-200/80 rounded-sm" />
     </aside>
   );
 };
@@ -31,11 +31,11 @@ const Movie = () => {
 
         <div className="w-full h-[80vh]">
           <div className="bg-white w-[80vw] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
-            <div className="bg-teal-200/80 w-full h-10 rounded-sm mb-2" />
+            <div className="bg-main-200/80 w-full h-10 rounded-sm mb-2" />
             {Array(6)
               .fill(null)
               .map((v, i) => (
-                <div key={i} className="bg-teal-200/80 w-full h-5 rounded-sm" />
+                <div key={i} className="bg-main-200/80 w-full h-5 rounded-sm" />
               ))}
           </div>
         </div>
@@ -44,16 +44,16 @@ const Movie = () => {
       <div className="py-6" />
 
       <div className="flex space-x-2">
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
-        <div className="w-full h-[30vh] bg-teal-200/80 px-4 py-2 space-y-2">
-          <div className="bg-teal-400 w-full h-[15%] rounded-sm"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80 px-4 py-2 space-y-2">
+          <div className="bg-main-400 w-full h-[15%] rounded-sm"></div>
           {Array(4)
             .fill(null)
             .map((v, i) => (
-              <div key={i} className="bg-teal-400 w-full h-[8%] rounded-sm" />
+              <div key={i} className="bg-main-400 w-full h-[8%] rounded-sm" />
             ))}
         </div>
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
       </div>
     </>
   );
@@ -71,11 +71,11 @@ const Book = () => {
 
         <div className="w-full h-[80vh]">
           <div className="bg-white w-[80vw] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
-            <div className="bg-teal-200/80 w-full h-10 rounded-sm mb-2" />
+            <div className="bg-main-200/80 w-full h-10 rounded-sm mb-2" />
             {Array(6)
               .fill(null)
               .map((v, i) => (
-                <div key={i} className="bg-teal-200/80 w-full h-5 rounded-sm" />
+                <div key={i} className="bg-main-200/80 w-full h-5 rounded-sm" />
               ))}
           </div>
         </div>
@@ -84,16 +84,16 @@ const Book = () => {
       <div className="py-6" />
 
       <div className="flex space-x-2">
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
-        <div className="w-full h-[30vh] bg-teal-200/80 px-4 py-2 space-y-2">
-          <div className="bg-teal-400 w-full h-[15%] rounded-sm"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80 px-4 py-2 space-y-2">
+          <div className="bg-main-400 w-full h-[15%] rounded-sm"></div>
           {Array(4)
             .fill(null)
             .map((v, i) => (
-              <div key={i} className="bg-teal-400 w-full h-[8%] rounded-sm" />
+              <div key={i} className="bg-main-400 w-full h-[8%] rounded-sm" />
             ))}
         </div>
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
       </div>
     </>
   );
@@ -111,11 +111,11 @@ const Drama = () => {
 
         <div className="w-full h-[80vh]">
           <div className="bg-white w-[80vw] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
-            <div className="bg-teal-200/80 w-full h-10 rounded-sm mb-2" />
+            <div className="bg-main-200/80 w-full h-10 rounded-sm mb-2" />
             {Array(6)
               .fill(null)
               .map((v, i) => (
-                <div key={i} className="bg-teal-200/80 w-full h-5 rounded-sm" />
+                <div key={i} className="bg-main-200/80 w-full h-5 rounded-sm" />
               ))}
           </div>
         </div>
@@ -124,16 +124,16 @@ const Drama = () => {
       <div className="py-6" />
 
       <div className="flex space-x-2">
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
-        <div className="w-full h-[30vh] bg-teal-200/80 px-4 py-2 space-y-2">
-          <div className="bg-teal-400 w-full h-[15%] rounded-sm"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80 px-4 py-2 space-y-2">
+          <div className="bg-main-400 w-full h-[15%] rounded-sm"></div>
           {Array(4)
             .fill(null)
             .map((v, i) => (
-              <div key={i} className="bg-teal-400 w-full h-[8%] rounded-sm" />
+              <div key={i} className="bg-main-400 w-full h-[8%] rounded-sm" />
             ))}
         </div>
-        <div className="w-full h-[30vh] bg-teal-200/80"></div>
+        <div className="w-full h-[30vh] bg-main-200/80"></div>
       </div>
     </>
   );

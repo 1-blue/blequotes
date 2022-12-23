@@ -104,7 +104,7 @@ const Write = () => {
   // 2022/12/22 - 게시글을 생성중인지 판단할 변수 - by 1-blue
   const [isCreatingPost, setIsCreatingPost] = useState(false);
 
-  //
+  // 2022/12/22 - 게시글 생성 성공/실패 판단 변수 - by 1-blue
   const { createPostDone, createPostError } = useAppSelector(
     (state) => state.post
   );
@@ -129,8 +129,7 @@ const Write = () => {
             name: e.thumbnail[0].name,
           });
 
-          // 업로드된 이미지의 URL ( 이미지명에 "?"가 들어가 있지 않은 경우 "?"를 기준으로 나누면 됨 )
-          // >>> 이미지명에 "?"가 들어가 있는 경우 애초에 "?"를 제거하고 요청을 보내도록 수정하기
+          // 업로드된 이미지의 URL ( "?"를 기준으로 나누면 배포된 URL을 얻을 수 있음 )
           thumbnailPath = preSignedURL.slice(0, preSignedURL.indexOf("?"));
 
           // 이미지 업로드 요청
@@ -180,7 +179,7 @@ const Write = () => {
     },
   });
 
-  // >>> 혹시 모르는 안전장치들
+  // 유효성 검사
   if (
     !title ||
     !id ||
@@ -198,7 +197,7 @@ const Write = () => {
         {/* 상단 설명부 */}
         <div className="w-[60vw] min-w-[300px] mx-auto space-y-3">
           <div className="h-[100px]"></div>
-          <p className="font-semibold bg-teal-400 text-white px-4 py-2 mx-auto rounded-md before:content-['💡']">
+          <p className="font-semibold bg-main-400 text-white px-4 py-2 mx-auto rounded-md before:content-['💡']">
             작성된 게시글은 관리자에 의해서 임의로 삭제할 수 있으며, 작성자에게
             게시글에 대한 권한이 부여되지 않습니다.
           </p>
@@ -224,14 +223,14 @@ const Write = () => {
       {/* 하단 입력부 */}
       <RHF.Form
         onSubmit={handleSubmit(createPost)}
-        className="flex flex-col w-[60vw] min-w-[300px] mx-auto space-y-2"
+        className="flex flex-col w-[60vw] min-w-[200px] mx-auto space-y-2"
       >
         <RHF.TextArea
           register={register}
           name="speech"
           rows={3}
           placeholder={`👉 "${data.title}"의 명대사를 입력해주세요! 👈`}
-          className="border-teal-400 border-2 rounded-md px-2 py-1 text-lg resize-none font-semibold overflow-hidden transition-colors focus:outline-teal-500 placeholder:text-base placeholder:text-center"
+          className="border-gray-300 border-2 rounded-md px-2 py-1 text-lg resize-none font-semibold overflow-hidden transition-colors focus:outline-main-400 placeholder:text-base placeholder:text-center"
           error={errors.speech}
           options={{
             required: {
@@ -257,13 +256,13 @@ const Write = () => {
 
             <button
               type="button"
-              className="group w-full relative border-2 border-teal-400 pt-[100%] rounded-md transition-colors hover:border-teal-300"
+              className="group w-full relative border-2 border-gray-300 pt-[100%] rounded-md transition-colors hover:border-main-400"
               onClick={() => thumbnailRef.current?.click()}
             >
-              <div className="group-hover:bg-black/20 group-hover:z-[1] absolute top-[1%] left-[1%] w-[98%] h-[98%] bg-black/10 transition-colors" />
+              <div className="group-hover:bg-black/40 group-hover:z-[1] absolute top-[1%] left-[1%] w-[98%] h-[98%] bg-black/10 transition-colors" />
               <Icon
                 shape={previewThumbnail ? "change" : "plus"}
-                className="group-hover:text-teal-300 group-hover:z-[1] absolute inset-[50%] translate-center h-10 w-10 text-teal-400"
+                className="group-hover:text-main-400 group-hover:z-[1] absolute inset-[50%] translate-center h-10 w-10 text-gray-500"
               />
               {previewThumbnail && (
                 <Image.Photo
@@ -277,7 +276,7 @@ const Write = () => {
           {/* 시간 / 게시글 생성 버튼 */}
           <div className="flex-1 flex flex-col space-y-2 min-w-[142px]">
             {/* 시간 */}
-            <p className="font-semibold text-sm bg-teal-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
+            <p className="font-semibold text-sm bg-main-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
               명대사 시작 시간을 입력해주세요!
             </p>
             {/* 영화인 경우 */}
@@ -288,21 +287,21 @@ const Write = () => {
                   name="hour"
                   type="number"
                   placeholder="시간을 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
                 <RHF.Input
                   register={register}
                   name="minute"
                   type="number"
                   placeholder="분을 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
                 <RHF.Input
                   register={register}
                   name="second"
                   type="number"
                   placeholder="초를 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
               </>
             )}
@@ -314,28 +313,28 @@ const Write = () => {
                   name="episode"
                   type="number"
                   placeholder="몇 화인지 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
                 <RHF.Input
                   register={register}
                   name="hour"
                   type="number"
                   placeholder="시간을 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
                 <RHF.Input
                   register={register}
                   name="minute"
                   type="number"
                   placeholder="분을 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
                 <RHF.Input
                   register={register}
                   name="second"
                   type="number"
                   placeholder="초를 숫자만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-500 placeholder:text-sm"
                 />
               </>
             )}
@@ -347,7 +346,7 @@ const Write = () => {
                   name="page"
                   type="number"
                   placeholder="페이지를 숫자로만 입력해주세요!"
-                  className="border-teal-400 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-teal-500 placeholder:text-sm"
+                  className="border-gray-300 border-2 rounded-sm px-2 py-1 focus:outline-none focus:border-main-400 placeholder:text-sm"
                 />
               </>
             )}
@@ -357,7 +356,7 @@ const Write = () => {
             {/* 게시글 생성 버튼  */}
             <RHF.Button
               type="submit"
-              className="self-end bg-teal-400 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors hover:bg-teal-500"
+              className="self-end bg-main-400 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors hover:bg-main-300 active:bg-main-500"
             >
               생성하기
             </RHF.Button>

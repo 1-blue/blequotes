@@ -209,7 +209,6 @@ const Search = () => {
           onSubmit={onSumbit}
           className="fixed inset-0 w-full h-full bg-black/70 flex flex-col justify-center items-center z-[1]"
           onClick={onCloseSearchForm}
-          data-type="searchForm"
         >
           <div className="absolute top-[120px] px-[10vw] py-4 space-y-4">
             <RHF.Select
@@ -220,12 +219,12 @@ const Search = () => {
                 { value: "drama", text: "드라마" },
                 { value: "book", text: "도서" },
               ]}
-              className="p-1 rounded-sm font-extrabold outline-none focus:ring-2 focus:ring-teal-500"
+              className="p-1 rounded-sm font-extrabold outline-none focus:ring-2 focus:ring-main-500"
             />
 
             <div className="w-[250px]" onKeyDown={onMoveKeyword}>
               <div
-                className="flex rounded-sm overflow-hidden font-bold focus-within:ring-2 focus-within:ring-teal-500"
+                className="flex rounded-sm overflow-hidden font-bold focus-within:ring-2 focus-within:ring-main-500"
                 ref={inputContainerRef}
               >
                 <RHF.Input
@@ -239,7 +238,7 @@ const Search = () => {
 
                 <RHF.Button
                   type="submit"
-                  className="px-2 py-1 outline-none font-lg bg-teal-500"
+                  className="px-2 py-1 outline-none font-lg bg-main-500"
                 >
                   <Icon shape="search" className="w-5 h-5 text-white" />
                 </RHF.Button>

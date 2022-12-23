@@ -1,5 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Slider from "react-slick";
+
+// hook
+import useInnerSize from "@src/hooks/useInnerSize";
 
 // component
 import Image from "@src/components/Common/Image";
@@ -31,7 +34,7 @@ const settings: Settings = {
   className: "center",
   centerMode: true,
   centerPadding: "40px",
-  infinite: true,
+  infinite: false,
   slidesToShow: 3,
   speed: 500,
   arrows: true,
@@ -62,6 +65,18 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
     setCurrentPoster(currentSlide);
   }, []);
 
+  /**
+   * 1024 이상인데 이미지가 2개 이하인 경우
+   * 700 이상인데 이미지가 1개 이하인 경우
+   */
+  const [innerWidth] = useInnerSize();
+  const infinite = useMemo(() => {
+    if (innerWidth >= 1024 && datas.length <= 2) return false;
+    if (innerWidth >= 400 && datas.length <= 1) return false;
+
+    return true;
+  }, [innerWidth, datas]);
+
   return (
     <Slider
       {...settings}
@@ -70,6 +85,7 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
       className="bg-zinc-300"
       prevArrow={<ArrowButton />}
       nextArrow={<ArrowButton />}
+      infinite={infinite}
     >
       {datas.map(({ id, category, paths, title, description, date }, i) => (
         <Image.SlickPoster
