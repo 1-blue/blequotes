@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import { movieThunkService, postThunkService } from "@src/store/thunks";
+import { postActions } from "@src/store/reducers/postReducer";
 
 // util
 import { getMovieDBImagePath } from "@src/utils";
+
+// hook
+import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 
 // component
 import Image from "@src/components/Common/Image";
@@ -18,21 +22,23 @@ const Movie = () => {
   const dispatch = useAppDispatch();
   const { popular, top_rated, now_playing, fetchMoviesLoading } =
     useAppSelector(({ movie }) => movie);
-  const { moviePosts } = useAppSelector(({ post }) => post);
+  const { moviePosts, hasMoreMoviePosts, getPostsLoading } = useAppSelector(
+    ({ post }) => post
+  );
 
   // 2022/12/24 - 영화 게시글들 패치 - by 1-blue
   useEffect(() => {
-    if (moviePosts.length !== 0) return;
+    dispatch(postActions.reset());
 
     dispatch(
       postThunkService.getPostsThunk({
         category: "MOVIE",
         sort: "latest",
-        take: 4,
+        take: 20,
         lastId: -1,
       })
     );
-  }, [moviePosts, dispatch]);
+  }, [dispatch]);
 
   // 2022/12/05 - 각종 영화들 패치 - by 1-blue
   useEffect(() => {
@@ -46,6 +52,30 @@ const Movie = () => {
       dispatch(movieThunkService.fetchMoviesThunk({ category: "now_playing" }));
     }
   }, [dispatch, popular, top_rated, now_playing]);
+
+  // 2022/12/24 - 무한 스크롤링을 위해 관찰할 태그 ref ( 해당 태그가 뷰포트에 들어오면 게시글 추가 패치 실행 ) - by 1-blue
+  // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
+  const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null);
+  // 2022/12/24 - 영화 더 가져오기 - by 1-blue
+  const fetchMoreMovies = useCallback(() => {
+    if (getPostsLoading) return;
+    if (!hasMoreMoviePosts) return;
+
+    dispatch(
+      postThunkService.getPostsThunk({
+        category: "MOVIE",
+        sort: "latest",
+        take: 20,
+        lastId: moviePosts[moviePosts.length - 1].id,
+      })
+    );
+  }, [getPostsLoading, hasMoreMoviePosts, dispatch, moviePosts]);
+  // 2022/12/24 - 영화 가져오기 무한 스크롤링 적용 - by 1-blue
+  useInfiniteScrolling({
+    observerRef,
+    fetchMore: fetchMoreMovies,
+    hasMore: hasMoreMoviePosts,
+  });
 
   // 2022/12/15 - 인기 / 꾸준한 인기 / 현재 상영중인 영화들 필터링 - by 1-blue
   const filteredPopularDatas = useMemo(
@@ -186,9 +216,16 @@ const Movie = () => {
       {/* 게시글들 */}
       <section>
         <h3 className="font-jua text-4xl px-4 pb-2">영화 명대사들</h3>
-        <GridPosts posts={moviePosts} />
-
-        <div className="py-6" />
+        {moviePosts.length > 0 ? (
+          <GridPosts posts={moviePosts} ref={setObserverRef} />
+        ) : (
+          <>
+            <span className="inline-block w-full text-center font-bold text-xl">
+              ** 첫 번째로 명대사를 작성해보세요...! **
+            </span>
+            <div className="mb-6" />
+          </>
+        )}
       </section>
     </>
   );

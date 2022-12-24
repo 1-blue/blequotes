@@ -68,7 +68,7 @@ postRouter.get(
 
       return res.json({
         meta: { ok: true },
-        data: { message: "게시글들을 가져왔습니다.", category, posts },
+        data: { message: "게시글들을 가져왔습니다.", take, category, posts },
       });
     } catch (error) {
       next(error);

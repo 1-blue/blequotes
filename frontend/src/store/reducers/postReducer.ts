@@ -3,17 +3,47 @@ import { createSlice } from "@reduxjs/toolkit";
 // thunk
 import { postThunkService } from "../thunks";
 
+// type
+import { Post } from "../types";
+
 interface PostState {
+  // 게시글들
+  moviePosts: Post[];
+  dramaPosts: Post[];
+  bookPosts: Post[];
+
+  // 게시글 더 패치 가능 여부
+  hasMoreMoviePosts: boolean;
+  hasMoreDramaPosts: boolean;
+  hasMoreBookPosts: boolean;
+
   // 게시글 생성
   createPostLoading: boolean;
   createPostDone: null | string;
   createPostError: null | string;
+
+  // 게시글들 가져오기
+  getPostsLoading: boolean;
+  getPostsDone: null | string;
+  getPostsError: null | string;
 }
 
 const initialState: PostState = {
+  moviePosts: [],
+  dramaPosts: [],
+  bookPosts: [],
+
+  hasMoreMoviePosts: true,
+  hasMoreDramaPosts: true,
+  hasMoreBookPosts: true,
+
   createPostLoading: false,
   createPostDone: null,
   createPostError: null,
+
+  getPostsLoading: false,
+  getPostsDone: null,
+  getPostsError: null,
 };
 
 const postSlice = createSlice({
@@ -24,6 +54,19 @@ const postSlice = createSlice({
       state.createPostLoading = false;
       state.createPostDone = null;
       state.createPostError = null;
+
+      state.getPostsLoading = false;
+      state.getPostsDone = null;
+      state.getPostsError = null;
+    },
+    reset(state) {
+      state.moviePosts = [];
+      state.dramaPosts = [];
+      state.bookPosts = [];
+
+      state.hasMoreMoviePosts = true;
+      state.hasMoreDramaPosts = true;
+      state.hasMoreBookPosts = true;
     },
   },
 
@@ -47,6 +90,41 @@ const postSlice = createSlice({
         state.createPostError = "게시글을 생성하는데 실패했습니다.";
 
         console.error("createPost >> ", action);
+      }
+    );
+
+    // 게시글들 가져오기
+    builder.addCase(postThunkService.getPostsThunk.pending, (state) => {
+      state.getPostsLoading = true;
+    });
+    builder.addCase(
+      postThunkService.getPostsThunk.fulfilled,
+      (state, action) => {
+        state.getPostsLoading = false;
+        state.getPostsDone = action.payload.message;
+
+        switch (action.payload.category) {
+          case "MOVIE":
+            state.moviePosts.push(...action.payload.posts);
+            state.hasMoreMoviePosts =
+              action.payload.take === action.payload.posts.length;
+            break;
+          case "DRAMA":
+            state.dramaPosts = action.payload.posts;
+            break;
+          case "BOOK":
+            state.bookPosts = action.payload.posts;
+            break;
+        }
+      }
+    );
+    builder.addCase(
+      postThunkService.getPostsThunk.rejected,
+      (state, action) => {
+        state.getPostsLoading = false;
+        state.getPostsError = "게시글들을 가져오는데 실패했습니다.";
+
+        console.error("getPosts >> ", action);
       }
     );
   },
