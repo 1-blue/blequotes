@@ -90,4 +90,9 @@ export type {
 } from "./image";
 
 // post type
-export type { CreatePostRequest, CreatePostResponse } from "./post";
+export type {
+  CreatePostRequest,
+  CreatePostResponse,
+  GetPostsRequest,
+  GetPostsResponse,
+} from "./post";

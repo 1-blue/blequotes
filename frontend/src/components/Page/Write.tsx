@@ -21,25 +21,15 @@ import NotFountPost from "@src/components/NotFoundPost";
 
 // type
 import type { PostCategory, SStorageData } from "@src/types";
+import type { CreatePostRequest } from "@src/store/types";
 
 type ParamsType = { title?: string };
 type LocationStateType = { state: { id?: string; category?: PostCategory } };
-type PostForm = {
-  idx: string;
-  category: PostCategory;
-  speech: string;
+type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
   thumbnail?: FileList;
-
-  // 영화 / 드라마 용
   hour?: number;
   minute?: number;
   second?: number;
-
-  // 드라마 용
-  episode?: number;
-
-  // 도서 용
-  page?: number;
 };
 
 const Write = () => {
@@ -68,13 +58,14 @@ const Write = () => {
     formState: { errors },
   } = useForm<PostForm>();
 
-  // 2022/12/20 - 기본 값들 입력 ( idx, category ) - by 1-blue
+  // 2022/12/20 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
   useEffect(() => {
-    if (!id || !category) return;
+    if (!id || !category || !title) return;
 
     setValue("idx", id);
     setValue("category", category);
-  }, [id, category, setValue]);
+    setValue("title", title);
+  }, [id, category, setValue, title]);
 
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
@@ -116,7 +107,8 @@ const Write = () => {
       setIsCreatingPost(true);
 
       try {
-        let thumbnailPath: undefined | string = undefined;
+        // 기본 썸네일은 해당 포스터 이미지
+        let thumbnailPath = data?.paths[0];
 
         // 썸네일이 있다면 업로드
         if (e.thumbnail && e.thumbnail?.length > 0) {
@@ -166,7 +158,7 @@ const Write = () => {
         setIsCreatingPost(false);
       }
     },
-    [dispatch]
+    [data, dispatch]
   );
 
   // 2022/12/22 - 게시글 생성 토스트 처리 - by 1-blue

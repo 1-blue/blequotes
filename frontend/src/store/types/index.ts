@@ -51,4 +51,10 @@ export type {
   DeleteImageResponse,
 } from "./image";
 
-export type { CreatePostRequest, CreatePostResponse } from "./post";
+export type {
+  Post,
+  CreatePostRequest,
+  CreatePostResponse,
+  GetPostsRequest,
+  GetPostsResponse,
+} from "./post";

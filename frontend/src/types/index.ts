@@ -1,7 +1,13 @@
 /**
  * 2022/12/05 - 아이콘 형태 타입 - by 1-blue
  */
-export type IconShape = "search" | "arrowDown" | "plus" | "change";
+export type IconShape =
+  | "search"
+  | "arrowDown"
+  | "plus"
+  | "change"
+  | "like"
+  | "hate";
 
 /**
  * 2022/12/16 - 검색 카테고리 - by 1-blue
@@ -12,6 +18,10 @@ export type SearchCategory = "movie" | "drama" | "book";
  * 2022/12/19 - 게시글 카테고리 - by 1-blue
  */
 export type PostCategory = "MOVIE" | "DRAMA" | "BOOK";
+/**
+ * 게시글들 정렬 기준
+ */
+export type PostSortBy = "popular" | "latest";
 
 /**
  * 2022/12/19 - 세션 스토리지에 저장할 데이터 타입 - by 1-blue

@@ -1,13 +1,19 @@
 // type
 import type { ApiResponse } from ".";
-import type { PostCategory } from "@prisma/client";
+import type { Post, PostCategory } from "@prisma/client";
+
+/**
+ * 게시글들 정렬 기준
+ */
+type PostSortBy = "popular" | "latest";
 
 // ============================== 게시글 생성 요청 관련 ==============================
 /**
- * 2022/12/22 - 게시글 생성 요청 수신 타입 ( F -> B ) - by 1-blue
+ * 2022/12/22 - 게시글 생성 요청 송신 타입 ( F -> B ) - by 1-blue
  */
 export type CreatePostRequest = {
   idx: string;
+  title: string;
   category: PostCategory;
   speech: string;
   thumbnail?: string;
@@ -22,6 +28,24 @@ export type CreatePostRequest = {
   page?: number;
 };
 /**
- * 2022/12/22 - 게시글 생성 요청 송신 타입 ( B -> F ) - by 1-blue
+ * 2022/12/22 - 게시글 생성 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type CreatePostResponse = ApiResponse<{}>;
+
+// ============================== 게시글들 가져오기 요청 관련 ==============================
+/**
+ * 2022/12/24 - 게시글들 요청 수신 타입 ( F -> B ) - by 1-blue
+ */
+export type GetPostsRequest = {
+  category: PostCategory;
+  sort: PostSortBy;
+  take: number;
+  lastId: number;
+};
+/**
+ * 2022/12/24 - 게시글들 요청 수신 타입 ( B -> F ) - by 1-blue
+ */
+export type GetPostsResponse = ApiResponse<{
+  category: PostCategory;
+  posts: Post[];
+}>;

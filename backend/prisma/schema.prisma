@@ -18,6 +18,7 @@ enum PostCategory {
 model Post {
   id Int @id @unique @default(autoincrement())
   idx String
+  title String
   category PostCategory
   speech String
   like Int @default(0)

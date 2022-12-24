@@ -31,6 +31,11 @@ module.exports = {
         "main-800": "#115e59",
         "main-900": "#134e4a",
       },
+
+      // media query
+      screens: {
+        xsm: "500px",
+      },
     },
     fontFamily: {
       nanumGothic: ["Nanum Gothic", "sans-serif"],

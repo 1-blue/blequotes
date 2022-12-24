@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
-import { movieThunkService } from "@src/store/thunks";
+import { movieThunkService, postThunkService } from "@src/store/thunks";
 
 // util
 import { getMovieDBImagePath } from "@src/utils";
@@ -9,6 +9,7 @@ import { getMovieDBImagePath } from "@src/utils";
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
 import Loading from "@src/components/Common/Loading";
+import GridPosts from "@src/components/GridPosts";
 
 // type
 import type { PostCategory } from "@src/types";
@@ -17,6 +18,21 @@ const Movie = () => {
   const dispatch = useAppDispatch();
   const { popular, top_rated, now_playing, fetchMoviesLoading } =
     useAppSelector(({ movie }) => movie);
+  const { moviePosts } = useAppSelector(({ post }) => post);
+
+  // 2022/12/24 - 영화 게시글들 패치 - by 1-blue
+  useEffect(() => {
+    if (moviePosts.length !== 0) return;
+
+    dispatch(
+      postThunkService.getPostsThunk({
+        category: "MOVIE",
+        sort: "latest",
+        take: 4,
+        lastId: -1,
+      })
+    );
+  }, [moviePosts, dispatch]);
 
   // 2022/12/05 - 각종 영화들 패치 - by 1-blue
   useEffect(() => {
@@ -166,6 +182,14 @@ const Movie = () => {
           <div className="py-6" />
         </section>
       )}
+
+      {/* 게시글들 */}
+      <section>
+        <h3 className="font-jua text-4xl px-4 pb-2">영화 명대사들</h3>
+        <GridPosts posts={moviePosts} />
+
+        <div className="py-6" />
+      </section>
     </>
   );
 };
