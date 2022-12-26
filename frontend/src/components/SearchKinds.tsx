@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 // components
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
-import Loading from "@src/components/Common/Loading";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 import SlickSlider from "@src/components/Common/SlickSlider";
 
 // type
@@ -121,7 +121,7 @@ const Movie = () => {
   }, [similarMovies]);
 
   // 영화 / 유사 영화 검색중
-  if (searchMoviesLoading || similarMoviesLoading) return <Loading.Movie />;
+  if (searchMoviesLoading || similarMoviesLoading) return <SkeletonUI.Page />;
 
   return (
     <>
@@ -282,7 +282,7 @@ const Drama = () => {
   }, [similarDramas]);
 
   // 드라마 / 유사 드라마 검색중
-  if (searchDramasLoading || similarDramasLoading) return <Loading.Movie />;
+  if (searchDramasLoading || similarDramasLoading) return <SkeletonUI.Page />;
 
   return (
     <>
@@ -419,7 +419,7 @@ const Book = () => {
   }, [similarBooks]);
 
   // 도서 / 유사 도서 검색중
-  if (searchBooksLoading || similarBooksLoading) return <Loading.Book />;
+  if (searchBooksLoading || similarBooksLoading) return <SkeletonUI.Page />;
 
   return (
     <>

@@ -11,7 +11,7 @@ import {
 // component
 import RHF from "@src/components/Common/RHF";
 import Icon from "@src/components/Common/Icon";
-import Loading from "@src/components/Common/Loading";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 import SearchKinds from "@src/components/SearchKinds";
 import Suggested from "@src/components/Suggested";
 
@@ -249,7 +249,7 @@ const Search = () => {
                 {isOpenKeyword &&
                   (suggestedMoviesLoading ||
                     suggestedDramasLoading ||
-                    suggestedBooksLoading) && <Loading.Keyword />}
+                    suggestedBooksLoading) && <SkeletonUI.SuggestedWord />}
                 {/* 추천 검색어 패치완료 */}
                 {isOpenKeyword && currentCategory === "movie" && (
                   <Suggested.Movie setFocusIndex={setFocusIndex} />

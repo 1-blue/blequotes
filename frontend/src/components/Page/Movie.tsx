@@ -12,7 +12,7 @@ import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
-import Loading from "@src/components/Common/Loading";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 import GridPosts from "@src/components/GridPosts";
 
 // type
@@ -160,8 +160,8 @@ const Movie = () => {
     top_rated.length === 0 ||
     now_playing.length === 0
   )
-    return <Loading.Movie />;
-  if (fetchMoviesLoading) return <Loading.Movie />;
+    return <SkeletonUI.Page />;
+  if (fetchMoviesLoading) return <SkeletonUI.Page />;
 
   // 메인 이미지로 사용할 랜덤한 영화 선택
   const index0To2 = Math.floor(Math.random() * 3);

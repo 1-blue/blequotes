@@ -8,7 +8,7 @@ import { getMovieDBImagePath } from "@src/utils";
 // component
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
-import Loading from "@src/components/Common/Loading";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
 import type { PostCategory } from "@src/types";
@@ -110,8 +110,8 @@ const Drama = () => {
 
   // 드라마를 패치하는 중이라면
   if (popular.length === 0 || top_rated.length === 0 || on_the_air.length === 0)
-    return <Loading.Drama />;
-  if (fetchDramasLoading) return <Loading.Drama />;
+    return <SkeletonUI.Page />;
+  if (fetchDramasLoading) return <SkeletonUI.Page />;
 
   // 메인 이미지로 사용할 랜덤한 드라마 선택
   const index0To2 = Math.floor(Math.random() * 3);

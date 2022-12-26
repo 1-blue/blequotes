@@ -3,7 +3,7 @@ import { useAppSelector } from "@src/hooks/useRTK";
 
 // components
 import Icon from "@src/components/Common/Icon";
-import Skeleton from "@src/components/Common/Skeleton";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
 import type { Post } from "@src/store/types";
@@ -52,7 +52,7 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
           </li>
         ))}
 
-        {getPostsLoading && <Skeleton.Posts />}
+        {getPostsLoading && <SkeletonUI.Posts />}
       </ul>
 
       <div className="py-6" ref={ref} />
