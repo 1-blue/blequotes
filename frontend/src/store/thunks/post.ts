@@ -5,7 +5,11 @@ import { AxiosError } from "axios";
 import { postApiService } from "../apis";
 
 // type
-import type { CreatePostRequest, GetPostsRequest } from "../types";
+import type {
+  CreatePostRequest,
+  GetPostsRequest,
+  UpdateLikeOrHateRequest,
+} from "../types";
 
 /**
  * 2022/12/22 - 게시글 생성 요청 thunk - by 1-blue
@@ -62,9 +66,37 @@ const getPostsThunk = createAsyncThunk(
 );
 
 /**
+ * 2022/12/26 - 게시글에 좋아요/싫어요 요청 thunk - by 1-blue
+ */
+const updateLikeOrHate = createAsyncThunk(
+  // 액션 타입 결정
+  "update/post/likeOrHate",
+
+  // promise를 반환하는 액션 작성
+  async (body: UpdateLikeOrHateRequest, { rejectWithValue }) => {
+    try {
+      const {
+        data: { data },
+      } = await postApiService.apiUpdateLikeOrHate(body);
+
+      return data;
+    } catch (error) {
+      console.error("error >> ", error);
+
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data);
+      }
+
+      return rejectWithValue("알 수 없는 에러");
+    }
+  }
+);
+
+/**
  * 2022/12/22 - 게시글 thunk 메서드들을 갖는 객체 - by 1-blue
  */
 export const postThunkService = {
   createPostThunk,
   getPostsThunk,
+  updateLikeOrHate,
 };

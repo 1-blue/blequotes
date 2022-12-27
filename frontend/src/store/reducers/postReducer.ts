@@ -26,6 +26,11 @@ interface PostState {
   getPostsLoading: boolean;
   getPostsDone: null | string;
   getPostsError: null | string;
+
+  // 게시글 좋아요/싫어요
+  updateLikeOrHateLoading: boolean;
+  updateLikeOrHateDone: null | string;
+  updateLikeOrHateError: null | string;
 }
 
 const initialState: PostState = {
@@ -44,6 +49,10 @@ const initialState: PostState = {
   getPostsLoading: false,
   getPostsDone: null,
   getPostsError: null,
+
+  updateLikeOrHateLoading: false,
+  updateLikeOrHateDone: null,
+  updateLikeOrHateError: null,
 };
 
 const postSlice = createSlice({
@@ -58,6 +67,10 @@ const postSlice = createSlice({
       state.getPostsLoading = false;
       state.getPostsDone = null;
       state.getPostsError = null;
+
+      state.updateLikeOrHateLoading = false;
+      state.updateLikeOrHateDone = null;
+      state.updateLikeOrHateError = null;
     },
     reset(state) {
       state.moviePosts = [];
@@ -125,6 +138,58 @@ const postSlice = createSlice({
         state.getPostsError = "게시글들을 가져오는데 실패했습니다.";
 
         console.error("getPosts >> ", action);
+      }
+    );
+
+    // 게시글에 좋아요/싫어요 요청
+    builder.addCase(postThunkService.updateLikeOrHate.pending, (state) => {
+      state.updateLikeOrHateLoading = true;
+    });
+    builder.addCase(
+      postThunkService.updateLikeOrHate.fulfilled,
+      (state, action) => {
+        state.updateLikeOrHateLoading = false;
+        state.updateLikeOrHateDone = action.payload.message;
+
+        const { resultPost } = action.payload;
+
+        if (!resultPost) return;
+
+        let targetIndex = -1;
+
+        switch (resultPost.category) {
+          case "MOVIE":
+            targetIndex = state.moviePosts.findIndex(
+              (post) => post.id === resultPost.id
+            );
+            state.moviePosts[targetIndex] = resultPost;
+            break;
+          case "DRAMA":
+            targetIndex = state.dramaPosts.findIndex(
+              (drama) => drama.id !== resultPost.id
+            );
+            state.dramaPosts[targetIndex] = resultPost;
+            break;
+          case "BOOK":
+            targetIndex = state.bookPosts.findIndex(
+              (book) => book.id !== resultPost.id
+            );
+            state.bookPosts[targetIndex] = resultPost;
+            break;
+        }
+      }
+    );
+    builder.addCase(
+      postThunkService.updateLikeOrHate.rejected,
+      (state, action) => {
+        state.updateLikeOrHateLoading = false;
+        // >>> createAsyncThunk의 타입 적용하면서 수정하기! 백엔드가 주는 메세지로 변경
+        state.updateLikeOrHateError =
+          "게시글에 좋아요를 누르는데 실패했습니다.";
+
+        console.log("좋아요 >> ", action);
+
+        console.error("updateLikeOrHate >> ", action);
       }
     );
   },

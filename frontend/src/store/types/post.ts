@@ -63,3 +63,18 @@ export type GetPostsResponse = ApiResponse<{
   category: PostCategory;
   posts: Post[];
 }>;
+
+// ============================== 게시글 좋아요/싫어요 요청 관련 ==============================
+/**
+ * 2022/12/26 - 게시글 좋아요/싫어요 요청 수신 타입 ( F -> B ) - by 1-blue
+ */
+export type UpdateLikeOrHateRequest = {
+  id: number;
+  already: boolean;
+  isLike: boolean;
+  isDuplication: boolean;
+};
+/**
+ * 2022/12/26 - 게시글 좋아요/싫어요 요청 수신 타입 ( B -> F ) - by 1-blue
+ */
+export type UpdateLikeOrHateResponse = ApiResponse<{ resultPost?: Post }>;

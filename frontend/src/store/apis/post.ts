@@ -6,6 +6,8 @@ import type {
   CreatePostResponse,
   GetPostsRequest,
   GetPostsResponse,
+  UpdateLikeOrHateRequest,
+  UpdateLikeOrHateResponse,
 } from "../types";
 
 /**
@@ -25,9 +27,18 @@ const apiGetPosts = async (data: GetPostsRequest) =>
   await serverInstance.get<GetPostsResponse>(`/api/post`, { params: data });
 
 /**
+ * 2022/12/26 - 게시글 좋아요/싫어요 요청 - by 1-blue
+ * @param data 게시글 식별자, 이미 눌렀는지, 좋아요/싫어요 판단 변수
+ * @returns 결과
+ */
+const apiUpdateLikeOrHate = async (data: UpdateLikeOrHateRequest) =>
+  await serverInstance.post<UpdateLikeOrHateResponse>(`/api/post/like`, data);
+
+/**
  * 2022/12/22 - 게시글 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const postApiService = {
   apiCreatePost,
   apiGetPosts,
+  apiUpdateLikeOrHate,
 };
