@@ -8,6 +8,11 @@ export type ApiResponse<T> = {
   data: { message: string } & T;
 };
 
+/**
+ * AsyncThunk의 에러 처리를 위한 타입
+ */
+export type CreateAsyncThunkErrorType = { rejectValue: { message: string } };
+
 export type {
   Movie,
   FetchMoviesRequest,

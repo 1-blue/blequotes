@@ -102,7 +102,9 @@ const movieSlice = createSlice({
       movieThunkService.fetchMoviesThunk.rejected,
       (state, action) => {
         state.fetchMoviesLoading = false;
-        state.fetchMoviesError = "영화들을 가져오는데 실패했습니다.";
+        if (action.payload?.message) {
+          state.fetchMoviesError = action.payload.message;
+        }
 
         console.error("fetchMovies >> ", action);
       }
@@ -124,7 +126,9 @@ const movieSlice = createSlice({
       movieThunkService.searchMoviesThunk.rejected,
       (state, action) => {
         state.searchMoviesLoading = false;
-        state.searchMoviesError = `영화 검색에 실패했습니다.`;
+        if (action.payload?.message) {
+          state.searchMoviesError = action.payload.message;
+        }
 
         console.error("searchMovies >> ", action);
       }
@@ -146,7 +150,9 @@ const movieSlice = createSlice({
       movieThunkService.suggestedMoviesThunk.rejected,
       (state, action) => {
         state.suggestedMoviesLoading = false;
-        state.suggestedMoviesError = `추천 영화 검색어들을 찾는데 실패했습니다.`;
+        if (action.payload?.message) {
+          state.suggestedMoviesError = action.payload.message;
+        }
 
         console.error("suggestedMovies >> ", action);
       }
@@ -168,7 +174,9 @@ const movieSlice = createSlice({
       movieThunkService.similarMoviesThunk.rejected,
       (state, action) => {
         state.similarMoviesLoading = false;
-        state.similarMoviesError = `유사 영화들의 검색에 실패했습니다.`;
+        if (action.payload?.message) {
+          state.similarMoviesError = action.payload.message;
+        }
 
         console.error("suggestedMovies >> ", action);
       }

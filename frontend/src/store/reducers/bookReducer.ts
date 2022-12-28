@@ -95,7 +95,9 @@ const bookSlice = createSlice({
       bookThunkService.searchBooksThunk.rejected,
       (state, action) => {
         state.searchBooksLoading = false;
-        state.searchBooksError = `도서 검색에 실패했습니다.`;
+        if (action.payload?.message) {
+          state.searchBooksError = action.payload.message;
+        }
 
         console.error("searchBooks >> ", action);
       }
@@ -117,7 +119,9 @@ const bookSlice = createSlice({
       bookThunkService.suggestedBooksThunk.rejected,
       (state, action) => {
         state.suggestedBooksLoading = false;
-        state.suggestedBooksError = `추천 도서 검색어들을 찾는데 실패했습니다.`;
+        if (action.payload?.message) {
+          state.suggestedBooksError = action.payload.message;
+        }
 
         console.error("suggestedBooks >> ", action);
       }
@@ -139,7 +143,9 @@ const bookSlice = createSlice({
       bookThunkService.similarBooksThunk.rejected,
       (state, action) => {
         state.similarBooksLoading = false;
-        state.similarBooksError = `유사 도서 검색어들을 찾는데 실패했습니다.`;
+        if (action.payload?.message) {
+          state.similarBooksError = action.payload.message;
+        }
 
         console.error("similarBooks >> ", action);
       }

@@ -6,15 +6,23 @@ import { postApiService } from "../apis";
 
 // type
 import type {
+  CreateAsyncThunkErrorType,
   CreatePostRequest,
+  CreatePostResponse,
   GetPostsRequest,
+  GetPostsResponse,
   UpdateLikeOrHateRequest,
+  UpdateLikeOrHateResponse,
 } from "../types";
 
 /**
  * 2022/12/22 - 게시글 생성 요청 thunk - by 1-blue
  */
-const createPostThunk = createAsyncThunk(
+const createPostThunk = createAsyncThunk<
+  CreatePostResponse["data"],
+  CreatePostRequest,
+  CreateAsyncThunkErrorType
+>(
   // 액션 타입 결정
   "create/post",
 
@@ -30,10 +38,12 @@ const createPostThunk = createAsyncThunk(
       console.error("error >> ", error);
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data);
+        return rejectWithValue({ message: error.response?.data.data.message });
       }
 
-      return rejectWithValue("알 수 없는 에러");
+      return rejectWithValue({
+        message: "알 수 없는 이유로 게시글 생성에 실패했습니다.",
+      });
     }
   }
 );
@@ -41,7 +51,11 @@ const createPostThunk = createAsyncThunk(
 /**
  * 2022/12/24 - 게시글들 가져오기 요청 thunk - by 1-blue
  */
-const getPostsThunk = createAsyncThunk(
+const getPostsThunk = createAsyncThunk<
+  GetPostsResponse["data"],
+  GetPostsRequest,
+  CreateAsyncThunkErrorType
+>(
   // 액션 타입 결정
   "fetch/posts",
 
@@ -57,10 +71,12 @@ const getPostsThunk = createAsyncThunk(
       console.error("error >> ", error);
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data);
+        return rejectWithValue({ message: error.response?.data.data.message });
       }
 
-      return rejectWithValue("알 수 없는 에러");
+      return rejectWithValue({
+        message: "알 수 없는 이유로 게시글들 가져오기에 실패했습니다.",
+      });
     }
   }
 );
@@ -68,7 +84,11 @@ const getPostsThunk = createAsyncThunk(
 /**
  * 2022/12/26 - 게시글에 좋아요/싫어요 요청 thunk - by 1-blue
  */
-const updateLikeOrHate = createAsyncThunk(
+const updateLikeOrHate = createAsyncThunk<
+  UpdateLikeOrHateResponse["data"],
+  UpdateLikeOrHateRequest,
+  CreateAsyncThunkErrorType
+>(
   // 액션 타입 결정
   "update/post/likeOrHate",
 
@@ -84,10 +104,12 @@ const updateLikeOrHate = createAsyncThunk(
       console.error("error >> ", error);
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data);
+        return rejectWithValue({ message: error.response?.data.data.message });
       }
 
-      return rejectWithValue("알 수 없는 에러");
+      return rejectWithValue({
+        message: "알 수 없는 이유료 게시글 싫어요/좋아요에 실패했습니다.",
+      });
     }
   }
 );

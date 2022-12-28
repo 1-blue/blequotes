@@ -100,7 +100,9 @@ const postSlice = createSlice({
       postThunkService.createPostThunk.rejected,
       (state, action) => {
         state.createPostLoading = false;
-        state.createPostError = "게시글을 생성하는데 실패했습니다.";
+        if (action.payload?.message) {
+          state.createPostError = action.payload.message;
+        }
 
         console.error("createPost >> ", action);
       }
@@ -135,7 +137,9 @@ const postSlice = createSlice({
       postThunkService.getPostsThunk.rejected,
       (state, action) => {
         state.getPostsLoading = false;
-        state.getPostsError = "게시글들을 가져오는데 실패했습니다.";
+        if (action.payload?.message) {
+          state.getPostsError = action.payload.message;
+        }
 
         console.error("getPosts >> ", action);
       }
@@ -183,11 +187,9 @@ const postSlice = createSlice({
       postThunkService.updateLikeOrHate.rejected,
       (state, action) => {
         state.updateLikeOrHateLoading = false;
-        // >>> createAsyncThunk의 타입 적용하면서 수정하기! 백엔드가 주는 메세지로 변경
-        state.updateLikeOrHateError =
-          "게시글에 좋아요를 누르는데 실패했습니다.";
-
-        console.log("좋아요 >> ", action);
+        if (action.payload?.message) {
+          state.updateLikeOrHateError = action.payload.message;
+        }
 
         console.error("updateLikeOrHate >> ", action);
       }

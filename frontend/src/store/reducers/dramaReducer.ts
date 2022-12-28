@@ -101,7 +101,9 @@ const dramaSlice = createSlice({
       dramaThunkService.fetchDramasThunk.rejected,
       (state, action) => {
         state.fetchDramasLoading = false;
-        state.fetchDramasError = "드라마들을 가져오는데 실패했습니다.";
+        if (action.payload?.message) {
+          state.fetchDramasError = action.payload.message;
+        }
 
         console.error("fetchDramas >> ", action);
       }
@@ -123,7 +125,9 @@ const dramaSlice = createSlice({
       dramaThunkService.searchDramasThunk.rejected,
       (state, action) => {
         state.searchDramasLoading = false;
-        state.searchDramasError = `드라마 검색에 실패했습니다.`;
+        if (action.payload?.message) {
+          state.searchDramasError = action.payload.message;
+        }
 
         console.error("searchDrama >> ", action);
       }
@@ -145,7 +149,9 @@ const dramaSlice = createSlice({
       dramaThunkService.suggestedDramasThunk.rejected,
       (state, action) => {
         state.suggestedDramasLoading = false;
-        state.suggestedDramasError = `추천 드라마 검색어들을 찾는데 실패했습니다.`;
+        if (action.payload?.message) {
+          state.suggestedDramasError = action.payload.message;
+        }
 
         console.error("suggestedDrama >> ", action);
       }
@@ -167,7 +173,9 @@ const dramaSlice = createSlice({
       dramaThunkService.similarDramasThunk.rejected,
       (state, action) => {
         state.similarDramasLoading = false;
-        state.similarDramasError = `유사 드라마들의 검색에 실패했습니다.`;
+        if (action.payload?.message) {
+          state.similarDramasError = action.payload.message;
+        }
 
         console.error("suggestedDrama >> ", action);
       }
