@@ -164,66 +164,84 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
 
   return (
     <>
-      <ul
-        className="grid gap-4 mx-[20px] grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
-        onClick={onClickLikeOrHate}
-      >
-        {posts.map((post) => (
-          <li
-            key={post.id}
-            style={{ backgroundImage: `url("${post.thumbnail}")` }}
-            className="group/post relative pt-[80%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2"
+      {posts.length > 0 ? (
+        <>
+          <ul
+            className="grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+            onClick={onClickLikeOrHate}
           >
-            <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50" />
-
-            <div className="absolute top-[10%] left-[10%] space-y-2 z-[1]">
-              <h4 className="text-center text-2xl">
-                <b>{post.title}</b>
-              </h4>
-              <p className="text-sm whitespace-pre-wrap">
-                <b>"{post.speech}"</b>
-              </p>
-            </div>
-
-            <form className="absolute bottom-[4%] right-[4%] self-end z-[1] space-y-1">
-              <button
-                type="button"
-                className="group/like flex items-center space-x-1"
-                data-type="like"
-                data-id={post.id}
+            {posts.map((post) => (
+              <li
+                key={post.id}
+                style={{ backgroundImage: `url("${post.thumbnail}")` }}
+                className="group/post relative pt-[80%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2"
               >
-                <Icon
-                  shape="like"
-                  className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400"
-                  isFill={likePostIds.includes(post.id)}
-                />
-                <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400">
-                  <b>{post.like}</b>
-                </span>
-              </button>
-              <button
-                type="button"
-                className="group/hate flex items-center space-x-1"
-                data-type="hate"
-                data-id={post.id}
-              >
-                <Icon
-                  shape="hate"
-                  className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400"
-                  isFill={hatePostIds.includes(post.id)}
-                />
-                <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400">
-                  <b>{post.hate}</b>
-                </span>
-              </button>
-            </form>
-          </li>
-        ))}
+                <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50" />
 
-        {getPostsLoading && <SkeletonUI.Posts />}
-      </ul>
+                <div className="absolute top-[10%] left-[10%] space-y-2 z-[1]">
+                  <h4 className="text-2xl">
+                    <b>{post.title}</b>
+                  </h4>
+                  <p className="text-sm whitespace-pre-wrap">
+                    <b>"{post.speech}"</b>
+                  </p>
+                </div>
 
-      <div className="py-6" ref={ref} />
+                <form className="absolute bottom-[4%] right-[4%] self-end z-[1] space-y-1">
+                  <button
+                    type="button"
+                    className="group/like flex items-center space-x-1"
+                    data-type="like"
+                    data-id={post.id}
+                  >
+                    <Icon
+                      shape="like"
+                      className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400"
+                      isFill={likePostIds.includes(post.id)}
+                    />
+                    <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400">
+                      <b>{post.like}</b>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="group/hate flex items-center space-x-1"
+                    data-type="hate"
+                    data-id={post.id}
+                  >
+                    <Icon
+                      shape="hate"
+                      className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400"
+                      isFill={hatePostIds.includes(post.id)}
+                    />
+                    <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400">
+                      <b>{post.hate}</b>
+                    </span>
+                  </button>
+                </form>
+              </li>
+            ))}
+
+            {getPostsLoading && <SkeletonUI.Posts />}
+          </ul>
+
+          <div className="py-6" ref={ref} />
+        </>
+      ) : (
+        <>
+          {getPostsLoading ? (
+            <ul className="grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+              <SkeletonUI.Posts />
+            </ul>
+          ) : (
+            <span className="inline-block w-full text-center font-bold text-xl">
+              ** 첫 번째로 명대사를 작성해보세요...! **
+            </span>
+          )}
+
+          <div className="mb-6" />
+        </>
+      )}
     </>
   );
 });

@@ -13,10 +13,11 @@ import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
-import GridPosts from "@src/components/GridPosts";
+import GridPosts from "@src/components/Posts/GridPosts";
+import PostHeader from "@src/components/Posts/PostHeader";
 
 // type
-import type { PostCategory } from "@src/types";
+import type { PostCategory, PostSortBy } from "@src/types";
 
 const Movie = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +27,9 @@ const Movie = () => {
     ({ post }) => post
   );
 
+  // 2022/12/28 - 게시글들 정렬 순서 - by 1-blue
+  const [sortBy, setSortBy] = useState<PostSortBy>("popular");
+
   // 2022/12/24 - 영화 게시글들 패치 - by 1-blue
   useEffect(() => {
     dispatch(postActions.reset());
@@ -33,12 +37,12 @@ const Movie = () => {
     dispatch(
       postThunkService.getPostsThunk({
         category: "MOVIE",
-        sort: "latest",
+        sortBy,
         take: 20,
         lastId: -1,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, sortBy]);
 
   // 2022/12/05 - 각종 영화들 패치 - by 1-blue
   useEffect(() => {
@@ -64,12 +68,12 @@ const Movie = () => {
     dispatch(
       postThunkService.getPostsThunk({
         category: "MOVIE",
-        sort: "latest",
+        sortBy,
         take: 20,
         lastId: moviePosts[moviePosts.length - 1].id,
       })
     );
-  }, [getPostsLoading, hasMoreMoviePosts, dispatch, moviePosts]);
+  }, [getPostsLoading, hasMoreMoviePosts, dispatch, sortBy, moviePosts]);
   // 2022/12/24 - 영화 가져오기 무한 스크롤링 적용 - by 1-blue
   useInfiniteScrolling({
     observerRef,
@@ -154,6 +158,14 @@ const Movie = () => {
     [now_playing]
   );
 
+  // 2022/12/28 - 게시글들 정렬 순서 변경 - by 1-blue
+  const onChangeSortBy = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSortBy(e.target.value as PostSortBy);
+    },
+    []
+  );
+
   // 영화를 패치하는 중이라면
   if (
     popular.length === 0 ||
@@ -214,18 +226,14 @@ const Movie = () => {
       )}
 
       {/* 게시글들 */}
-      <section>
-        <h3 className="font-jua text-4xl px-4 pb-2">영화 명대사들</h3>
-        {moviePosts.length > 0 ? (
-          <GridPosts posts={moviePosts} ref={setObserverRef} />
-        ) : (
-          <>
-            <span className="inline-block w-full text-center font-bold text-xl">
-              ** 첫 번째로 명대사를 작성해보세요...! **
-            </span>
-            <div className="mb-6" />
-          </>
-        )}
+      <section className="mx-4">
+        <PostHeader
+          title="영화 명대사들"
+          onChangeSortBy={onChangeSortBy}
+          sortBy={sortBy}
+        />
+
+        <GridPosts posts={moviePosts} ref={setObserverRef} />
       </section>
     </>
   );

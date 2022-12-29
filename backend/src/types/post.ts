@@ -38,7 +38,7 @@ export type CreatePostResponse = ApiResponse<{}>;
  */
 export type GetPostsRequest = {
   category: PostCategory;
-  sort: PostSortBy;
+  sortBy: PostSortBy;
   take: number;
   lastId: number;
 };
