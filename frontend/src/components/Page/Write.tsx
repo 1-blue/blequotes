@@ -20,7 +20,7 @@ import Loading from "@src/components/Common/Loading";
 import NotFountPost from "@src/components/NotFoundPost";
 
 // type
-import type { PostCategory, SStorageData } from "@src/types";
+import type { LinkState, SStorageData } from "@src/types";
 import type { CreatePostRequest } from "@src/store/types";
 
 type ParamsType = { title?: string };
@@ -37,8 +37,8 @@ const Write = () => {
   const navigate = useNavigate();
   const { title } = useParams<ParamsType>();
   const {
-    state: { id, category },
-  } = useLocation() as LocationStateType;
+    state: { idx, category },
+  } = useLocation() as LinkState;
 
   // 2022/12/19 - 세션 스토리지에 저장된 데이터 - by 1-blue
   const [data, setData] = useState<null | SStorageData>(null);
@@ -60,12 +60,12 @@ const Write = () => {
 
   // 2022/12/20 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
   useEffect(() => {
-    if (!id || !category || !title) return;
+    if (!idx || !category || !title) return;
 
-    setValue("idx", id);
+    setValue("idx", idx);
     setValue("category", category);
     setValue("title", title);
-  }, [id, category, setValue, title]);
+  }, [idx, category, setValue, title]);
 
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
@@ -166,7 +166,7 @@ const Write = () => {
     doneMessage: createPostDone,
     errorMessage: createPostError,
     callback() {
-      navigate(`/post/${title}`, { state: { id, category } });
+      navigate(`/post/${title}`, { state: { idx, category } });
       dispatch(postActions.resetMessage());
     },
   });
@@ -174,11 +174,11 @@ const Write = () => {
   // 유효성 검사
   if (
     !title ||
-    !id ||
+    !idx ||
     !category ||
     !data ||
     data.title !== title ||
-    data.id !== id ||
+    data.idx !== idx ||
     data.category !== category
   )
     return <NotFountPost title={title} />;

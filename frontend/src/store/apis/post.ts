@@ -4,6 +4,8 @@ import { serverInstance } from ".";
 import type {
   CreatePostRequest,
   CreatePostResponse,
+  GetPostsOfTargetRequest,
+  GetPostsOfTargetResponse,
   GetPostsRequest,
   GetPostsResponse,
   UpdateLikeOrHateRequest,
@@ -35,10 +37,25 @@ const apiUpdateLikeOrHate = async (data: UpdateLikeOrHateRequest) =>
   await serverInstance.post<UpdateLikeOrHateResponse>(`/api/post/like`, data);
 
 /**
+ * 2022/12/30 - 특정 대상의 게시글들 요청 - by 1-blue
+ * @param data 대상 식별자, 정렬 기준, 요청 개수, 요청 기준
+ * @returns 결과
+ */
+const apiGetPostsOfTarget = async (data: GetPostsOfTargetRequest) =>
+  await serverInstance.get<GetPostsOfTargetResponse>(`/api/post/${data.idx}`, {
+    params: {
+      lastId: data.lastId,
+      sortBy: data.sortBy,
+      take: data.take,
+    },
+  });
+
+/**
  * 2022/12/22 - 게시글 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const postApiService = {
   apiCreatePost,
   apiGetPosts,
   apiUpdateLikeOrHate,
+  apiGetPostsOfTarget,
 };

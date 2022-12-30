@@ -25,10 +25,10 @@ export type PostSortBy = "popular" | "latest";
 
 /**
  * 2022/12/19 - 세션 스토리지에 저장할 데이터 타입 - by 1-blue
- * 특정 페이지 이동 or 작성 페이지 이동 시 데이터 저장 ( 새로고침 시 유지하기 위함... redux는 날아감 )
+ * 게시글 페이지 이동 or 게시글 작성 페이지 이동 시 데이터 저장 ( 새로고침 시 유지하기 위함... redux는 날아감 )
  */
 export type SStorageData = {
-  id: string;
+  idx: string;
   category: string;
   title: string;
   description: string;
@@ -44,3 +44,8 @@ export type LStorageData = {
   postId: number;
   isLike: boolean;
 };
+
+/**
+ * 2022/12/30 - "<Link>"로 특정 대상의 페이지로 이동하는 경우 송신 및 수신 타입 - by 1-blue
+ */
+export type LinkState = { state: { idx?: string; category?: PostCategory } };

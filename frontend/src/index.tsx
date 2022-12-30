@@ -20,6 +20,7 @@ import Movie from "@src/components/Page/Movie";
 import Drama from "@src/components/Page/Drama";
 import Book from "@src/components/Page/Book";
 import Search from "@src/components/Page/Search";
+import Post from "@src/components/Page/Post";
 import Write from "@src/components/Page/Write";
 
 // component
@@ -44,6 +45,7 @@ root.render(
             <Route path="/drama" element={<Drama />}></Route>
             <Route path="/book" element={<Book />}></Route>
             <Route path="/search" element={<Search />}></Route>
+            <Route path="/post/:title" element={<Post />}></Route>
             <Route path="/write/:title" element={<Write />}></Route>
             <Route path="*" element={<div>경로없음</div>}></Route>
           </Routes>

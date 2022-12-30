@@ -49,7 +49,7 @@ const settings: Settings = {
 
 type Props = {
   datas: {
-    id: string;
+    idx: string;
     category: PostCategory;
     paths: string[];
     title?: string;
@@ -87,10 +87,10 @@ const SlickSlider = ({ datas, ...rest }: Props) => {
       nextArrow={<ArrowButton />}
       infinite={infinite}
     >
-      {datas.map(({ id, category, paths, title, description, date }, i) => (
+      {datas.map(({ idx, category, paths, title, description, date }, i) => (
         <Image.SlickPoster
-          key={id}
-          id={id}
+          key={idx}
+          idx={idx}
           category={category}
           paths={paths}
           isMainPoster={currentPoster === i}

@@ -11,11 +11,13 @@ interface PostState {
   moviePosts: Post[];
   dramaPosts: Post[];
   bookPosts: Post[];
+  targetPosts: Post[]; // 특정 대상의 게시글들
 
   // 게시글 더 패치 가능 여부
   hasMoreMoviePosts: boolean;
   hasMoreDramaPosts: boolean;
   hasMoreBookPosts: boolean;
+  hasMoreTargetPosts: boolean;
 
   // 게시글 생성
   createPostLoading: boolean;
@@ -31,16 +33,23 @@ interface PostState {
   updateLikeOrHateLoading: boolean;
   updateLikeOrHateDone: null | string;
   updateLikeOrHateError: null | string;
+
+  // 특정 대상의 게시글들
+  getPostsOfTargetLoading: boolean;
+  getPostsOfTargetDone: null | string;
+  getPostsOfTargetError: null | string;
 }
 
 const initialState: PostState = {
   moviePosts: [],
   dramaPosts: [],
   bookPosts: [],
+  targetPosts: [],
 
   hasMoreMoviePosts: true,
   hasMoreDramaPosts: true,
   hasMoreBookPosts: true,
+  hasMoreTargetPosts: true,
 
   createPostLoading: false,
   createPostDone: null,
@@ -53,6 +62,10 @@ const initialState: PostState = {
   updateLikeOrHateLoading: false,
   updateLikeOrHateDone: null,
   updateLikeOrHateError: null,
+
+  getPostsOfTargetLoading: false,
+  getPostsOfTargetDone: null,
+  getPostsOfTargetError: null,
 };
 
 const postSlice = createSlice({
@@ -71,11 +84,17 @@ const postSlice = createSlice({
       state.updateLikeOrHateLoading = false;
       state.updateLikeOrHateDone = null;
       state.updateLikeOrHateError = null;
+
+      state.getPostsOfTargetLoading = false;
+      state.getPostsOfTargetDone = null;
+      state.getPostsOfTargetError = null;
     },
     reset(state) {
       state.moviePosts = [];
       state.dramaPosts = [];
       state.bookPosts = [];
+
+      state.targetPosts = [];
 
       state.hasMoreMoviePosts = true;
       state.hasMoreDramaPosts = true;
@@ -125,10 +144,14 @@ const postSlice = createSlice({
               action.payload.take === action.payload.posts.length;
             break;
           case "DRAMA":
-            state.dramaPosts = action.payload.posts;
+            state.dramaPosts.push(...action.payload.posts);
+            state.hasMoreDramaPosts =
+              action.payload.take === action.payload.posts.length;
             break;
           case "BOOK":
-            state.bookPosts = action.payload.posts;
+            state.bookPosts.push(...action.payload.posts);
+            state.hasMoreBookPosts =
+              action.payload.take === action.payload.posts.length;
             break;
         }
       }
@@ -170,13 +193,13 @@ const postSlice = createSlice({
             break;
           case "DRAMA":
             targetIndex = state.dramaPosts.findIndex(
-              (drama) => drama.id !== resultPost.id
+              (drama) => drama.id === resultPost.id
             );
             state.dramaPosts[targetIndex] = resultPost;
             break;
           case "BOOK":
             targetIndex = state.bookPosts.findIndex(
-              (book) => book.id !== resultPost.id
+              (book) => book.id === resultPost.id
             );
             state.bookPosts[targetIndex] = resultPost;
             break;
@@ -192,6 +215,33 @@ const postSlice = createSlice({
         }
 
         console.error("updateLikeOrHate >> ", action);
+      }
+    );
+
+    // 특정 대상의 게시글들 요청
+    builder.addCase(postThunkService.getPostsOfTarget.pending, (state) => {
+      state.getPostsLoading = true;
+    });
+    builder.addCase(
+      postThunkService.getPostsOfTarget.fulfilled,
+      (state, action) => {
+        state.getPostsLoading = false;
+        state.getPostsDone = action.payload.message;
+
+        state.targetPosts.push(...action.payload.posts);
+        state.hasMoreTargetPosts =
+          action.payload.take === action.payload.posts.length;
+      }
+    );
+    builder.addCase(
+      postThunkService.getPostsOfTarget.rejected,
+      (state, action) => {
+        state.getPostsLoading = false;
+        if (action.payload?.message) {
+          state.getPostsError = action.payload.message;
+        }
+
+        console.error("getPostsOfTarget >> ", action);
       }
     );
   },

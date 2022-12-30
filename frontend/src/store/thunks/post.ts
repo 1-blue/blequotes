@@ -9,6 +9,8 @@ import type {
   CreateAsyncThunkErrorType,
   CreatePostRequest,
   CreatePostResponse,
+  GetPostsOfTargetRequest,
+  GetPostsOfTargetResponse,
   GetPostsRequest,
   GetPostsResponse,
   UpdateLikeOrHateRequest,
@@ -27,7 +29,7 @@ const createPostThunk = createAsyncThunk<
   "create/post",
 
   // promise를 반환하는 액션 작성
-  async (body: CreatePostRequest, { rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
       const {
         data: { data },
@@ -60,7 +62,7 @@ const getPostsThunk = createAsyncThunk<
   "fetch/posts",
 
   // promise를 반환하는 액션 작성
-  async (body: GetPostsRequest, { rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
       const {
         data: { data },
@@ -93,7 +95,7 @@ const updateLikeOrHate = createAsyncThunk<
   "update/post/likeOrHate",
 
   // promise를 반환하는 액션 작성
-  async (body: UpdateLikeOrHateRequest, { rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
       const {
         data: { data },
@@ -108,7 +110,40 @@ const updateLikeOrHate = createAsyncThunk<
       }
 
       return rejectWithValue({
-        message: "알 수 없는 이유료 게시글 싫어요/좋아요에 실패했습니다.",
+        message: "알 수 없는 이유로 게시글 싫어요/좋아요에 실패했습니다.",
+      });
+    }
+  }
+);
+
+/**
+ * 2022/12/30 - 특정 대상의 게시글들 요청 thunk - by 1-blue
+ */
+const getPostsOfTarget = createAsyncThunk<
+  GetPostsOfTargetResponse["data"],
+  GetPostsOfTargetRequest,
+  CreateAsyncThunkErrorType
+>(
+  // 액션 타입 결정
+  "fetch/posts/target",
+
+  // promise를 반환하는 액션 작성
+  async (body, { rejectWithValue }) => {
+    try {
+      const {
+        data: { data },
+      } = await postApiService.apiGetPostsOfTarget(body);
+
+      return data;
+    } catch (error) {
+      console.error("error >> ", error);
+
+      if (error instanceof AxiosError) {
+        return rejectWithValue({ message: error.response?.data.data.message });
+      }
+
+      return rejectWithValue({
+        message: "알 수 없는 이유로 게시글 싫어요/좋아요에 실패했습니다.",
       });
     }
   }
@@ -121,4 +156,5 @@ export const postThunkService = {
   createPostThunk,
   getPostsThunk,
   updateLikeOrHate,
+  getPostsOfTarget,
 };

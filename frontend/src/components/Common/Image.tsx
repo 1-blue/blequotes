@@ -53,7 +53,7 @@ const BackgroundImage = ({
 
 // react-slick으로 사용할 포스터 이미지
 type SlickPosterProps = {
-  id: string;
+  idx: string;
   category: PostCategory;
   paths: string[];
   isMainPoster: boolean;
@@ -63,7 +63,7 @@ type SlickPosterProps = {
   date: string;
 };
 const SlickPoster = ({
-  id,
+  idx,
   category,
   paths,
   isMainPoster,
@@ -74,13 +74,13 @@ const SlickPoster = ({
 }: SlickPosterProps) => {
   const [isShow, setIsShow] = useState(false);
 
-  // 2022/12/19 - 게시글 작성 페이지 이동 시 클릭한 데이터 세션 스토리지에 저장 - by 1-blue
+  // 2022/12/19 - 게시글 및 게시글 작성 페이지 이동 시 클릭한 데이터 세션 스토리지에 저장 - by 1-blue
   const onSaveDataToStorage = useCallback(() => {
     sessionStorage.setItem(
       "data",
-      JSON.stringify({ id, category, title, description, paths, date })
+      JSON.stringify({ idx, category, title, description, paths, date })
     );
-  }, [id, category, title, description, paths, date]);
+  }, [idx, category, title, description, paths, date]);
 
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
@@ -96,7 +96,7 @@ const SlickPoster = ({
   return (
     <Link
       to={`/post/${title}`}
-      state={{ id, category }}
+      state={{ idx, category }}
       onClick={onSaveDataToStorage}
     >
       <figure

@@ -97,4 +97,6 @@ export type {
   GetPostsResponse,
   UpdateLikeOrHateRequest,
   UpdateLikeOrHateResponse,
+  GetPostsOfTargetRequest,
+  GetPostsOfTargetResponse,
 } from "./post";

@@ -65,3 +65,21 @@ export type UpdateLikeOrHateRequest = {
  * 2022/12/26 - 게시글 좋아요/싫어요 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type UpdateLikeOrHateResponse = ApiResponse<{ resultPost?: Post }>;
+
+// ============================== 특정 영화/드라마/도서의 게시글들 요청 관련 ==============================
+/**
+ * 2022/12/30 - 특정 대상의 게시글들 요청 수신 타입 ( F -> B ) - by 1-blue
+ */
+export type GetPostsOfTargetRequest = {
+  idx: string;
+  sortBy: PostSortBy;
+  take: number;
+  lastId: number;
+};
+/**
+ * 2022/12/30 - 특정 대상의 게시글들 요청 수신 타입 ( B -> F ) - by 1-blue
+ */
+export type GetPostsOfTargetResponse = ApiResponse<{
+  take: number;
+  posts: Post[];
+}>;
