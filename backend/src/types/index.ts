@@ -33,6 +33,11 @@ export type {
   ApiSimilarMoviesResponse,
   SimilarMoviesRequest,
   SimilarMoviesResponse,
+  //
+  ApiDetailMovieRequest,
+  ApiDetailMovieResponse,
+  DetailMovieRequest,
+  DetailMovieResponse,
 } from "./movie";
 
 export type {

@@ -24,10 +24,10 @@ export type PostCategory = "MOVIE" | "DRAMA" | "BOOK";
 export type PostSortBy = "popular" | "latest";
 
 /**
- * 2022/12/19 - 세션 스토리지에 저장할 데이터 타입 - by 1-blue
- * 게시글 페이지 이동 or 게시글 작성 페이지 이동 시 데이터 저장 ( 새로고침 시 유지하기 위함... redux는 날아감 )
+ * 2022/12/31 - 영화/드라마/도서 데이터 통합 타입 - by 1-blue
+ * post, write 페이지는 공용으로 사용하기 때문에 데이터 이름을 맞춰주기 위함
  */
-export type SStorageData = {
+export type TargetData = {
   idx: string;
   category: string;
   title: string;

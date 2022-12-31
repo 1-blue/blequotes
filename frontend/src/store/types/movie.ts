@@ -31,6 +31,57 @@ export type Movie = {
   vote_count: number;
 };
 
+/**
+ * 2022/12/30 - 영화 상세 타입 - by 1-blue
+ */
+export type DetailMovie = {
+  adult: boolean;
+  backdrop_path: string;
+  belongs_to_collection: {
+    id: number;
+    name: string;
+    poster_path: string;
+    backdrop_path: string;
+  };
+  budget: number;
+  genres: {
+    id: number;
+    name: string;
+  }[];
+  homepage: string;
+  id: number;
+  imdb_id: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: {
+    id: number;
+    logo_path: string;
+    name: string;
+    origin_country: string;
+  }[];
+  production_countries: {
+    iso_3166_1: string;
+    name: string;
+  }[];
+  release_date: string;
+  revenue: number;
+  runtime: number;
+  spoken_languages: {
+    english_name: string;
+    iso_639_1: string;
+    name: string;
+  }[];
+  status: string;
+  tagline: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+};
+
 // ============================== 인기 / 최신 / 꾸준한 인기 영화들 관련 ==============================
 /**
  * 2022/12/17 - 인기 / 현재 상영중 / 꾸준한 인기 영화들 요청 송신 타입 ( F -> B ) - by 1-blue
@@ -82,3 +133,16 @@ export type SimilarMoviesRequest = {
  * 2022/12/17 - 유사 영화 검색어 검색 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SimilarMoviesResponse = ApiResponse<{ movies: Movie[] }>;
+
+// ============================== 특정 영화 상세 정보 요청 관련 ==============================
+/**
+ * 2022/12/31 - 특정 영화 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
+ */
+export type DetailMovieRequest = {
+  movieIdx: string;
+  language?: MovieLanguage;
+};
+/**
+ * 2022/12/31 - 특정 영화 상세 정보 요청 수신 타입 ( B -> F ) - by 1-blue
+ */
+export type DetailMovieResponse = ApiResponse<{ movie: DetailMovie }>;

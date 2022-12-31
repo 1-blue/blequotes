@@ -15,6 +15,7 @@ export type CreateAsyncThunkErrorType = { rejectValue: { message: string } };
 
 export type {
   Movie,
+  DetailMovie,
   FetchMoviesRequest,
   FetchMoviesResponse,
   SearchMoviesRequest,
@@ -23,6 +24,8 @@ export type {
   SuggestMoviesResponse,
   SimilarMoviesRequest,
   SimilarMoviesResponse,
+  DetailMovieRequest,
+  DetailMovieResponse,
 } from "./movie";
 
 export type {

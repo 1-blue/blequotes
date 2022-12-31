@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { movieThunkService } from "../thunks";
 
 // type
-import type { Movie } from "../types";
+import type { DetailMovie, Movie } from "../types";
 
 interface MovieState {
   popular: Movie[];
@@ -14,6 +14,8 @@ interface MovieState {
   searchedMovies: Movie[];
   suggestedMovies: string[];
   similarMovies: Movie[];
+
+  detailMovie: DetailMovie | null;
 
   // 특정 카테고리의 영화들 요청
   fetchMoviesLoading: boolean;
@@ -34,15 +36,23 @@ interface MovieState {
   similarMoviesLoading: boolean;
   similarMoviesDone: null | string;
   similarMoviesError: null | string;
+
+  // 특정 영화 상세 정보
+  detailMovieLoading: boolean;
+  detailMovieDone: null | string;
+  detailMovieError: null | string;
 }
 
 const initialState: MovieState = {
   popular: [],
   top_rated: [],
   now_playing: [],
+
   searchedMovies: [],
   suggestedMovies: [],
   similarMovies: [],
+
+  detailMovie: null,
 
   fetchMoviesLoading: false,
   fetchMoviesDone: null,
@@ -59,6 +69,10 @@ const initialState: MovieState = {
   similarMoviesLoading: false,
   similarMoviesDone: null,
   similarMoviesError: null,
+
+  detailMovieLoading: false,
+  detailMovieDone: null,
+  detailMovieError: null,
 };
 
 const movieSlice = createSlice({
@@ -81,6 +95,10 @@ const movieSlice = createSlice({
       state.similarMoviesLoading = false;
       state.similarMoviesDone = null;
       state.similarMoviesError = null;
+
+      state.detailMovieLoading = false;
+      state.detailMovieDone = null;
+      state.detailMovieError = null;
     },
   },
 
@@ -179,6 +197,30 @@ const movieSlice = createSlice({
         }
 
         console.error("suggestedMovies >> ", action);
+      }
+    );
+
+    // 특정 영화 상세 정보 요청
+    builder.addCase(movieThunkService.detailMovieThunk.pending, (state) => {
+      state.detailMovieLoading = true;
+    });
+    builder.addCase(
+      movieThunkService.detailMovieThunk.fulfilled,
+      (state, action) => {
+        state.detailMovieLoading = false;
+        state.detailMovieDone = action.payload.data.message;
+        state.detailMovie = action.payload.data.movie;
+      }
+    );
+    builder.addCase(
+      movieThunkService.detailMovieThunk.rejected,
+      (state, action) => {
+        state.detailMovieLoading = false;
+        if (action.payload?.message) {
+          state.detailMovieError = action.payload.message;
+        }
+
+        console.error("detailMovie >> ", action);
       }
     );
   },

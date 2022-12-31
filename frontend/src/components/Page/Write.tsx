@@ -1,8 +1,11 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { postThunkService } from "@src/store/thunks";
+import { movieThunkService, postThunkService } from "@src/store/thunks";
 import { postActions } from "@src/store/reducers/postReducer";
+
+// util
+import { getMovieDBImagePath } from "@src/utils";
 
 // api
 import { imageApiService } from "@src/store/apis";
@@ -20,7 +23,7 @@ import Loading from "@src/components/Common/Loading";
 import NotFountPost from "@src/components/NotFoundPost";
 
 // type
-import type { LinkState, SStorageData } from "@src/types";
+import type { LinkState, TargetData } from "@src/types";
 import type { CreatePostRequest } from "@src/store/types";
 
 type ParamsType = { title?: string };
@@ -35,20 +38,43 @@ type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
 const Write = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { title } = useParams<ParamsType>();
-  const {
-    state: { idx, category },
-  } = useLocation() as LinkState;
+  const { state } = useLocation() as LinkState;
+  const { detailMovie, detailMovieLoading } = useAppSelector(
+    ({ movie }) => movie
+  );
 
-  // 2022/12/19 - 세션 스토리지에 저장된 데이터 - by 1-blue
-  const [data, setData] = useState<null | SStorageData>(null);
+  // 2022/12/31 - 현재 대상에 대한 상세 정보 요청 - by 1-blue
   useEffect(() => {
-    const storageData = sessionStorage.getItem("data");
-    if (!storageData) return;
+    if (!state.idx) return;
 
-    const parsingData = JSON.parse(storageData) as SStorageData;
-    setData(parsingData);
-  }, []);
+    switch (state.category) {
+      case "MOVIE":
+        dispatch(movieThunkService.detailMovieThunk({ movieIdx: state.idx }));
+        break;
+      case "DRAMA":
+        break;
+      case "BOOK":
+        break;
+    }
+  }, [state, dispatch]);
+  // 2022/12/31 - 영화/드라마/도서의 상세 정보 중 필요한 정보만 추출한 변수 - by 1-blue
+  const [data, setData] = useState<TargetData | null>(null);
+  useEffect(() => {
+    if (state.category === "MOVIE" && detailMovie) {
+      setData({
+        idx: detailMovie.id + "",
+        title: detailMovie.title,
+        description: detailMovie.overview,
+        date: detailMovie.release_date,
+        paths: [detailMovie.poster_path, detailMovie.backdrop_path]
+          .filter((v) => v)
+          .map((v) => getMovieDBImagePath(v)),
+        category: "MOVIE",
+      });
+    }
+    // if(state.category === "DRAMA" && detailMovie) {}
+    // if(state.category === "BOOK" && detailMovie) {}
+  }, [state, detailMovie]);
 
   const {
     register,
@@ -58,14 +84,14 @@ const Write = () => {
     formState: { errors },
   } = useForm<PostForm>();
 
-  // 2022/12/20 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
+  // 2022/12/31 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
   useEffect(() => {
-    if (!idx || !category || !title) return;
+    if (!state.idx || !state.category || !detailMovie) return;
 
-    setValue("idx", idx);
-    setValue("category", category);
-    setValue("title", title);
-  }, [idx, category, setValue, title]);
+    setValue("idx", state.idx);
+    setValue("category", state.category);
+    setValue("title", detailMovie.title);
+  }, [state, detailMovie, setValue]);
 
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
@@ -103,12 +129,14 @@ const Write = () => {
   // 2022/12/22 - 게시글 생성 요청 - by 1-blue
   const createPost = useCallback(
     async (e: PostForm) => {
+      if (!data) return;
+
       // 게시글 생성 시작
       setIsCreatingPost(true);
 
       try {
         // 기본 썸네일은 해당 포스터 이미지
-        let thumbnailPath = data?.paths[0];
+        let thumbnailPath = data.paths[0];
 
         // 썸네일이 있다면 업로드
         if (e.thumbnail && e.thumbnail?.length > 0) {
@@ -166,22 +194,15 @@ const Write = () => {
     doneMessage: createPostDone,
     errorMessage: createPostError,
     callback() {
-      navigate(`/post/${title}`, { state: { idx, category } });
+      navigate(`/post/${detailMovie?.title}`, {
+        state: { idx: state.idx, category: state.category },
+      });
       dispatch(postActions.resetMessage());
     },
   });
 
-  // 유효성 검사
-  if (
-    !title ||
-    !idx ||
-    !category ||
-    !data ||
-    data.title !== title ||
-    data.idx !== idx ||
-    data.category !== category
-  )
-    return <NotFountPost title={title} />;
+  // >>> 스켈레톤 UI 추가하기
+  if (detailMovieLoading || !data) return <></>;
 
   return (
     <>
@@ -206,7 +227,9 @@ const Write = () => {
       {/* 중단 이미지 */}
       <section className="w-full bg-black">
         <Image.BackgroundImage
-          path={targetPath}
+          path={
+            data.paths[1] && innerWidth >= 1030 ? data.paths[1] : data.paths[0]
+          }
           alt={`"${data.title}"의 이미지`}
           className="bg-center bg-contain bg-no-repeat h-[80vh] bg-local mb-4 max-w-[1200px] mx-auto"
         />

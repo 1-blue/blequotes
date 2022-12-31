@@ -15,6 +15,8 @@ import type {
   SuggestMoviesResponse,
   SimilarMoviesRequest,
   SimilarMoviesResponse,
+  DetailMovieResponse,
+  DetailMovieRequest,
 } from "../types";
 
 /**
@@ -135,6 +137,34 @@ const similarMoviesThunk = createAsyncThunk<
 });
 
 /**
+ * 2022/12/31 - 특정 영화 상세 정보 요청 thunk - by 1-blue
+ */
+const detailMovieThunk = createAsyncThunk<
+  DetailMovieResponse,
+  DetailMovieRequest,
+  CreateAsyncThunkErrorType
+>("detail/movie", async ({ movieIdx, language }, { rejectWithValue }) => {
+  try {
+    const { data } = await movieApiService.apiDetailMovie({
+      movieIdx,
+      language,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("error >> ", error);
+
+    if (error instanceof AxiosError) {
+      return rejectWithValue({ message: error.response?.data.data.message });
+    }
+
+    return rejectWithValue({
+      message: "알 수 없는 이유로 특정 영화 정보 요청에 실패했습니다.",
+    });
+  }
+});
+
+/**
  * 2022/12/17 - 영화 thunk 메서드들을 갖는 객체 - by 1-blue
  */
 export const movieThunkService = {
@@ -142,4 +172,5 @@ export const movieThunkService = {
   searchMoviesThunk,
   suggestedMoviesThunk,
   similarMoviesThunk,
+  detailMovieThunk,
 };

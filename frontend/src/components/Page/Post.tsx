@@ -1,30 +1,66 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { postActions } from "@src/store/reducers/postReducer";
-import { postThunkService } from "@src/store/thunks";
+import { movieThunkService, postThunkService } from "@src/store/thunks";
 
-// component
-import Image from "@src/components/Common/Image";
-import NotFountPost from "@src/components/NotFoundPost";
-import PostHeader from "@src/components/Posts/PostHeader";
-import GridPosts from "@src/components/Posts/GridPosts";
+// util
+import { getMovieDBImagePath } from "@src/utils";
 
 // hook
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import useInnerSize from "@src/hooks/useInnerSize";
 import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 
-// type
-import type { LinkState, PostSortBy, SStorageData } from "@src/types";
+// component
+import Image from "@src/components/Common/Image";
+import PostHeader from "@src/components/Posts/PostHeader";
+import GridPosts from "@src/components/Posts/GridPosts";
 
-type ParamsType = { title?: string };
+// hook
+// type
+import type { LinkState, PostSortBy, TargetData } from "@src/types";
 
 const Post = () => {
   const dispatch = useAppDispatch();
-  const { title } = useParams<ParamsType>();
   const { state } = useLocation() as LinkState;
+  const { detailMovie, detailMovieLoading } = useAppSelector(
+    ({ movie }) => movie
+  );
   const { targetPosts, hasMoreTargetPosts, getPostsOfTargetLoading } =
     useAppSelector(({ post }) => post);
+
+  // 2022/12/31 - 현재 대상에 대한 상세 정보 요청 - by 1-blue
+  useEffect(() => {
+    if (!state.idx) return;
+
+    switch (state.category) {
+      case "MOVIE":
+        dispatch(movieThunkService.detailMovieThunk({ movieIdx: state.idx }));
+        break;
+      case "DRAMA":
+        break;
+      case "BOOK":
+        break;
+    }
+  }, [state, dispatch]);
+  // 2022/12/31 - 영화/드라마/도서의 상세 정보 중 필요한 정보만 추출한 변수 - by 1-blue
+  const [data, setData] = useState<TargetData | null>(null);
+  useEffect(() => {
+    if (state.category === "MOVIE" && detailMovie) {
+      setData({
+        idx: detailMovie.id + "",
+        title: detailMovie.title,
+        description: detailMovie.overview,
+        date: detailMovie.release_date,
+        paths: [detailMovie.poster_path, detailMovie.backdrop_path]
+          .filter((v) => v)
+          .map((v) => getMovieDBImagePath(v)),
+        category: "MOVIE",
+      });
+    }
+    // if(state.category === "DRAMA" && detailMovie) {}
+    // if(state.category === "BOOK" && detailMovie) {}
+  }, [state, detailMovie]);
 
   // 2022/12/30 - 게시글들 정렬 순서 - by 1-blue
   const [sortBy, setSortBy] = useState<PostSortBy>("popular");
@@ -82,57 +118,29 @@ const Post = () => {
     hasMore: hasMoreTargetPosts,
   });
 
-  // 2022/12/30 - 세션 스토리지에 저장된 데이터 - by 1-blue
-  const [data, setData] = useState<null | SStorageData>(null);
-  useEffect(() => {
-    const storageData = sessionStorage.getItem("data");
-    if (!storageData) return;
-
-    const parsingData = JSON.parse(storageData) as SStorageData;
-    setData(parsingData);
-  }, []);
-
-  // 2022/12/30 - 게시글 작성 페이지 이동 시 클릭한 데이터 세션 스토리지에 저장 - by 1-blue
-  const onSaveDataToStorage = useCallback(() => {
-    sessionStorage.setItem("data", JSON.stringify(data));
-  }, [data]);
-
   // 2022/12/30 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
 
-  // 2022/12/30 - 렌더링할 이미지 path - by 1-blue
-  const targetPath = useMemo(() => {
-    if (!data) return "";
-    if (data.paths.length === 1) return data.paths[0];
-
-    if (innerWidth >= 1030) return data.paths[1];
-    else return data.paths[0];
-  }, [data, innerWidth]);
-
-  // 혹시 모르는 안전장치들
-  if (
-    !title ||
-    !state?.idx ||
-    !state?.category ||
-    !data ||
-    data.title !== title ||
-    data.idx !== state?.idx ||
-    data.category !== state?.category
-  )
-    return <NotFountPost title={title} />;
+  // >>> 스켈레톤 UI 추가하기
+  if (detailMovieLoading || !data) return <></>;
 
   return (
     <>
       <Image.BackgroundImage
-        {...data}
-        path={targetPath}
+        title={data.title}
+        description={data.description}
+        date={data.date}
+        alt={`${data.title}의 포스터 이미지`}
+        path={
+          data.paths[1] && innerWidth >= 1030 ? data.paths[1] : data.paths[0]
+        }
         className="w-full h-screen"
       />
 
       {/* 게시글들 */}
       <section className="mx-4 mt-8">
         <PostHeader
-          title={`"${title}"의 명대사들`}
+          title={`"${data.title}"의 명대사들`}
           onChangeSortBy={onChangeSortBy}
           sortBy={sortBy}
         />
@@ -143,8 +151,7 @@ const Post = () => {
       <aside className="absolute bottom-4 right-4">
         <Link
           to={`/write/${data.title}`}
-          state={{ ...state, title }}
-          onClick={onSaveDataToStorage}
+          state={{ ...state }}
           className="text-white bg-main-500 px-3 py-3 rounded-md font-bold transition-colors hover:bg-main-600"
         >
           명대사 작성하기

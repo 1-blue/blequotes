@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 // util
@@ -74,14 +74,6 @@ const SlickPoster = ({
 }: SlickPosterProps) => {
   const [isShow, setIsShow] = useState(false);
 
-  // 2022/12/19 - 게시글 및 게시글 작성 페이지 이동 시 클릭한 데이터 세션 스토리지에 저장 - by 1-blue
-  const onSaveDataToStorage = useCallback(() => {
-    sessionStorage.setItem(
-      "data",
-      JSON.stringify({ idx, category, title, description, paths, date })
-    );
-  }, [idx, category, title, description, paths, date]);
-
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
 
@@ -94,11 +86,7 @@ const SlickPoster = ({
   }, [paths, innerWidth]);
 
   return (
-    <Link
-      to={`/post/${title}`}
-      state={{ idx, category }}
-      onClick={onSaveDataToStorage}
-    >
+    <Link to={`/post/${title}`} state={{ idx, category }}>
       <figure
         className="relative cursor-pointer flex justify-center bg-slate-400"
         onMouseOver={() => setIsShow(true)}

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import { postThunkService } from "@src/store/thunks";
 import { postActions } from "@src/store/reducers/postReducer";
@@ -178,10 +179,17 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
               >
                 <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50" />
 
-                <div className="absolute top-[10%] left-[10%] space-y-2 z-[1]">
-                  <h4 className="text-2xl">
-                    <b>{post.title}</b>
-                  </h4>
+                <div className="absolute top-[10%] w-full px-4 space-y-2 z-[1]">
+                  <Link
+                    to={`/post/${post.title}`}
+                    state={{ idx: post.idx, category: post.category }}
+                    className="underline-offset-8 decoration-main-400 hover:underline hover:text-main-400"
+                  >
+                    <h4 className="text-2xl text-center">
+                      <b>{post.title}</b>
+                    </h4>
+                  </Link>
+
                   <p className="text-sm whitespace-pre-wrap">
                     <b>"{post.speech}"</b>
                   </p>

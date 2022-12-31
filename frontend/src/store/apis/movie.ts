@@ -2,6 +2,8 @@ import { serverInstance } from ".";
 
 // type
 import type {
+  DetailMovieRequest,
+  DetailMovieResponse,
   FetchMoviesRequest,
   FetchMoviesResponse,
   SearchMoviesRequest,
@@ -66,6 +68,19 @@ const apiSimilarMovies = async ({
   });
 
 /**
+ * 2022/12/31 - 특정 영화 상세 정보 요청 - by 1-blue
+ * @param movieIdx "MovieDB"에서 받은 영화 식별자
+ * @returns 특정 영화 상세 정보
+ */
+const apiDetailMovie = async ({
+  movieIdx,
+  language = "ko-kr",
+}: DetailMovieRequest) =>
+  await serverInstance.get<DetailMovieResponse>(`/api/movie/detail`, {
+    params: { movieIdx, language },
+  });
+
+/**
  * 2022/12/17 - 영화 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const movieApiService = {
@@ -73,4 +88,5 @@ export const movieApiService = {
   apiSearchMovies,
   apiSuggestedMovies,
   apiSimilarMovies,
+  apiDetailMovie,
 };

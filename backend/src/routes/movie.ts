@@ -14,6 +14,8 @@ import type {
   SimilarMoviesResponse,
   SuggestMoviesRequest,
   SuggestMoviesResponse,
+  DetailMovieRequest,
+  DetailMovieResponse,
 } from "../types";
 
 const movieRouter = express.Router();
@@ -128,6 +130,35 @@ movieRouter.get(
         data: {
           message: `현재 검색한 영화와 유사한 영화들입니다."`,
           movies: data.results,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 특정 영화 상세 정보 요청
+movieRouter.get(
+  "/detail",
+  async (
+    req: Request<{}, {}, {}, DetailMovieRequest>,
+    res: Response<DetailMovieResponse>,
+    next: NextFunction
+  ) => {
+    try {
+      const { movieIdx, language } = req.query;
+
+      const { data } = await movieService.apiDetailMovie({
+        movieIdx,
+        language,
+      });
+
+      return res.status(200).json({
+        meta: { ok: true },
+        data: {
+          message: `${data.title}에 대한 상세 정보입니다`,
+          movie: data,
         },
       });
     } catch (error) {

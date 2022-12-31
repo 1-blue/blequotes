@@ -10,6 +10,8 @@ import type {
   ApiSuggestMoviesResponse,
   ApiSimilarMoviesRequest,
   ApiSimilarMoviesResponse,
+  ApiDetailMovieRequest,
+  ApiDetailMovieResponse,
 } from "../types";
 
 /**
@@ -67,6 +69,19 @@ const apiSimilarMovies = async ({
   );
 
 /**
+ * 2022/12/31 - 특정 영화 상세 정보 요청 - by 1-blue
+ * @param movieId "MovieDB"에서 받은 영화 식별자
+ * @returns 특정 영화 상세 정보
+ */
+const apiDetailMovie = async ({
+  movieIdx,
+  language = "ko-kr",
+}: ApiDetailMovieRequest) =>
+  await movieDBInstance.get<ApiDetailMovieResponse>(`/movie/${movieIdx}`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, language },
+  });
+
+/**
  * 2022/12/17 - 영화 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const movieService = {
@@ -74,4 +89,5 @@ export const movieService = {
   apiSearchMovies,
   apiSuggestedMovies,
   apiSimilarMovies,
+  apiDetailMovie,
 };
