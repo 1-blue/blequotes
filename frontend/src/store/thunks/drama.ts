@@ -15,6 +15,8 @@ import type {
   SuggestDramasResponse,
   SimilarDramasRequest,
   SimilarDramasResponse,
+  DetailDramaResponse,
+  DetailDramaRequest,
 } from "../types";
 
 /**
@@ -138,6 +140,34 @@ const similarDramasThunk = createAsyncThunk<
 );
 
 /**
+ * 2022/12/31 - 특정 드라마 상세 정보 요청 thunk - by 1-blue
+ */
+const detailDramaThunk = createAsyncThunk<
+  DetailDramaResponse,
+  DetailDramaRequest,
+  CreateAsyncThunkErrorType
+>("detail/drama", async ({ dramaIdx, language }, { rejectWithValue }) => {
+  try {
+    const { data } = await dramaApiService.apiDetailDrama({
+      dramaIdx,
+      language,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("error >> ", error);
+
+    if (error instanceof AxiosError) {
+      return rejectWithValue({ message: error.response?.data.data.message });
+    }
+
+    return rejectWithValue({
+      message: "알 수 없는 이유로 특정 드라마 정보 요청에 실패했습니다.",
+    });
+  }
+});
+
+/**
  * 2022/12/17 - 드라마 thunk 메서드들을 갖는 객체 - by 1-blue
  */
 export const dramaThunkService = {
@@ -145,4 +175,5 @@ export const dramaThunkService = {
   searchDramasThunk,
   suggestedDramasThunk,
   similarDramasThunk,
+  detailDramaThunk,
 };

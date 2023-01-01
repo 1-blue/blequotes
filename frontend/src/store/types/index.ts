@@ -30,6 +30,7 @@ export type {
 
 export type {
   Drama,
+  DetailDrama,
   FetchDramasRequest,
   FetchDramasResponse,
   SearchDramasRequest,
@@ -38,6 +39,8 @@ export type {
   SuggestDramasResponse,
   SimilarDramasRequest,
   SimilarDramasResponse,
+  DetailDramaRequest,
+  DetailDramaResponse,
 } from "./drama";
 
 export type {
@@ -48,6 +51,8 @@ export type {
   SuggestBooksResponse,
   SimilarBooksRequest,
   SimilarBooksResponse,
+  DetailBookRequest,
+  DetailBookResponse,
 } from "./book";
 
 export type {

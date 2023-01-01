@@ -14,6 +14,8 @@ import type {
   SimilarDramasResponse,
   SuggestDramasRequest,
   SuggestDramasResponse,
+  DetailDramaRequest,
+  DetailDramaResponse,
 } from "../types";
 
 const dramaRouter = express.Router();
@@ -128,6 +130,35 @@ dramaRouter.get(
         data: {
           message: `현재 검색한 드라마와 유사한 드라마들입니다."`,
           dramas: data.results,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 특정 드라마 상세 정보 요청
+dramaRouter.get(
+  "/detail",
+  async (
+    req: Request<{}, {}, {}, DetailDramaRequest>,
+    res: Response<DetailDramaResponse>,
+    next: NextFunction
+  ) => {
+    try {
+      const { dramaIdx, language } = req.query;
+
+      const { data } = await dramaService.apiDetailDrama({
+        dramaIdx,
+        language,
+      });
+
+      return res.status(200).json({
+        meta: { ok: true },
+        data: {
+          message: `"${data.name}"에 대한 상세 정보입니다`,
+          drama: data,
         },
       });
     } catch (error) {

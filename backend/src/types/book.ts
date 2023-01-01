@@ -90,3 +90,23 @@ export type SimilarBooksRequest = ApiSimilarBooksRequest;
  * 2022/12/18 - 유사 도서들 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SimilarBooksResponse = ApiResponse<{ books: Book[] }>;
+
+// ============================== 특정 도서 상세 정보 요청 관련 ==============================
+/**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
+ */
+export type ApiDetailBookRequest = {
+  bookIdx: string;
+};
+/**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
+ */
+export type ApiDetailBookResponse = ReceiveBook;
+/**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
+ */
+export type DetailBookRequest = ApiDetailBookRequest;
+/**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 수신 타입 ( B -> F ) - by 1-blue
+ */
+export type DetailBookResponse = ApiResponse<{ book: Book }>;

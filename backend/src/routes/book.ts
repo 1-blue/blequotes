@@ -12,6 +12,8 @@ import type {
   SimilarBooksResponse,
   SuggestedBooksRequest,
   SuggestedBooksResponse,
+  DetailBookRequest,
+  DetailBookResponse,
 } from "../types";
 
 const bookRouter = express.Router();
@@ -29,11 +31,17 @@ bookRouter.get(
 
       const { data } = await bookService.apiSearchBooks({ title });
 
+      // 카카오에서 "isbn" 기반으로 검색할 때 전체를 입력하면 안되고 공백을 기준으로 앞부분만 입력해야 작동해서 아래처럼 처리함
+      const books = data.documents.map((document) => ({
+        ...document,
+        isbn: document.isbn.split(" ")[0],
+      }));
+
       return res.status(200).json({
         meta: { ok: true },
         data: {
           message: `"${title}"인 도서를 검색했습니다."`,
-          books: data.documents,
+          books,
         },
       });
     } catch (error) {
@@ -81,11 +89,49 @@ bookRouter.get(
 
       const { data } = await bookService.apiSimilarBooks({ author });
 
+      // 카카오에서 "isbn" 기반으로 검색할 때 전체를 입력하면 안되고 공백을 기준으로 앞부분만 입력해야 작동해서 아래처럼 처리함
+      const books = data.documents.map((document) => ({
+        ...document,
+        isbn: document.isbn.split(" ")[0],
+      }));
+
       return res.status(200).json({
         meta: { ok: true },
         data: {
           message: `저자가 "${author}"인 도서의 추천 검색어를 가져왔습니다."`,
-          books: data.documents,
+          books,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 특정 도서 상세 정보 요청
+bookRouter.get(
+  "/detail",
+  async (
+    req: Request<{}, {}, {}, DetailBookRequest>,
+    res: Response<DetailBookResponse>,
+    next: NextFunction
+  ) => {
+    try {
+      const { bookIdx } = req.query;
+
+      const { data } = await bookService.apiDetailBook({ bookIdx });
+
+      // 카카오에서 "isbn" 기반으로 검색할 때 전체를 입력하면 안되고 공백을 기준으로 앞부분만 입력해야 작동해서 아래처럼 처리함
+      const book = {
+        ...data.documents[0],
+        isbn: data.documents[0].isbn.split(" ")[0],
+      };
+
+      return res.status(200).json({
+        meta: { ok: true },
+        data: {
+          message: `"${book.title}"인 도서를 검색했습니다."`,
+          book,
         },
       });
     } catch (error) {

@@ -11,6 +11,8 @@ interface BookState {
   suggestedBooks: string[];
   similarBooks: Book[];
 
+  detailBook: Book | null;
+
   // 특정 카테고리의 도서들 요청
   fetchBooksLoading: boolean;
   fetchBooksDone: null | string;
@@ -30,12 +32,19 @@ interface BookState {
   similarBooksLoading: boolean;
   similarBooksDone: null | string;
   similarBooksError: null | string;
+
+  // 특정 영화 상세 정보
+  detailBookLoading: boolean;
+  detailBookDone: null | string;
+  detailBookError: null | string;
 }
 
 const initialState: BookState = {
   searchedBooks: [],
   suggestedBooks: [],
   similarBooks: [],
+
+  detailBook: null,
 
   fetchBooksLoading: false,
   fetchBooksDone: null,
@@ -52,6 +61,10 @@ const initialState: BookState = {
   similarBooksLoading: false,
   similarBooksDone: null,
   similarBooksError: null,
+
+  detailBookLoading: false,
+  detailBookDone: null,
+  detailBookError: null,
 };
 
 const bookSlice = createSlice({
@@ -74,6 +87,10 @@ const bookSlice = createSlice({
       state.similarBooksLoading = false;
       state.similarBooksDone = null;
       state.similarBooksError = null;
+
+      state.detailBookLoading = false;
+      state.detailBookDone = null;
+      state.detailBookError = null;
     },
   },
 
@@ -148,6 +165,30 @@ const bookSlice = createSlice({
         }
 
         console.error("similarBooks >> ", action);
+      }
+    );
+
+    // 특정 도서 상세 정보 요청
+    builder.addCase(bookThunkService.detailBookThunk.pending, (state) => {
+      state.detailBookLoading = true;
+    });
+    builder.addCase(
+      bookThunkService.detailBookThunk.fulfilled,
+      (state, action) => {
+        state.detailBookLoading = false;
+        state.detailBookDone = action.payload.data.message;
+        state.detailBook = action.payload.data.book;
+      }
+    );
+    builder.addCase(
+      bookThunkService.detailBookThunk.rejected,
+      (state, action) => {
+        state.detailBookLoading = false;
+        if (action.payload?.message) {
+          state.detailBookError = action.payload.message;
+        }
+
+        console.error("detailBook >> ", action);
       }
     );
   },

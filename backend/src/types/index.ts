@@ -61,6 +61,11 @@ export type {
   ApiSimilarDramasResponse,
   SimilarDramasRequest,
   SimilarDramasResponse,
+  //
+  ApiDetailDramaRequest,
+  ApiDetailDramaResponse,
+  DetailDramaRequest,
+  DetailDramaResponse,
 } from "./drama";
 
 // book type
@@ -80,6 +85,11 @@ export {
   ApiSimilarBooksResponse,
   SimilarBooksRequest,
   SimilarBooksResponse,
+  //
+  ApiDetailBookRequest,
+  ApiDetailBookResponse,
+  DetailBookRequest,
+  DetailBookResponse,
 } from "./book";
 
 // s3(image) type

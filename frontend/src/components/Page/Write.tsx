@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { movieThunkService, postThunkService } from "@src/store/thunks";
+import {
+  bookThunkService,
+  dramaThunkService,
+  movieThunkService,
+  postThunkService,
+} from "@src/store/thunks";
 import { postActions } from "@src/store/reducers/postReducer";
 
 // util
-import { getMovieDBImagePath } from "@src/utils";
+import { dateFormat, getMovieDBImagePath } from "@src/utils";
 
 // api
 import { imageApiService } from "@src/store/apis";
@@ -38,28 +43,37 @@ type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
 const Write = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { title } = useParams() as { title: string };
   const { state } = useLocation() as LinkState;
+
   const { detailMovie, detailMovieLoading } = useAppSelector(
     ({ movie }) => movie
   );
-
+  const { detailDrama, detailDramaLoading } = useAppSelector(
+    ({ drama }) => drama
+  );
+  const { detailBook, detailBookLoading } = useAppSelector(({ book }) => book);
   // 2022/12/31 - 현재 대상에 대한 상세 정보 요청 - by 1-blue
   useEffect(() => {
-    if (!state.idx) return;
+    if (!state?.idx) return;
 
     switch (state.category) {
       case "MOVIE":
         dispatch(movieThunkService.detailMovieThunk({ movieIdx: state.idx }));
         break;
       case "DRAMA":
+        dispatch(dramaThunkService.detailDramaThunk({ dramaIdx: state.idx }));
         break;
       case "BOOK":
+        dispatch(bookThunkService.detailBookThunk({ bookIdx: state.idx }));
         break;
     }
   }, [state, dispatch]);
   // 2022/12/31 - 영화/드라마/도서의 상세 정보 중 필요한 정보만 추출한 변수 - by 1-blue
   const [data, setData] = useState<TargetData | null>(null);
   useEffect(() => {
+    if (!state?.category) return;
+
     if (state.category === "MOVIE" && detailMovie) {
       setData({
         idx: detailMovie.id + "",
@@ -69,12 +83,33 @@ const Write = () => {
         paths: [detailMovie.poster_path, detailMovie.backdrop_path]
           .filter((v) => v)
           .map((v) => getMovieDBImagePath(v)),
-        category: "MOVIE",
+        category: state.category,
       });
     }
-    // if(state.category === "DRAMA" && detailMovie) {}
-    // if(state.category === "BOOK" && detailMovie) {}
-  }, [state, detailMovie]);
+    if (state.category === "DRAMA" && detailDrama) {
+      setData({
+        idx: detailDrama.id + "",
+        title: detailDrama.name,
+        description: detailDrama.overview,
+        date: detailDrama.first_air_date,
+        paths: [detailDrama.poster_path, detailDrama.backdrop_path]
+          .filter((v) => v)
+          .map((v) => getMovieDBImagePath(v)),
+        category: state.category,
+      });
+    }
+    // 도서
+    if (state.category === "BOOK" && detailBook) {
+      setData({
+        idx: detailBook.isbn,
+        title: detailBook.title,
+        description: detailBook.contents,
+        date: dateFormat(new Date(detailBook.datetime), "YYYY-MM-DD"),
+        paths: [detailBook.thumbnail],
+        category: state.category,
+      });
+    }
+  }, [state, detailMovie, detailDrama, detailBook]);
 
   const {
     register,
@@ -86,7 +121,7 @@ const Write = () => {
 
   // 2022/12/31 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
   useEffect(() => {
-    if (!state.idx || !state.category || !detailMovie) return;
+    if (!state?.idx || !state?.category || !detailMovie) return;
 
     setValue("idx", state.idx);
     setValue("category", state.category);
@@ -195,14 +230,18 @@ const Write = () => {
     errorMessage: createPostError,
     callback() {
       navigate(`/post/${detailMovie?.title}`, {
-        state: { idx: state.idx, category: state.category },
+        state: { idx: state?.idx, category: state?.category },
       });
       dispatch(postActions.resetMessage());
     },
   });
 
+  // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
+  if (!state) return <NotFoundPost title={title} />;
+
   // >>> 스켈레톤 UI 추가하기
-  if (detailMovieLoading || !data) return <></>;
+  if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
+    return <></>;
 
   return (
     <>

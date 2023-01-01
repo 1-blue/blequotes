@@ -2,6 +2,8 @@ import { bookInstance } from "./index";
 
 // type
 import type {
+  ApiDetailBookRequest,
+  ApiDetailBookResponse,
   ApiSearchBooksRequest,
   ApiSearchBooksResponse,
   ApiSimilarBooksRequest,
@@ -43,10 +45,21 @@ export const apiSimilarBooks = async ({ author }: ApiSimilarBooksRequest) =>
   });
 
 /**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 - by 1-blue
+ * @param bookIdx isbn
+ * @returns 특정 도서 상세 정보
+ */
+export const apiDetailBook = async ({ bookIdx }: ApiDetailBookRequest) =>
+  await bookInstance.get<ApiDetailBookResponse>(`/v3/search/book`, {
+    params: { page: 1, size: 10, target: "isbn", query: bookIdx },
+  });
+
+/**
  * 2022/12/18 - 도서 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const bookService = {
   apiSearchBooks,
   apiSuggestedBooks,
   apiSimilarBooks,
+  apiDetailBook,
 };

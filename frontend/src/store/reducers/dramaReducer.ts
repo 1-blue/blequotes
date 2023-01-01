@@ -4,15 +4,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { dramaThunkService } from "../thunks";
 
 // type
-import type { Drama } from "../types";
+import type { DetailDrama, Drama } from "../types";
 
 interface DramaState {
   popular: Drama[];
   top_rated: Drama[];
   on_the_air: Drama[];
+
   searchedDramas: Drama[];
   suggestedDramas: string[];
   similarDramas: Drama[];
+
+  detailDrama: DetailDrama | null;
 
   // 특정 카테고리의 드라마들 요청
   fetchDramasLoading: boolean;
@@ -33,6 +36,11 @@ interface DramaState {
   similarDramasLoading: boolean;
   similarDramasDone: null | string;
   similarDramasError: null | string;
+
+  // 특정 드라마 상세 정보
+  detailDramaLoading: boolean;
+  detailDramaDone: null | string;
+  detailDramaError: null | string;
 }
 
 const initialState: DramaState = {
@@ -42,6 +50,8 @@ const initialState: DramaState = {
   searchedDramas: [],
   suggestedDramas: [],
   similarDramas: [],
+
+  detailDrama: null,
 
   fetchDramasLoading: false,
   fetchDramasDone: null,
@@ -58,6 +68,10 @@ const initialState: DramaState = {
   similarDramasLoading: false,
   similarDramasDone: null,
   similarDramasError: null,
+
+  detailDramaLoading: false,
+  detailDramaDone: null,
+  detailDramaError: null,
 };
 
 const dramaSlice = createSlice({
@@ -80,6 +94,10 @@ const dramaSlice = createSlice({
       state.similarDramasLoading = false;
       state.similarDramasDone = null;
       state.similarDramasError = null;
+
+      state.detailDramaLoading = false;
+      state.detailDramaDone = null;
+      state.detailDramaError = null;
     },
   },
 
@@ -178,6 +196,30 @@ const dramaSlice = createSlice({
         }
 
         console.error("suggestedDrama >> ", action);
+      }
+    );
+
+    // 특정 영화 상세 정보 요청
+    builder.addCase(dramaThunkService.detailDramaThunk.pending, (state) => {
+      state.detailDramaLoading = true;
+    });
+    builder.addCase(
+      dramaThunkService.detailDramaThunk.fulfilled,
+      (state, action) => {
+        state.detailDramaLoading = false;
+        state.detailDramaDone = action.payload.data.message;
+        state.detailDrama = action.payload.data.drama;
+      }
+    );
+    builder.addCase(
+      dramaThunkService.detailDramaThunk.rejected,
+      (state, action) => {
+        state.detailDramaLoading = false;
+        if (action.payload?.message) {
+          state.detailDramaError = action.payload.message;
+        }
+
+        console.error("detailMovie >> ", action);
       }
     );
   },

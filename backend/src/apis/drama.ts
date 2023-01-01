@@ -10,6 +10,8 @@ import type {
   ApiSuggestDramasResponse,
   ApiSimilarDramasRequest,
   ApiSimilarDramasResponse,
+  ApiDetailDramaRequest,
+  ApiDetailDramaResponse,
 } from "../types";
 
 /**
@@ -54,7 +56,7 @@ const apiSuggestedDramas = async ({
 
 /**
  * 2022/12/17 - 유사한 드라마들 요청 - by 1-blue
- * @param movieId "DramaDB"에서 받은 드라마 식별자
+ * @param dramaId "DramaDB"에서 받은 드라마 식별자
  * @returns 유사한 드라마들
  */
 const apiSimilarDramas = async ({
@@ -67,6 +69,19 @@ const apiSimilarDramas = async ({
   );
 
 /**
+ * 2022/12/31 - 특정 드라마 상세 정보 요청 - by 1-blue
+ * @param dramaIdx "MovieDB"에서 받은 드라마 식별자
+ * @returns 특정 드라마 상세 정보
+ */
+const apiDetailDrama = async ({
+  dramaIdx,
+  language = "ko-kr",
+}: ApiDetailDramaRequest) =>
+  await movieDBInstance.get<ApiDetailDramaResponse>(`/tv/${dramaIdx}`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, language },
+  });
+
+/**
  * 2022/12/17 - 드라마 api 요청 메서드들을 갖는 객체 - by 1-blue
  */
 export const dramaService = {
@@ -74,4 +89,5 @@ export const dramaService = {
   apiSearchDramas,
   apiSuggestedDramas,
   apiSimilarDramas,
+  apiDetailDrama,
 };

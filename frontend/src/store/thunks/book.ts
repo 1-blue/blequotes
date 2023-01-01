@@ -7,6 +7,8 @@ import { bookApiService } from "../apis";
 // type
 import type {
   CreateAsyncThunkErrorType,
+  DetailBookRequest,
+  DetailBookResponse,
   SearchBooksRequest,
   SearchBooksResponse,
   SimilarBooksRequest,
@@ -91,10 +93,38 @@ const similarBooksThunk = createAsyncThunk<
 });
 
 /**
+ * 2022/12/31 - 특정 도서 상세 정보 요청 thunk - by 1-blue
+ */
+const detailBookThunk = createAsyncThunk<
+  DetailBookResponse,
+  DetailBookRequest,
+  CreateAsyncThunkErrorType
+>("detail/book", async ({ bookIdx }, { rejectWithValue }) => {
+  try {
+    const { data } = await bookApiService.apiDetailBook({
+      bookIdx,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("error >> ", error);
+
+    if (error instanceof AxiosError) {
+      return rejectWithValue({ message: error.response?.data.data.message });
+    }
+
+    return rejectWithValue({
+      message: "알 수 없는 이유로 특정 도서 정보 요청에 실패했습니다.",
+    });
+  }
+});
+
+/**
  * 2022/12/18 - 도서 thunk 메서드들을 갖는 객체 - by 1-blue
  */
 export const bookThunkService = {
   searchBooksThunk,
   suggestedBooksThunk,
   similarBooksThunk,
+  detailBookThunk,
 };

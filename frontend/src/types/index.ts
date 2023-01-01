@@ -48,4 +48,4 @@ export type LStorageData = {
 /**
  * 2022/12/30 - "<Link>"로 특정 대상의 페이지로 이동하는 경우 송신 및 수신 타입 - by 1-blue
  */
-export type LinkState = { state: { idx?: string; category?: PostCategory } };
+export type LinkState = { state?: { idx?: string; category?: PostCategory } };

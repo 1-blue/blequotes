@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { postActions } from "@src/store/reducers/postReducer";
-import { movieThunkService, postThunkService } from "@src/store/thunks";
+import {
+  bookThunkService,
+  dramaThunkService,
+  movieThunkService,
+  postThunkService,
+} from "@src/store/thunks";
 
 // util
-import { getMovieDBImagePath } from "@src/utils";
+import { dateFormat, getMovieDBImagePath } from "@src/utils";
 
 // hook
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
@@ -15,37 +20,47 @@ import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 import Image from "@src/components/Common/Image";
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
+import NotFoundPost from "@src/components/NotFoundPost";
 
-// hook
 // type
 import type { LinkState, PostSortBy, TargetData } from "@src/types";
 
 const Post = () => {
   const dispatch = useAppDispatch();
+  const { title } = useParams() as { title: string };
   const { state } = useLocation() as LinkState;
-  const { detailMovie, detailMovieLoading } = useAppSelector(
-    ({ movie }) => movie
-  );
   const { targetPosts, hasMoreTargetPosts, getPostsOfTargetLoading } =
     useAppSelector(({ post }) => post);
 
+  const { detailMovie, detailMovieLoading } = useAppSelector(
+    ({ movie }) => movie
+  );
+  const { detailDrama, detailDramaLoading } = useAppSelector(
+    ({ drama }) => drama
+  );
+  const { detailBook, detailBookLoading } = useAppSelector(({ book }) => book);
   // 2022/12/31 - 현재 대상에 대한 상세 정보 요청 - by 1-blue
   useEffect(() => {
-    if (!state.idx) return;
+    if (!state?.idx) return;
 
     switch (state.category) {
       case "MOVIE":
         dispatch(movieThunkService.detailMovieThunk({ movieIdx: state.idx }));
         break;
       case "DRAMA":
+        dispatch(dramaThunkService.detailDramaThunk({ dramaIdx: state.idx }));
         break;
       case "BOOK":
+        dispatch(bookThunkService.detailBookThunk({ bookIdx: state.idx }));
         break;
     }
   }, [state, dispatch]);
   // 2022/12/31 - 영화/드라마/도서의 상세 정보 중 필요한 정보만 추출한 변수 - by 1-blue
   const [data, setData] = useState<TargetData | null>(null);
   useEffect(() => {
+    if (!state) return;
+
+    // 영화
     if (state.category === "MOVIE" && detailMovie) {
       setData({
         idx: detailMovie.id + "",
@@ -55,12 +70,34 @@ const Post = () => {
         paths: [detailMovie.poster_path, detailMovie.backdrop_path]
           .filter((v) => v)
           .map((v) => getMovieDBImagePath(v)),
-        category: "MOVIE",
+        category: state.category,
       });
     }
-    // if(state.category === "DRAMA" && detailMovie) {}
-    // if(state.category === "BOOK" && detailMovie) {}
-  }, [state, detailMovie]);
+    // 드라마
+    if (state.category === "DRAMA" && detailDrama) {
+      setData({
+        idx: detailDrama.id + "",
+        title: detailDrama.name,
+        description: detailDrama.overview,
+        date: detailDrama.first_air_date,
+        paths: [detailDrama.poster_path, detailDrama.backdrop_path]
+          .filter((v) => v)
+          .map((v) => getMovieDBImagePath(v)),
+        category: state.category,
+      });
+    }
+    // 도서
+    if (state.category === "BOOK" && detailBook) {
+      setData({
+        idx: detailBook.isbn,
+        title: detailBook.title,
+        description: detailBook.contents,
+        date: dateFormat(new Date(detailBook.datetime), "YYYY-MM-DD"),
+        paths: [detailBook.thumbnail],
+        category: state.category,
+      });
+    }
+  }, [state, detailMovie, detailDrama, detailBook]);
 
   // 2022/12/30 - 게시글들 정렬 순서 - by 1-blue
   const [sortBy, setSortBy] = useState<PostSortBy>("popular");
@@ -74,7 +111,7 @@ const Post = () => {
 
   // 2022/12/30 - 현재 대상의 게시글들 요청 - by 1-blue
   useEffect(() => {
-    if (!state.idx) return;
+    if (!state?.idx) return;
 
     dispatch(postActions.reset());
 
@@ -91,14 +128,15 @@ const Post = () => {
   // 2022/12/30 - 무한 스크롤링을 위해 관찰할 태그 ref ( 해당 태그가 뷰포트에 들어오면 게시글 추가 패치 실행 ) - by 1-blue
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null);
-  // 2022/12/30 - 영화 더 가져오기 - by 1-blue
+  // 2022/12/30 - 현재 대상의 게시글들 더 가져오기 - by 1-blue
   const fetchMoreMovies = useCallback(() => {
     if (getPostsOfTargetLoading) return;
     if (!hasMoreTargetPosts) return;
+    if (!state?.idx) return;
 
     dispatch(
-      postThunkService.getPostsThunk({
-        category: "MOVIE",
+      postThunkService.getPostsOfTarget({
+        idx: state.idx,
         sortBy,
         take: 20,
         lastId: targetPosts[targetPosts.length - 1].id,
@@ -108,10 +146,11 @@ const Post = () => {
     getPostsOfTargetLoading,
     hasMoreTargetPosts,
     dispatch,
+    state,
     sortBy,
     targetPosts,
   ]);
-  // 2022/12/30 - 영화 가져오기 무한 스크롤링 적용 - by 1-blue
+  // 2022/12/30 - 현재 대상의 게시글들 가져오기 무한 스크롤링 적용 - by 1-blue
   useInfiniteScrolling({
     observerRef,
     fetchMore: fetchMoreMovies,
@@ -121,8 +160,12 @@ const Post = () => {
   // 2022/12/30 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
 
+  // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
+  if (!state) return <NotFoundPost title={title} />;
+
   // >>> 스켈레톤 UI 추가하기
-  if (detailMovieLoading || !data) return <></>;
+  if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
+    return <></>;
 
   return (
     <>

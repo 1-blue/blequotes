@@ -156,14 +156,45 @@ postRouter.post(
           });
         }
       }
+);
 
-      let message = "";
-      if (isLike) message = "좋아요를 눌렀습니다.";
-      else message = "싫어요를 눌렀습니다.";
+// 특정 대상의 게시글들 요청
+postRouter.get(
+  "/:idx",
+  async (
+    req: Request<
+      Pick<GetPostsOfTargetRequest, "idx">,
+      {},
+      {},
+      Omit<GetPostsOfTargetRequest, "idx">
+    >,
+    res: Response<GetPostsOfTargetResponse>,
+    next: NextFunction
+  ) => {
+    try {
+      const idx = req.params.idx;
+      const { sortBy } = req.query;
+      const take = +req.query.take;
+      const lastId = +req.query.lastId;
+
+      let orderBy = {};
+      if (sortBy === "popular")
+        orderBy = [{ like: "desc" }, { updatedAt: "desc" }];
+      else if (sortBy === "latest")
+        orderBy = [{ updatedAt: "desc" }, { like: "desc" }];
+
+      // 게시글들 찾기
+      const posts = await prisma.post.findMany({
+        where: { idx },
+        take,
+        skip: lastId === -1 ? 0 : 1,
+        ...(lastId !== -1 && { cursor: { id: lastId } }),
+        orderBy,
+      });
 
       return res.json({
         meta: { ok: true },
-        data: { message, resultPost },
+        data: { message: "게시글들을 가져왔습니다.", take, posts },
       });
     } catch (error) {
       next(error);
