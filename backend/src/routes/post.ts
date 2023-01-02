@@ -7,6 +7,8 @@ import type { Request, Response, NextFunction } from "express";
 import type {
   CreatePostRequest,
   CreatePostResponse,
+  GetPostsOfTargetRequest,
+  GetPostsOfTargetResponse,
   GetPostsRequest,
   GetPostsResponse,
   UpdateLikeOrHateRequest,
@@ -108,6 +110,8 @@ postRouter.post(
           data: { message: "존재하지 않는 게시글입니다.", resultPost },
         });
 
+      let message = "";
+
       // 이미 좋아요/싫어요를 누른 상태라면
       if (already) {
         // 좋아요인데 좋아요를 누른 경우 -> 좋아요 취소
@@ -116,6 +120,8 @@ postRouter.post(
             where: { id },
             data: { like: exPost.like - 1 },
           });
+
+          message = "좋아요를 취소했습니다.";
         }
         // 싫어요인데 싫어요를 누른 경우 -> 싫어요 취소
         else if (isDuplication && isLike === false) {
@@ -123,6 +129,8 @@ postRouter.post(
             where: { id },
             data: { hate: exPost.hate - 1 },
           });
+
+          message = "싫어요를 취소했습니다.";
         }
         // 좋아요/싫어요를 누르고 반대로 누른 경우
         else {
@@ -132,6 +140,8 @@ postRouter.post(
               where: { id },
               data: { like: exPost.like + 1, hate: exPost.hate - 1 },
             });
+
+            message = "싫어요를 취소하고 좋아요를 눌렀습니다.";
           }
           // 싫어요를 누른 경우 -> 좋아요 "-1", 싫어요 "+1"
           else {
@@ -139,6 +149,8 @@ postRouter.post(
               where: { id },
               data: { like: exPost.like - 1, hate: exPost.hate + 1 },
             });
+
+            message = "좋아요를 취소하고 싫어요를 눌렀습니다.";
           }
         }
       }
@@ -150,6 +162,8 @@ postRouter.post(
             where: { id },
             data: { like: exPost.like + 1 },
           });
+
+          message = "좋아요를 눌렀습니다.";
         }
         // 싫어요를 누른 경우 -> 싫어요 "+1"
         else {
@@ -157,8 +171,19 @@ postRouter.post(
             where: { id },
             data: { hate: exPost.hate + 1 },
           });
+
+          message = "싫어요를 눌렀습니다.";
         }
       }
+
+      return res.json({
+        meta: { ok: true },
+        data: { message, resultPost },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 // 특정 대상의 게시글들 요청

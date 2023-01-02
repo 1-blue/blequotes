@@ -62,7 +62,7 @@ const Drama = () => {
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null);
   // 2022/12/30 - 드라마 더 가져오기 - by 1-blue
-  const fetchMoreDrama = useCallback(() => {
+  const fetchMoreDramaPosts = useCallback(() => {
     if (getPostsLoading) return;
     if (!hasMoreDramaPosts) return;
 
@@ -78,7 +78,7 @@ const Drama = () => {
   // 2022/12/30 - 드라마 가져오기 무한 스크롤링 적용 - by 1-blue
   useInfiniteScrolling({
     observerRef,
-    fetchMore: fetchMoreDrama,
+    fetchMore: fetchMoreDramaPosts,
     hasMore: hasMoreDramaPosts,
   });
 

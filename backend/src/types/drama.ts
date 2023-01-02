@@ -194,7 +194,7 @@ export type SuggestDramasResponse = ApiResponse<{ titles: string[] }>;
  * 2022/12/17 - 유사 드라마 검색어 검색 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
 export type ApiSimilarDramasRequest = {
-  dramaId: number;
+  dramaIdx: string;
   language?: DramaLanguage;
 };
 /**

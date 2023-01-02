@@ -60,11 +60,11 @@ const apiSuggestedDramas = async ({
  * @returns 유사한 드라마들
  */
 const apiSimilarDramas = async ({
-  dramaId,
+  dramaIdx,
   language = "ko-kr",
 }: SimilarDramasRequest) =>
   await serverInstance.get<SimilarDramasResponse>(`/api/drama/similar`, {
-    params: { dramaId, language },
+    params: { dramaIdx, language },
   });
 
 /**

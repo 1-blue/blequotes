@@ -118,10 +118,10 @@ dramaRouter.get(
     next: NextFunction
   ) => {
     try {
-      const { dramaId, language } = req.query;
+      const { dramaIdx, language } = req.query;
 
       const { data } = await dramaService.apiSimilarDramas({
-        dramaId: +dramaId,
+        dramaIdx,
         language,
       });
 

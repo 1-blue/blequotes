@@ -60,11 +60,11 @@ const apiSuggestedMovies = async ({
  * @returns 유사한 영화들
  */
 const apiSimilarMovies = async ({
-  movieId,
+  movieIdx,
   language = "ko-kr",
 }: ApiSimilarMoviesRequest) =>
   await movieDBInstance.get<ApiSimilarMoviesResponse>(
-    `/movie/${movieId}/similar`,
+    `/movie/${movieIdx}/similar`,
     { params: { api_key: process.env.MOVIE_DB_API_KEY, language } }
   );
 

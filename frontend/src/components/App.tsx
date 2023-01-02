@@ -45,7 +45,7 @@ const App = () => {
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null);
   // 2023/01/02 - 게시글 더 가져오기 - by 1-blue
-  const fetchMoreMovies = useCallback(() => {
+  const fetchMorePosts = useCallback(() => {
     if (getPostsLoading) return;
     if (!hasMorePosts) return;
 
@@ -61,7 +61,7 @@ const App = () => {
   // 2023/01/02 - 게시글 가져오기 무한 스크롤링 적용 - by 1-blue
   useInfiniteScrolling({
     observerRef,
-    fetchMore: fetchMoreMovies,
+    fetchMore: fetchMorePosts,
     hasMore: hasMorePosts,
   });
 

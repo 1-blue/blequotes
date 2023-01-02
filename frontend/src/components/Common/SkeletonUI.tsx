@@ -4,16 +4,15 @@ import Icon from "@src/components/Common/Icon";
 
 /**
  * 2022/12/14 - 영화/드라마/도서 패치 스켈레톤 UI - by 1-blue
- * @returns
  */
 const Page = () => {
   return (
-    <>
-      <aside className="w-full flex flex-col justify-center items-center space-y-2 bg-black/70">
+    <aside>
+      <div className="w-full flex flex-col justify-center items-center space-y-2 bg-black/70">
         <Spinner.Relative outerClassName="absolute top-1/3" />
 
         <div className="w-full h-[80vh]">
-          <div className="bg-white w-[50vw] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
+          <div className="bg-white w-[50vw] min-w-[500px] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
             <div className="bg-gray-300 w-full h-10 rounded-sm mb-2" />
             {Array(6)
               .fill(null)
@@ -22,7 +21,7 @@ const Page = () => {
               ))}
           </div>
         </div>
-      </aside>
+      </div>
 
       <div className="py-6" />
 
@@ -38,7 +37,7 @@ const Page = () => {
         </div>
         <div className="w-full h-[30vh] bg-gray-300"></div>
       </div>
-    </>
+    </aside>
   );
 };
 
@@ -66,7 +65,7 @@ const Posts = () => {
               <div className="w-full h-4 bg-gray-200 rounded" />
             </div>
 
-            <form className="absolute bottom-[4%] right-[4%] self-end z-[1] space-y-1">
+            <div className="absolute bottom-[4%] right-[4%] self-end z-[1] space-y-1">
               <button type="button" className="flex items-center space-x-1">
                 <Icon shape="like" className="w-5 h-5" />
                 <span className="text-sm">
@@ -79,7 +78,7 @@ const Posts = () => {
                   <b>0</b>
                 </span>
               </button>
-            </form>
+            </div>
           </li>
         ))}
     </>
@@ -88,7 +87,6 @@ const Posts = () => {
 
 /**
  * 2022/12/14 - 추천 영화 검색 로딩 스켈레톤 UI - by 1-blue
- * @returns
  */
 const SuggestedWord = () => {
   return (
@@ -102,15 +100,39 @@ const SuggestedWord = () => {
   );
 };
 
+/**
+ * 2023/01/02 - 상세 대상 패치 스켈레톤 UI - by 1-blue
+ */
+const DetailTarget = () => {
+  return (
+    <aside className="w-full flex flex-col justify-center items-center space-y-2 bg-black/70">
+      <Spinner.Relative outerClassName="absolute top-1/3" />
+
+      <div className="w-full h-[100vh]">
+        <div className="bg-white w-[50vw] min-w-[600px] h-full mx-auto flex flex-col justify-end px-4 pb-4 space-y-2">
+          <div className="bg-gray-300 w-full h-10 rounded-sm mb-2" />
+          {Array(6)
+            .fill(null)
+            .map((v, i) => (
+              <div key={i} className="bg-gray-300 w-full h-5 rounded-sm" />
+            ))}
+        </div>
+      </div>
+    </aside>
+  );
+};
+
 type SkeletonUIType = {
   Page: typeof Page;
   Posts: typeof Posts;
   SuggestedWord: typeof SuggestedWord;
+  DetailTarget: typeof DetailTarget;
 };
 const SkeletonUI: SkeletonUIType = {
   Page,
   Posts,
   SuggestedWord,
+  DetailTarget,
 };
 
 export default SkeletonUI;

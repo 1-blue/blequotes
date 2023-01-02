@@ -50,7 +50,9 @@ const Movie = () => {
     if (!searchedMovies || searchedMovies.length === 0) return;
 
     dispatch(
-      movieThunkService.similarMoviesThunk({ movieId: searchedMovies[0].id })
+      movieThunkService.similarMoviesThunk({
+        movieIdx: searchedMovies[0].id + "",
+      })
     );
   }, [searchedMovies, dispatch]);
 
@@ -85,7 +87,7 @@ const Movie = () => {
         }
 
         return {
-          id: movie.id + "",
+          idx: movie.id + "",
           category: "MOVIE" as PostCategory,
           paths,
           title: movie.title,
@@ -110,7 +112,7 @@ const Movie = () => {
         }
 
         return {
-          id: movie.id + "",
+          idx: movie.id + "",
           category: "MOVIE" as PostCategory,
           paths,
           title: movie.title,
@@ -211,7 +213,9 @@ const Drama = () => {
     if (!searchedDramas || searchedDramas.length === 0) return;
 
     dispatch(
-      dramaThunkService.similarDramasThunk({ dramaId: searchedDramas[0].id })
+      dramaThunkService.similarDramasThunk({
+        dramaIdx: searchedDramas[0].id + "",
+      })
     );
   }, [searchedDramas, dispatch]);
 
@@ -246,7 +250,7 @@ const Drama = () => {
         }
 
         return {
-          id: drama.id + "",
+          idx: drama.id + "",
           category: "DRAMA" as PostCategory,
           paths,
           title: drama.name,
@@ -271,7 +275,7 @@ const Drama = () => {
         }
 
         return {
-          id: drama.id + "",
+          idx: drama.id + "",
           category: "DRAMA" as PostCategory,
           paths,
           title: drama.name,
@@ -397,7 +401,7 @@ const Book = () => {
     if (!searchedBooks) return null;
 
     return searchedBooks.map((book) => ({
-      id: book.isbn,
+      idx: book.isbn,
       category: "BOOK" as PostCategory,
       paths: [book.thumbnail],
       title: book.title,
@@ -409,7 +413,7 @@ const Book = () => {
     if (!similarBooks) return null;
 
     return similarBooks.map((book) => ({
-      id: book.isbn,
+      idx: book.isbn,
       category: "BOOK" as PostCategory,
       paths: [book.thumbnail],
       title: book.title,

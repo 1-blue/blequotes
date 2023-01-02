@@ -215,6 +215,14 @@ const postSlice = createSlice({
             state.bookPosts[targetIndex] = resultPost;
             break;
         }
+
+        // 메인 페이지에서 누를 경우
+        if (state.posts.length >= 1) {
+          targetIndex = state.posts.findIndex(
+            (post) => post.id === resultPost.id
+          );
+          if (targetIndex !== -1) state.posts[targetIndex] = resultPost;
+        }
       }
     );
     builder.addCase(

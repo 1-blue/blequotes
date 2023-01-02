@@ -80,12 +80,6 @@ const Search = () => {
     if (state?.isShow) setIsShowSearchForm(true);
   }, [state]);
 
-  // 2022/12/07 - 검색 폼 렌더링 시 스크롤 금지 - by 1-blue
-  useEffect(() => {
-    if (isShowSearchForm) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "auto";
-  }, [isShowSearchForm]);
-
   // 해당 컴포넌트에서 "keyword"는 추천 검색어를 의미
   // 2022/12/13 - 추천 검색어 보여줄지 결정하는 변수 - by 1-blue
   const [isOpenKeyword, setIsOpenKeyword] = useState(false);
@@ -119,8 +113,11 @@ const Search = () => {
   const handleClickOutSide = useCallback((e: MouseEvent) => {
     if (!(e.target instanceof HTMLElement)) return;
 
-    // >>> input의 ref를 얻어내기 힘들어서 아래와 같이 처리
-    if (inputContainerRef.current?.firstElementChild === e.target) {
+    // FIXME: input의 ref를 얻어내기 힘들어서 아래와 같이 처리
+    if (
+      inputContainerRef.current?.firstElementChild?.lastElementChild ===
+      e.target
+    ) {
       setIsOpenKeyword(true);
       setFocusIndex(-1);
     } else {
@@ -178,13 +175,18 @@ const Search = () => {
           setFocusIndex(-1);
           setIsOpenKeyword(false);
 
+          // FIXME: "react-hook-form"에서 컴포넌트로 만든 "input"의 ref를 얻기 힘들어서 직접 찾아서 처리함
+          // 즉 "<RHF.Input />"가 변경될 때마다 그에 맞게 수정해줘야 함
           // [type="search"]input에 포커싱
           if (
             inputContainerRef &&
             inputContainerRef.current &&
-            inputContainerRef.current.firstElementChild instanceof HTMLElement
+            inputContainerRef.current.firstElementChild instanceof
+              HTMLElement &&
+            inputContainerRef.current.firstElementChild
+              .lastElementChild instanceof HTMLInputElement
           ) {
-            inputContainerRef.current.firstElementChild.focus();
+            inputContainerRef.current.firstElementChild.lastElementChild.focus();
           }
           break;
 

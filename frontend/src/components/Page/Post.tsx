@@ -21,6 +21,7 @@ import Image from "@src/components/Common/Image";
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
 import NotFoundPost from "@src/components/NotFoundPost";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
 import type { LinkState, PostSortBy, TargetData } from "@src/types";
@@ -163,9 +164,17 @@ const Post = () => {
   // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
   if (!state) return <NotFoundPost title={title} />;
 
-  // >>> 스켈레톤 UI 추가하기
+  // 현재 대상의 데이터 패치중
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
-    return <></>;
+    return (
+      <>
+        <SkeletonUI.DetailTarget />;
+        <div className="my-6" />
+        <ul className="mx-4 grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+          <SkeletonUI.Posts />
+        </ul>
+      </>
+    );
 
   return (
     <>

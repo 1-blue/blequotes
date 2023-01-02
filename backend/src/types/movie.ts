@@ -159,10 +159,9 @@ export type SuggestMoviesResponse = ApiResponse<{ titles: string[] }>;
 // ============================== 현재 검색된 영화와 유사한 영화들 관련 ==============================
 /**
  * 2022/12/17 - 유사 영화 검색어 검색 송신 타입 ( B -> "MovieDB" ) - by 1-blue
- * >>> movieId -> movieIdx로 수정하기 <<<
  */
 export type ApiSimilarMoviesRequest = {
-  movieId: number;
+  movieIdx: string;
   language?: MovieLanguage;
 };
 /**

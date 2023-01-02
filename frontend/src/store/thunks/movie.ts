@@ -31,12 +31,9 @@ const fetchMoviesThunk = createAsyncThunk<
   "fetch/movie",
 
   // promise를 반환하는 액션 작성
-  async ({ category, language }, { rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
-      const { data } = await movieApiService.apiFetchMovies({
-        category,
-        language,
-      });
+      const { data } = await movieApiService.apiFetchMovies(body);
 
       return data;
     } catch (error) {
@@ -60,12 +57,9 @@ const searchMoviesThunk = createAsyncThunk<
   SearchMoviesResponse,
   SearchMoviesRequest,
   CreateAsyncThunkErrorType
->("search/movie", async ({ title, language }, { rejectWithValue }) => {
+>("search/movie", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await movieApiService.apiSearchMovies({
-      title,
-      language,
-    });
+    const { data } = await movieApiService.apiSearchMovies(body);
     return data;
   } catch (error) {
     console.error("error >> ", error);
@@ -87,12 +81,9 @@ const suggestedMoviesThunk = createAsyncThunk<
   SuggestMoviesResponse,
   SuggestMoviesRequest,
   CreateAsyncThunkErrorType
->("suggested/movie", async ({ keyword, language }, { rejectWithValue }) => {
+>("suggested/movie", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await movieApiService.apiSuggestedMovies({
-      keyword,
-      language,
-    });
+    const { data } = await movieApiService.apiSuggestedMovies(body);
 
     return data;
   } catch (error) {
@@ -115,12 +106,9 @@ const similarMoviesThunk = createAsyncThunk<
   SimilarMoviesResponse,
   SimilarMoviesRequest,
   CreateAsyncThunkErrorType
->("similar/movie", async ({ movieId, language }, { rejectWithValue }) => {
+>("similar/movie", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await movieApiService.apiSimilarMovies({
-      movieId,
-      language,
-    });
+    const { data } = await movieApiService.apiSimilarMovies(body);
 
     return data;
   } catch (error) {
@@ -143,12 +131,9 @@ const detailMovieThunk = createAsyncThunk<
   DetailMovieResponse,
   DetailMovieRequest,
   CreateAsyncThunkErrorType
->("detail/movie", async ({ movieIdx, language }, { rejectWithValue }) => {
+>("detail/movie", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await movieApiService.apiDetailMovie({
-      movieIdx,
-      language,
-    });
+    const { data } = await movieApiService.apiDetailMovie(body);
 
     return data;
   } catch (error) {

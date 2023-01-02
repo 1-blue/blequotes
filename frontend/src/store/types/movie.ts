@@ -126,7 +126,7 @@ export type SuggestMoviesResponse = ApiResponse<{ titles: string[] }>;
  * 2022/12/17 - 유사 영화 검색어 검색 송신 타입 ( F -> B ) - by 1-blue
  */
 export type SimilarMoviesRequest = {
-  movieId: number;
+  movieIdx: string;
   language?: MovieLanguage;
 };
 /**

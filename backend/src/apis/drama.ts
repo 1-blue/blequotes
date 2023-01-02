@@ -60,11 +60,11 @@ const apiSuggestedDramas = async ({
  * @returns 유사한 드라마들
  */
 const apiSimilarDramas = async ({
-  dramaId,
+  dramaIdx,
   language = "ko-kr",
 }: ApiSimilarDramasRequest) =>
   await movieDBInstance.get<ApiSimilarDramasResponse>(
-    `/tv/${dramaId}/similar`,
+    `/tv/${dramaIdx}/similar`,
     { params: { api_key: process.env.MOVIE_DB_API_KEY, language } }
   );
 

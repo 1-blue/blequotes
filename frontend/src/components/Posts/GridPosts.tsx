@@ -195,45 +195,70 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
                   </p>
                 </div>
 
-                <form className="absolute bottom-[4%] right-[4%] self-end z-[1] space-y-1">
-                  <button
-                    type="button"
-                    className="group/like flex items-center space-x-1"
-                    data-type="like"
-                    data-id={post.id}
-                  >
-                    <Icon
-                      shape="like"
-                      className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400"
-                      isFill={likePostIds.includes(post.id)}
-                    />
-                    <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400">
-                      <b>{post.like}</b>
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className="group/hate flex items-center space-x-1"
-                    data-type="hate"
-                    data-id={post.id}
-                  >
-                    <Icon
-                      shape="hate"
-                      className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400"
-                      isFill={hatePostIds.includes(post.id)}
-                    />
-                    <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400">
-                      <b>{post.hate}</b>
-                    </span>
-                  </button>
-                </form>
+                <div className="absolute bottom-[4%] z-[1] w-full px-2 flex justify-between">
+                  {post.category === "MOVIE" && (
+                    <div className="text-xs font-bold self-end">
+                      {post.time && <span>- {post.time} -</span>}
+                    </div>
+                  )}
+                  {post.category === "DRAMA" && (
+                    <div className="text-xs self-end">
+                      {post.episode && <span>- {post.episode}화 -</span>}
+                      {post.time && <span> {post.time}</span>}
+                    </div>
+                  )}
+                  {post.category === "BOOK" && (
+                    <div className="text-xs self-end">
+                      {post.page && <span>- {post.page}페이지 -</span>}
+                    </div>
+                  )}
+
+                  <form className="space-y-1">
+                    <button
+                      type="button"
+                      className="group/like flex items-center space-x-1"
+                      data-type="like"
+                      data-id={post.id}
+                    >
+                      <Icon
+                        shape="like"
+                        className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400"
+                        isFill={likePostIds.includes(post.id)}
+                      />
+                      <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400">
+                        <b>{post.like}</b>
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      className="group/hate flex items-center space-x-1"
+                      data-type="hate"
+                      data-id={post.id}
+                    >
+                      <Icon
+                        shape="hate"
+                        className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400"
+                        isFill={hatePostIds.includes(post.id)}
+                      />
+                      <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400">
+                        <b>{post.hate}</b>
+                      </span>
+                    </button>
+                  </form>
+                </div>
               </li>
             ))}
 
             {getPostsLoading && <SkeletonUI.Posts />}
           </ul>
 
-          <div className="py-6" ref={ref} />
+          <div className="pt-12 pb-10" ref={ref}>
+            {getPostsLoading || (
+              <span className="inline-block w-full text-xl font-bold text-main-600 text-center">
+                ** 모든 게시글을 불러왔습니다. **
+              </span>
+            )}
+          </div>
         </>
       ) : (
         <>
@@ -242,7 +267,7 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
               <SkeletonUI.Posts />
             </ul>
           ) : (
-            <span className="inline-block w-full text-center font-bold text-xl">
+            <span className="inline-block w-full mt-12 mb-10 text-center font-bold text-xl">
               ** 첫 번째로 명대사를 작성해보세요...! **
             </span>
           )}

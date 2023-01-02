@@ -118,10 +118,10 @@ movieRouter.get(
     next: NextFunction
   ) => {
     try {
-      const { movieId, language } = req.query;
+      const { movieIdx, language } = req.query;
 
       const { data } = await movieService.apiSimilarMovies({
-        movieId: +movieId,
+        movieIdx,
         language,
       });
 
@@ -157,7 +157,7 @@ movieRouter.get(
       return res.status(200).json({
         meta: { ok: true },
         data: {
-          message: `${data.title}에 대한 상세 정보입니다`,
+          message: `"${data.title}"에 대한 상세 정보입니다`,
           movie: data,
         },
       });

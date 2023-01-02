@@ -60,8 +60,8 @@ const Movie = () => {
   // 2022/12/24 - 무한 스크롤링을 위해 관찰할 태그 ref ( 해당 태그가 뷰포트에 들어오면 게시글 추가 패치 실행 ) - by 1-blue
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null);
-  // 2022/12/24 - 영화 더 가져오기 - by 1-blue
-  const fetchMoreMovies = useCallback(() => {
+  // 2022/12/24 - 영화 게시글 더 가져오기 - by 1-blue
+  const fetchMoreMoviePosts = useCallback(() => {
     if (getPostsLoading) return;
     if (!hasMoreMoviePosts) return;
 
@@ -74,10 +74,10 @@ const Movie = () => {
       })
     );
   }, [getPostsLoading, hasMoreMoviePosts, dispatch, sortBy, moviePosts]);
-  // 2022/12/24 - 영화 가져오기 무한 스크롤링 적용 - by 1-blue
+  // 2022/12/24 - 영화 게시글 가져오기 무한 스크롤링 적용 - by 1-blue
   useInfiniteScrolling({
     observerRef,
-    fetchMore: fetchMoreMovies,
+    fetchMore: fetchMoreMoviePosts,
     hasMore: hasMoreMoviePosts,
   });
 

@@ -31,12 +31,9 @@ const fetchDramasThunk = createAsyncThunk<
   "fetch/drama",
 
   // promise를 반환하는 액션 작성
-  async ({ category, language }: FetchDramasRequest, { rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
-      const { data } = await dramaApiService.apiFetchDramas({
-        category,
-        language,
-      });
+      const { data } = await dramaApiService.apiFetchDramas(body);
 
       return data;
     } catch (error) {
@@ -60,12 +57,9 @@ const searchDramasThunk = createAsyncThunk<
   SearchDramasResponse,
   SearchDramasRequest,
   CreateAsyncThunkErrorType
->("search/drama", async ({ title, language }, { rejectWithValue }) => {
+>("search/drama", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await dramaApiService.apiSearchDramas({
-      title,
-      language,
-    });
+    const { data } = await dramaApiService.apiSearchDramas(body);
     return data;
   } catch (error) {
     console.error("error >> ", error);
@@ -87,12 +81,9 @@ const suggestedDramasThunk = createAsyncThunk<
   SuggestDramasResponse,
   SuggestDramasRequest,
   CreateAsyncThunkErrorType
->("suggested/drama", async ({ keyword, language }, { rejectWithValue }) => {
+>("suggested/drama", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await dramaApiService.apiSuggestedDramas({
-      keyword,
-      language,
-    });
+    const { data } = await dramaApiService.apiSuggestedDramas(body);
 
     return data;
   } catch (error) {
@@ -115,29 +106,23 @@ const similarDramasThunk = createAsyncThunk<
   SimilarDramasResponse,
   SimilarDramasRequest,
   CreateAsyncThunkErrorType
->(
-  "similar/drama",
-  async ({ dramaId, language }: SimilarDramasRequest, { rejectWithValue }) => {
-    try {
-      const { data } = await dramaApiService.apiSimilarDramas({
-        dramaId,
-        language,
-      });
+>("similar/drama", async (body, { rejectWithValue }) => {
+  try {
+    const { data } = await dramaApiService.apiSimilarDramas(body);
 
-      return data;
-    } catch (error) {
-      console.error("error >> ", error);
+    return data;
+  } catch (error) {
+    console.error("error >> ", error);
 
-      if (error instanceof AxiosError) {
-        return rejectWithValue({ message: error.response?.data.data.message });
-      }
-
-      return rejectWithValue({
-        message: "알 수 없는 이유로 유사 드라마 검색에 실패했습니다.",
-      });
+    if (error instanceof AxiosError) {
+      return rejectWithValue({ message: error.response?.data.data.message });
     }
+
+    return rejectWithValue({
+      message: "알 수 없는 이유로 유사 드라마 검색에 실패했습니다.",
+    });
   }
-);
+});
 
 /**
  * 2022/12/31 - 특정 드라마 상세 정보 요청 thunk - by 1-blue
@@ -146,12 +131,9 @@ const detailDramaThunk = createAsyncThunk<
   DetailDramaResponse,
   DetailDramaRequest,
   CreateAsyncThunkErrorType
->("detail/drama", async ({ dramaIdx, language }, { rejectWithValue }) => {
+>("detail/drama", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await dramaApiService.apiDetailDrama({
-      dramaIdx,
-      language,
-    });
+    const { data } = await dramaApiService.apiDetailDrama(body);
 
     return data;
   } catch (error) {

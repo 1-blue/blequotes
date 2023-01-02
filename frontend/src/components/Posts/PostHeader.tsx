@@ -19,7 +19,7 @@ const PostHeader = ({ title, onChangeSortBy, sortBy }: Props) => {
         <select
           name="sort-by"
           id="sort-by"
-          className="p-1 rounded-md font-extrabold border-[3px] border-gray-400 outline-none focus:border-main-500"
+          className="p-1 rounded-md font-extrabold border-[3px] border-gray-400 outline-none focus:border-main-500 focus:text-main-500"
           onChange={onChangeSortBy}
           value={sortBy}
         >

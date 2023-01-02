@@ -159,7 +159,7 @@ export type SuggestDramasResponse = ApiResponse<{ titles: string[] }>;
  * 2022/12/17 - 유사 드라마 검색어 검색 송신 타입 ( F -> B ) - by 1-blue
  */
 export type SimilarDramasRequest = {
-  dramaId: number;
+  dramaIdx: string;
   language?: DramaLanguage;
 };
 /**

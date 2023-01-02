@@ -7,7 +7,7 @@ type Props = {
   title?: string;
 };
 
-const NotFountPost = ({ title }: Props) => {
+const NotFoundPost = ({ title }: Props) => {
   return (
     <section className="absolute inset-0 w-screen h-screen flex flex-col justify-center items-center">
       <h4 className="font-extrabold text-2xl px-4 mb-2">다시 접근해주세요!</h4>
@@ -45,4 +45,4 @@ const NotFountPost = ({ title }: Props) => {
   );
 };
 
-export default NotFountPost;
+export default NotFoundPost;

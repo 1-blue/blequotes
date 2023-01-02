@@ -60,11 +60,11 @@ const apiSuggestedMovies = async ({
  * @returns 유사한 영화들
  */
 const apiSimilarMovies = async ({
-  movieId,
+  movieIdx,
   language = "ko-kr",
 }: SimilarMoviesRequest) =>
   await serverInstance.get<SimilarMoviesResponse>(`/api/movie/similar`, {
-    params: { movieId, language },
+    params: { movieIdx, language },
   });
 
 /**

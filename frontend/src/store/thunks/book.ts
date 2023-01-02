@@ -24,9 +24,9 @@ const searchBooksThunk = createAsyncThunk<
   SearchBooksResponse,
   SearchBooksRequest,
   CreateAsyncThunkErrorType
->("search/book", async ({ title }, { rejectWithValue }) => {
+>("search/book", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await bookApiService.apiSearchBooks({ title });
+    const { data } = await bookApiService.apiSearchBooks(body);
 
     return data;
   } catch (error) {
@@ -49,9 +49,9 @@ const suggestedBooksThunk = createAsyncThunk<
   SuggestBooksResponse,
   SuggestBooksRequest,
   CreateAsyncThunkErrorType
->("suggested/book", async ({ keyword }, { rejectWithValue }) => {
+>("suggested/book", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await bookApiService.apiSuggestedBooks({ keyword });
+    const { data } = await bookApiService.apiSuggestedBooks(body);
 
     return data;
   } catch (error) {
@@ -74,9 +74,9 @@ const similarBooksThunk = createAsyncThunk<
   SimilarBooksResponse,
   SimilarBooksRequest,
   CreateAsyncThunkErrorType
->("similar/book", async ({ author }, { rejectWithValue }) => {
+>("similar/book", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await bookApiService.apiSimilaredBooks({ author });
+    const { data } = await bookApiService.apiSimilaredBooks(body);
 
     return data;
   } catch (error) {
@@ -99,11 +99,9 @@ const detailBookThunk = createAsyncThunk<
   DetailBookResponse,
   DetailBookRequest,
   CreateAsyncThunkErrorType
->("detail/book", async ({ bookIdx }, { rejectWithValue }) => {
+>("detail/book", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await bookApiService.apiDetailBook({
-      bookIdx,
-    });
+    const { data } = await bookApiService.apiDetailBook(body);
 
     return data;
   } catch (error) {

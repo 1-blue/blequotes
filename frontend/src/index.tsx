@@ -32,7 +32,8 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
+  <>
+    {/* <React.StrictMode> */}
     {/* Redux-Toolkit */}
     <Provider store={store}>
       {/* 라우팅 ( react-router ) */}
@@ -58,5 +59,6 @@ root.render(
         </Layout>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+    {/* </React.StrictMode> */}
+  </>
 );

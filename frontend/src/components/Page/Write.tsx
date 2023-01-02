@@ -25,14 +25,13 @@ import RHF from "@src/components/Common/RHF";
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
 import Loading from "@src/components/Common/Loading";
-import NotFountPost from "@src/components/NotFoundPost";
+import NotFoundPost from "@src/components/NotFoundPost";
 
 // type
 import type { LinkState, TargetData } from "@src/types";
 import type { CreatePostRequest } from "@src/store/types";
+import SkeletonUI from "../Common/SkeletonUI";
 
-type ParamsType = { title?: string };
-type LocationStateType = { state: { id?: string; category?: PostCategory } };
 type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
   thumbnail?: FileList;
   hour?: number;
@@ -131,15 +130,6 @@ const Write = () => {
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
 
-  // 2022/12/20 - 렌더링할 이미지 path - by 1-blue
-  const targetPath = useMemo(() => {
-    if (!data) return "";
-    if (data.paths.length === 1) return data.paths[0];
-
-    if (innerWidth >= 1024) return data.paths[1];
-    else return data.paths[0];
-  }, [data, innerWidth]);
-
   // 2022/12/21 - 썸네일 관련 처리 - by 1-blue
   const { ref: refThumbnailRegister, ...restThumbnailRegister } =
     register("thumbnail");
@@ -196,8 +186,8 @@ const Write = () => {
 
         const { thumbnail, hour, minute, second, ...rest } = e;
         let time: undefined | string = undefined;
-        const episode = rest.episode && +rest.episode;
-        const page = rest.page && +rest.page;
+        const episode = rest.episode ? +rest.episode : undefined;
+        const page = rest.page ? +rest.page : undefined;
 
         if (hour || minute || second) {
           time = `${hour ? hour : 0}시간 ${minute ? minute : 0}분 ${
@@ -239,9 +229,17 @@ const Write = () => {
   // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
   if (!state) return <NotFoundPost title={title} />;
 
-  // >>> 스켈레톤 UI 추가하기
+  // 현재 대상의 데이터 패치중
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
-    return <></>;
+    return (
+      <>
+        <SkeletonUI.DetailTarget />;
+        <div className="my-6" />
+        <ul className="mx-4 grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+          <SkeletonUI.Posts />
+        </ul>
+      </>
+    );
 
   return (
     <>
@@ -277,7 +275,7 @@ const Write = () => {
       {/* 하단 입력부 */}
       <RHF.Form
         onSubmit={handleSubmit(createPost)}
-        className="flex flex-col w-[60vw] min-w-[200px] mx-auto space-y-2"
+        className="flex flex-col w-[90vw] min-w-[250px] mx-auto space-y-2 md:w-[60vw]"
       >
         <RHF.TextArea
           register={register}
@@ -295,9 +293,9 @@ const Write = () => {
         />
 
         {/* 썸네일과 시간 / 생성 버튼 부분 */}
-        <div className="flex space-x-2 pb-4">
+        <div className="flex space-y-2 pb-4 flex-col md:flex-row md:space-x-2">
           {/* 썸네일 */}
-          <div className="flex-1">
+          <div className="flex-1 space-y-2">
             <input
               type="file"
               {...restThumbnailRegister}
@@ -307,7 +305,6 @@ const Write = () => {
               }}
               hidden
             />
-
             <button
               type="button"
               className="group w-full relative border-2 border-gray-300 pt-[100%] rounded-md transition-colors hover:border-main-400"
@@ -326,18 +323,27 @@ const Write = () => {
                 />
               )}
             </button>
+            <p className="font-semibold text-sm bg-main-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
+              썸네일을 등록하지 않으면 포스터 이미지로 대체됩니다.
+            </p>
           </div>
           {/* 시간 / 게시글 생성 버튼 */}
           <div className="flex-1 flex flex-col space-y-2 min-w-[142px]">
             {/* 시간 */}
             <p className="font-semibold text-sm bg-main-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
-              명대사 시작 시간을 입력해주세요!
+              명대사에 관한 정보를 입력해주세요!
+              <br />
+              반드시 입력할 필요는 없습니다!
             </p>
             {/* 영화인 경우 */}
-            {category === "MOVIE" && (
+            {state.category === "MOVIE" && (
               <>
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 2, message: "2시간 이하로 입력해주세요!" },
+                  }}
+                  error={errors.hour}
                   name="hour"
                   type="number"
                   placeholder="시간을 숫자만 입력해주세요!"
@@ -345,6 +351,10 @@ const Write = () => {
                 />
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 59, message: "59분 이하로 입력해주세요!" },
+                  }}
+                  error={errors.minute}
                   name="minute"
                   type="number"
                   placeholder="분을 숫자만 입력해주세요!"
@@ -352,6 +362,10 @@ const Write = () => {
                 />
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 2, message: "59초 이하로 입력해주세요!" },
+                  }}
+                  error={errors.second}
                   name="second"
                   type="number"
                   placeholder="초를 숫자만 입력해주세요!"
@@ -360,10 +374,14 @@ const Write = () => {
               </>
             )}
             {/* 드라마인 경우 */}
-            {category === "DRAMA" && (
+            {state.category === "DRAMA" && (
               <>
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 200, message: "200 이하로 입력해주세요!" },
+                  }}
+                  error={errors.episode}
                   name="episode"
                   type="number"
                   placeholder="몇 화인지 숫자만 입력해주세요!"
@@ -371,6 +389,10 @@ const Write = () => {
                 />
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 2, message: "2시간 이하로 입력해주세요!" },
+                  }}
+                  error={errors.hour}
                   name="hour"
                   type="number"
                   placeholder="시간을 숫자만 입력해주세요!"
@@ -378,6 +400,10 @@ const Write = () => {
                 />
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 59, message: "59분 이하로 입력해주세요!" },
+                  }}
+                  error={errors.minute}
                   name="minute"
                   type="number"
                   placeholder="분을 숫자만 입력해주세요!"
@@ -385,6 +411,10 @@ const Write = () => {
                 />
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: { value: 59, message: "59초 이하로 입력해주세요!" },
+                  }}
+                  error={errors.second}
                   name="second"
                   type="number"
                   placeholder="초를 숫자만 입력해주세요!"
@@ -393,10 +423,17 @@ const Write = () => {
               </>
             )}
             {/* 도서인 경우 */}
-            {category === "BOOK" && (
+            {state.category === "BOOK" && (
               <>
                 <RHF.Input
                   register={register}
+                  options={{
+                    max: {
+                      value: 4000,
+                      message: "4000페이지 이하로 입력해주세요!",
+                    },
+                  }}
+                  error={errors.page}
                   name="page"
                   type="number"
                   placeholder="페이지를 숫자로만 입력해주세요!"

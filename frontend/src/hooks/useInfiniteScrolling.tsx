@@ -6,11 +6,22 @@ type Props = {
   hasMore: boolean;
 };
 
-// 2022/12/24 - 무한 스크롤링 적용 훅 - by 1-blue
+// 2022/12/25 - "IntersectionObserver"의 옵션들 - by 1-blue
+const options: IntersectionObserverInit = {
+  threshold: 0.1,
+};
+
+/**
+ * 2022/12/24 - 무한 스크롤링 적용 훅 - by 1-blue
+ * @param observerRef 감시할 element ref
+ * @param fetchMore 추가 패치를 실행할 함수
+ * @param hasMore 더 패치할 수 있는지 여부
+ * @returns
+ */
 const useInfiniteScrolling = ({ observerRef, fetchMore, hasMore }: Props) => {
   // 2022/12/24 - 뷰포트 내에 감시하는 태그가 들어왔다면 패치 - by 1-blue
-  const onScroll = useCallback(
-    (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+  const onScroll: IntersectionObserverCallback = useCallback(
+    (entries, observer) => {
       if (!entries[0].isIntersecting) return;
 
       fetchMore();
@@ -22,7 +33,7 @@ const useInfiniteScrolling = ({ observerRef, fetchMore, hasMore }: Props) => {
     if (!observerRef) return;
 
     // 콜백함수와 옵션값 지정
-    let observer = new IntersectionObserver(onScroll, { threshold: 0.1 });
+    let observer = new IntersectionObserver(onScroll, options);
     // 특정 요소 감시 시작
     observer.observe(observerRef);
 
