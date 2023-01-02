@@ -56,15 +56,18 @@ postRouter.get(
       const take = +req.query.take;
       const lastId = +req.query.lastId;
 
+      // 게시글 정렬 기준
       let orderBy = {};
       if (sortBy === "popular")
         orderBy = [{ like: "desc" }, { updatedAt: "desc" }];
       else if (sortBy === "latest")
         orderBy = [{ updatedAt: "desc" }, { like: "desc" }];
 
-      // 게시글들 찾기
+      // 게시글 카테고리
+      let where = category === "ALL" ? {} : { category };
+
       const posts = await prisma.post.findMany({
-        where: { category },
+        where,
         take,
         skip: lastId === -1 ? 0 : 1,
         ...(lastId !== -1 && { cursor: { id: lastId } }),

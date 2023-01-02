@@ -37,7 +37,7 @@ export type CreatePostResponse = ApiResponse<{}>;
  * 2022/12/24 - 게시글들 요청 수신 타입 ( F -> B ) - by 1-blue
  */
 export type GetPostsRequest = {
-  category: PostCategory;
+  category: "ALL" | PostCategory;
   sortBy: PostSortBy;
   take: number;
   lastId: number;
@@ -47,7 +47,7 @@ export type GetPostsRequest = {
  */
 export type GetPostsResponse = ApiResponse<{
   take: number;
-  category: PostCategory;
+  category: "ALL" | PostCategory;
   posts: Post[];
 }>;
 

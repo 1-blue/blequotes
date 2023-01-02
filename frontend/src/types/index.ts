@@ -17,7 +17,7 @@ export type SearchCategory = "movie" | "drama" | "book";
 /**
  * 2022/12/19 - 게시글 카테고리 - by 1-blue
  */
-export type PostCategory = "MOVIE" | "DRAMA" | "BOOK";
+export type PostCategory = "ALL" | "MOVIE" | "DRAMA" | "BOOK";
 /**
  * 게시글들 정렬 기준
  */

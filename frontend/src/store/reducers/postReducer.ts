@@ -8,12 +8,14 @@ import { Post } from "../types";
 
 interface PostState {
   // 게시글들
+  posts: Post[]; // 카테고리 구분 없이 모든 게시글들
   moviePosts: Post[];
   dramaPosts: Post[];
   bookPosts: Post[];
   targetPosts: Post[]; // 특정 대상의 게시글들
 
   // 게시글 더 패치 가능 여부
+  hasMorePosts: boolean;
   hasMoreMoviePosts: boolean;
   hasMoreDramaPosts: boolean;
   hasMoreBookPosts: boolean;
@@ -41,11 +43,13 @@ interface PostState {
 }
 
 const initialState: PostState = {
+  posts: [],
   moviePosts: [],
   dramaPosts: [],
   bookPosts: [],
   targetPosts: [],
 
+  hasMorePosts: true,
   hasMoreMoviePosts: true,
   hasMoreDramaPosts: true,
   hasMoreBookPosts: true,
@@ -90,15 +94,17 @@ const postSlice = createSlice({
       state.getPostsOfTargetError = null;
     },
     reset(state) {
+      state.posts = [];
       state.moviePosts = [];
       state.dramaPosts = [];
       state.bookPosts = [];
-
       state.targetPosts = [];
 
+      state.hasMorePosts = true;
       state.hasMoreMoviePosts = true;
       state.hasMoreDramaPosts = true;
       state.hasMoreBookPosts = true;
+      state.hasMoreTargetPosts = true;
     },
   },
 
@@ -138,6 +144,11 @@ const postSlice = createSlice({
         state.getPostsDone = action.payload.message;
 
         switch (action.payload.category) {
+          case "ALL":
+            state.posts.push(...action.payload.posts);
+            state.hasMorePosts =
+              action.payload.take === action.payload.posts.length;
+            break;
           case "MOVIE":
             state.moviePosts.push(...action.payload.posts);
             state.hasMoreMoviePosts =
