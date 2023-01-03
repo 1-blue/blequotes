@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { postActions } from "@src/store/reducers/postReducer";
 import {
@@ -9,7 +9,11 @@ import {
 } from "@src/store/thunks";
 
 // util
-import { dateFormat, getMovieDBImagePath } from "@src/utils";
+import {
+  dateFormat,
+  getMovieDBImagePath,
+  numberWithSeparator,
+} from "@src/utils";
 
 // hook
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
@@ -24,7 +28,12 @@ import NotFoundPost from "@src/components/NotFoundPost";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
-import type { LinkState, PostSortBy, TargetData } from "@src/types";
+import type {
+  LinkState,
+  PostSortBy,
+  TargetData,
+  TargetInformation,
+} from "@src/types";
 
 const Post = () => {
   const dispatch = useAppDispatch();
@@ -161,6 +170,37 @@ const Post = () => {
   // 2022/12/30 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
 
+  // 2023/01/03 - 영화/드라마/도서에서 필요한 데이터 추출 - by 1-blue
+  const information = useMemo<TargetInformation | undefined>(() => {
+    if (!state) return;
+
+    switch (state.category) {
+      case "MOVIE":
+        if (!detailMovie) return;
+        return {
+          tagline: detailMovie.tagline,
+          genres: detailMovie.genres,
+          runtime: detailMovie.runtime,
+        };
+
+      case "DRAMA":
+        if (!detailDrama) return;
+        return {
+          tagline: detailDrama.tagline,
+          genres: detailDrama.genres,
+          runtime: detailDrama.episode_run_time[0],
+          numerOfEpisodes: detailDrama.number_of_episodes,
+        };
+
+      case "BOOK":
+        if (!detailBook) return;
+        return {
+          price: numberWithSeparator(detailBook.price, ","),
+          authors: detailBook.authors,
+        };
+    }
+  }, [state, detailMovie, detailDrama, detailBook]);
+
   // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
   if (!state) return <NotFoundPost title={title} />;
 
@@ -186,6 +226,7 @@ const Post = () => {
         path={
           data.paths[1] && innerWidth >= 1030 ? data.paths[1] : data.paths[0]
         }
+        information={information}
         className="w-full h-screen"
       />
 
@@ -200,6 +241,7 @@ const Post = () => {
         <GridPosts posts={targetPosts} ref={setObserverRef} />
       </section>
 
+      {/* FIXME: 위치를 우측 하단 fixed로 고정하는 방법 생각해보기 */}
       <aside className="absolute bottom-4 right-4">
         <Link
           to={`/write/${data.title}`}

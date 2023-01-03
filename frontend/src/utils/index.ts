@@ -33,6 +33,12 @@ export const throttleHelper = (callback: () => void, waitTime: number) => {
   };
 };
 
+/**
+ * 금액 3자리 구분자(,) 찍는 함수
+ */
+export const numberWithSeparator = (number: number, separator: string) =>
+  number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, separator);
+
 // 시간 포멧
 export {
   dateFormat,

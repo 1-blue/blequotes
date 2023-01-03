@@ -8,7 +8,7 @@ import { combineClassNames } from "@src/utils";
 import useInnerSize from "@src/hooks/useInnerSize";
 
 // type
-import type { PostCategory } from "@src/types";
+import type { PostCategory, TargetInformation } from "@src/types";
 
 // 백그라운드 이미지
 type BackgroundImageProps = {
@@ -18,6 +18,7 @@ type BackgroundImageProps = {
   description?: string;
   date?: string;
   alt?: string;
+  information?: TargetInformation;
 };
 const BackgroundImage = ({
   className,
@@ -26,6 +27,7 @@ const BackgroundImage = ({
   description,
   date,
   alt = "배경 이미지",
+  information,
 }: BackgroundImageProps) => {
   return (
     <figure
@@ -37,14 +39,63 @@ const BackgroundImage = ({
     >
       <img src={path} alt={alt} hidden />
       {(title || description || date) && (
-        <div className="absolute inset-0 text-white text-center flex flex-col justify-end bg-gradient-to-b from-black/0 to-black/80">
-          {title && <h4 className="my-2 text-2xl font-bold">{title}</h4>}
-          {description && (
-            <p className="max-w-[600px] px-4 mx-auto">{description}</p>
-          )}
-          {date && (
-            <time className="text-center text-sm mt-4 mb-8">{date}</time>
-          )}
+        <div className="absolute inset-0 flex flex-col justify-end items-center bg-gradient-to-b from-black/0 to-black/80">
+          <div className="max-w-[600px] flex flex-col justify-center text-white">
+            {information && (
+              <div className="flex flex-col items-end text-xs space-y-1">
+                {/* 한줄 설명 */}
+                {information.tagline && (
+                  <span className="absolute top-1/2 text-lg font-bold mb-8 self-center">
+                    "{information.tagline}"
+                  </span>
+                )}
+                {/* 장르 */}
+                {information.genres && information.genres.length > 0 && (
+                  <ul className="flex space-x-1">
+                    {information.genres.map((genre) => (
+                      <li
+                        key={genre.id}
+                        className="bg-indigo-600 text-white px-2 py-1 rounded-sm font-bold"
+                      >
+                        {genre.name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {/* 런타임, 몇 회 */}
+                <div className="space-x-2">
+                  {information.runtime && <span>{information.runtime}분</span>}
+                  {information.numerOfEpisodes && (
+                    <span>{information.numerOfEpisodes}부작</span>
+                  )}
+                </div>
+
+                {/* 저자들 */}
+                {information.authors && information.authors.length > 0 && (
+                  <ul className="flex space-x-1">
+                    {information.authors.map((author) => (
+                      <li
+                        key={author}
+                        className="bg-indigo-600 text-white px-2 py-1 rounded-sm font-bold"
+                      >
+                        {author}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {/* 가격 */}
+                {information.price && <span>{information.price}원</span>}
+              </div>
+            )}
+
+            {title && (
+              <h4 className="my-2 text-center text-2xl font-bold">{title}</h4>
+            )}
+            {description && <p className="px-4 mx-auto">{description}</p>}
+            {date && (
+              <time className="text-center text-sm mt-2 mb-4">{date}</time>
+            )}
+          </div>
         </div>
       )}
     </figure>

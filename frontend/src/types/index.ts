@@ -49,3 +49,23 @@ export type LStorageData = {
  * 2022/12/30 - "<Link>"로 특정 대상의 페이지로 이동하는 경우 송신 및 수신 타입 - by 1-blue
  */
 export type LinkState = { state?: { idx?: string; category?: PostCategory } };
+
+/**
+ * 2023/01/03 - 현재 상세 데이터를 받은 대상에서 화면에 추가로 렌더링할 정보들 - by 1-blue
+ */
+export type TargetInformation = {
+  // 영화/드라마 공통
+  tagline?: string;
+  genres?: {
+    id: number;
+    name: string;
+  }[];
+  runtime?: number;
+
+  // 드라마 전용
+  numerOfEpisodes?: number;
+
+  // 도서 전용
+  price?: string;
+  authors?: string[];
+};
