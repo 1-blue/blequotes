@@ -26,11 +26,11 @@ import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
 import Loading from "@src/components/Common/Loading";
 import NotFoundPost from "@src/components/NotFoundPost";
+import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
 import type { LinkState, TargetData } from "@src/types";
 import type { CreatePostRequest } from "@src/store/types";
-import SkeletonUI from "../Common/SkeletonUI";
 
 type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
   thumbnail?: FileList;
@@ -120,12 +120,29 @@ const Write = () => {
 
   // 2022/12/31 - 기본 값들 입력 ( idx, category, title ) - by 1-blue
   useEffect(() => {
-    if (!state?.idx || !state?.category || !detailMovie) return;
+    if (!state) return;
+    if (!state.idx || !state.category) return;
 
     setValue("idx", state.idx);
     setValue("category", state.category);
-    setValue("title", detailMovie.title);
-  }, [state, detailMovie, setValue]);
+
+    switch (state.category) {
+      case "MOVIE":
+        if (!detailMovie) return;
+        setValue("title", detailMovie.title);
+        break;
+
+      case "DRAMA":
+        if (!detailDrama) return;
+        setValue("title", detailDrama.name);
+        break;
+
+      case "BOOK":
+        if (!detailBook) return;
+        setValue("title", detailBook.title);
+        break;
+    }
+  }, [state, detailMovie, detailDrama, detailBook, setValue]);
 
   // 2022/12/20 - 브라우저 width - by 1-blue
   const [innerWidth] = useInnerSize();
@@ -288,6 +305,10 @@ const Write = () => {
             required: {
               value: true,
               message: "반드시 입력해야합니다!",
+            },
+            maxLength: {
+              value: 300,
+              message: "최대 300자까지 입력이 가능합니다!",
             },
           }}
         />

@@ -17,15 +17,15 @@ enum PostCategory {
 // idx -> 해당 게시글의 주제( 영화, 드라마, 도서 )의 식별자 ( 영화, 드라마 -> movieDB에서 제공한 id, 도서 -> isbn )
 model Post {
   id Int @id @unique @default(autoincrement())
-  idx String
-  title String
+  idx String @db.VarChar(20)
+  title String @db.VarChar(20)
   category PostCategory
-  speech String
+  speech String @db.VarChar(300)
   like Int @default(0)
   hate Int @default(0)
   updatedAt DateTime @updatedAt
-  time String?
+  time String? @db.VarChar(10)
   episode Int?
   page Int?
-  thumbnail String?
+  thumbnail String @db.VarChar(300)
 }

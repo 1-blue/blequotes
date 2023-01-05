@@ -29,7 +29,7 @@ export type CreatePostRequest = {
   title: string;
   category: PostCategory;
   speech: string;
-  thumbnail?: string;
+  thumbnail: string;
 
   // 영화 / 드라마 용
   time?: string;

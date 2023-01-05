@@ -34,7 +34,9 @@ module.exports = {
 
       // media query
       screens: {
+        xs: "400px",
         xsm: "500px",
+        "4xl": "2000px",
       },
     },
     fontFamily: {
