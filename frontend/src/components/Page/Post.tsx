@@ -24,7 +24,7 @@ import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 import Image from "@src/components/Common/Image";
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
-import NotFoundPost from "@src/components/NotFoundPost";
+import NotFoundPage from "@src/components/Page/404";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
 
 // type
@@ -202,7 +202,7 @@ const Post = () => {
   }, [state, detailMovie, detailDrama, detailBook]);
 
   // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
-  if (!state) return <NotFoundPost title={title} />;
+  if (!state) return <NotFoundPage.Post title={title} />;
 
   // 현재 대상의 데이터 패치중
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)

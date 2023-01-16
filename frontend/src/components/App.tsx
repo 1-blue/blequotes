@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { postActions } from "@src/store/reducers/postReducer";
 import { postThunkService } from "@src/store/thunks";
 
 // hook
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
+import useInnerSize from "@src/hooks/useInnerSize";
 
 // component
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
+import Image from "@src/components/Common/Image";
+
+// main poster data
+import { heightThumbnails, widthThumbnails } from "@src/data";
 
 // type
 import type { PostSortBy } from "@src/types";
@@ -65,10 +70,39 @@ const App = () => {
     hasMore: hasMorePosts,
   });
 
+  // 2022/01/16 - 현재 브라우저 가로 사이즈 - by 1-blue
+  const [innerWidth] = useInnerSize();
+  // 2022/01/16 - 랜덤한 이미지 인덱스 제작 - by 1-blue
+  const randomIndex = useMemo(
+    () => Math.floor(Math.random() * widthThumbnails.length),
+    []
+  );
+  // 2022/01/16 - 메인 이미지로 사용할 이미지 선택 - by 1-blue
+  const mainImage =
+    innerWidth > 768
+      ? widthThumbnails[randomIndex]
+      : heightThumbnails[randomIndex];
+
   return (
     <>
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
-      <section className="h-[92px] bg-gray-600 mb-6"></section>
+      <section className="h-[92px] bg-gray-600"></section>
+
+      {/*  */}
+      <section className="relative">
+        <Image.Photo
+          className="h-[60vh] bg-no-repeat bg-center bg-contain mb-6"
+          path={mainImage}
+          alt="대표 배경 이미지"
+        />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/60 flex justify-center items-center">
+          <h3 className="mx-8 text-white text-2xl font-bold">
+            영화 / 드라마 / 도서의 명대사를 등록하는 사이트입니다.
+            <br />
+            여러분이 생각하는 명대사를 작성해보세요!
+          </h3>
+        </div>
+      </section>
 
       {/* 게시글들 */}
       <section className="mx-4">

@@ -25,8 +25,9 @@ import RHF from "@src/components/Common/RHF";
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
 import Loading from "@src/components/Common/Loading";
-import NotFoundPost from "@src/components/NotFoundPost";
+import NotFoundPage from "@src/components/Page/404";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
+import ColdOut from "@src/components/Common/ColdOut";
 
 // type
 import type { LinkState, TargetData } from "@src/types";
@@ -244,7 +245,7 @@ const Write = () => {
   });
 
   // 링크 클릭을 하지 않고 "URL"로 바로 접근한 경우
-  if (!state) return <NotFoundPost title={title} />;
+  if (!state) return <NotFoundPage.Post title={title} />;
 
   // 현재 대상의 데이터 패치중
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
@@ -264,10 +265,7 @@ const Write = () => {
         {/* 상단 설명부 */}
         <div className="w-[60vw] min-w-[300px] mx-auto space-y-3">
           <div className="h-[100px]"></div>
-          <p className="font-semibold bg-main-400 text-white px-4 py-2 mx-auto rounded-md before:content-['💡']">
-            작성된 게시글은 관리자에 의해서 임의로 삭제할 수 있으며, 작성자에게
-            게시글에 대한 권한이 부여되지 않습니다.
-          </p>
+          <ColdOut text="작성된 게시글은 관리자에 의해서 임의로 삭제할 수 있으며, 작성자에게 게시글에 대한 권한이 부여되지 않습니다." />
           <h1 className="text-4xl font-bold text-center mx-auto">
             {data.title}
           </h1>
@@ -344,18 +342,13 @@ const Write = () => {
                 />
               )}
             </button>
-            <p className="font-semibold text-sm bg-main-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
-              썸네일을 등록하지 않으면 포스터 이미지로 대체됩니다.
-            </p>
+            <ColdOut text="썸네일을 등록하지 않으면 포스터 이미지로 대체됩니다." />
           </div>
           {/* 시간 / 게시글 생성 버튼 */}
           <div className="flex-1 flex flex-col space-y-2 min-w-[142px]">
-            {/* 시간 */}
-            <p className="font-semibold text-sm bg-main-400 text-white px-4 py-2 w-full rounded-md before:content-['💡']">
-              명대사에 관한 정보를 입력해주세요!
-              <br />
-              반드시 입력할 필요는 없습니다!
-            </p>
+            <ColdOut
+              text={`명대사에 관한 정보를 입력해주세요!\n반드시 입력할 필요는 없습니다!`}
+            />
             {/* 영화인 경우 */}
             {state.category === "MOVIE" && (
               <>

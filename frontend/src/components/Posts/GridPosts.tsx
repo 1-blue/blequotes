@@ -168,18 +168,18 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
       {posts.length > 0 ? (
         <>
           <ul
-            className="grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+            className="grid gap-4 grid-cols-1 xsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5"
             onClick={onClickLikeOrHate}
           >
             {posts.map((post) => (
               <li
                 key={post.id}
                 style={{ backgroundImage: `url("${post.thumbnail}")` }}
-                className="group/post relative pt-[80%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2"
+                className="group/post relative pt-[110%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2 md:pt-[90%]"
               >
                 <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50" />
 
-                <div className="absolute top-[10%] w-full px-4 space-y-2 z-[1]">
+                <div className="absolute top-[2%] w-full px-4 space-y-2 z-[1]">
                   <Link
                     to={`/post/${post.title}`}
                     state={{ idx: post.idx, category: post.category }}
@@ -190,12 +190,12 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
                     </h4>
                   </Link>
 
-                  <p className="text-sm whitespace-pre-wrap">
-                    <b>"{post.speech}"</b>
+                  <p className="text-sm whitespace-pre-wrap post-speech">
+                    <b>- {post.speech} -</b>
                   </p>
                 </div>
 
-                <div className="absolute bottom-[4%] z-[1] w-full px-2 flex justify-between">
+                <div className="absolute bottom-[4%] z-[1] w-full px-4 flex justify-between">
                   {post.category === "MOVIE" && (
                     <div className="text-xs font-bold self-end">
                       {post.time && <span>- {post.time} -</span>}

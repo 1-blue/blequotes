@@ -60,7 +60,7 @@ export const getDummyPost = (): Prisma.PostCreateManyInput[] => [
 “할 일 줘요? 술 말고 할 일 줘요? 날 추앙해요. 난 한 번도 채워진 적이 없어. 개새끼, 개새끼... 내가 만났던 놈들은 다 개새끼. 그러니까 날 추앙해요. 가득 채워지게. 조금 있으면 겨울이에요. 겨울이 오면 살아 있는 건 아무것도 없어요. 그렇게 앉아서 보고 있을 것도 없어요. 공장에 일도 없고, 낮부터 마시면서 쓰레기 같은 기분 견디는 거, 지옥 같을 거에요. 당신은 무슨 일이든 해야 돼요. 난 한 번은 채워지고 싶어. 그러니까 날 추앙해요. 사랑으론 안 돼. 추앙해요.”`,
     episode: 2,
     thumbnail:
-      "https://w.namu.la/s/b3c523e979c2e9a87f33397e588e162e69107be97ba9d0faaaff058ddc7e03fc3b0d47cf56b26ab93d919d2c565324592572c10c43f89c64c49cfc4b5333188f0be75cca6c0304cbb54ec9c81e3b02f689118a162b451d190ae814d393694d6ae7c4eeb32cbb6848d9a985e38c4b5e5d",
+      "https://image.tmdb.org/t/p/w500/mrOxruke1FI0Sx6v6BOdpu4yppZ.jpg",
     like: 90,
   },
   {
@@ -70,7 +70,7 @@ export const getDummyPost = (): Prisma.PostCreateManyInput[] => [
     speech: `“내가 영화를 혼자 봐서 헤어진 걸로 만들고, 걔가 새벽에 딴 놈이랑 톡해서 헤어진 걸로 만들어야 돼. 절대로 내가 별 볼일 없는 인간인 거 그게 들통나서 헤어지는 게 아니라! 나도 알아. 걔가 쥘 수 있는 패 중에 내가 최고의 패는 아니라는거. 더 좋은 패가 있겠다 싶겠지. 나도 알아.”`,
     episode: 3,
     thumbnail:
-      "https://w.namu.la/s/5ce129b6347f24e825fb009541a733d0b2667503bb52bc0b3d5fc12c0e425f13c74375ca31f5f86bf882b22a521b6f3bd69961e23d7948fb14904617e7a0352860036a0a08a8d8662c8cdd315bda5d426e583862117d874fbc12fcdaf89d138f26d8f6222ce343f4208155e9b2db3bfa",
+      "https://image.tmdb.org/t/p/w500/mrOxruke1FI0Sx6v6BOdpu4yppZ.jpg",
   },
   {
     idx: "154887",
@@ -79,7 +79,7 @@ export const getDummyPost = (): Prisma.PostCreateManyInput[] => [
     speech: `“옛날엔 사과하는게 참 멋진 행동이었는데, 그쵸? 어떤 한 인간이 뼈를 깎는 그 고통을 감내하면서 자신을 성찰하고 용기있게 하는 행동이 사과였는데. 쓰읍... 언제부터 사과가 강요에 의한 비굴한 행동이 됐는지 모르겠어요. 이제 더 이상 용기있게 사과하는 사람을 볼 때의 그 감동을 느끼기 힘들어 졌다는게 참... 그래요.”`,
     episode: 6,
     thumbnail:
-      "https://w.namu.la/s/98dac9cf1fd60411904c20292ef71291c743599639d7532569afbb7cae75754286b61eb006a06d3daf4d6ab0accdd115e608f31cb50b4d95d8f50f16d71f34e7e7222a3a1504ae845446c6667e33ce498f7e53396426f7ef04342cd6d9ac578592e5db1d01dbe91497a52d4029b386f6",
+      "https://image.tmdb.org/t/p/w500/mrOxruke1FI0Sx6v6BOdpu4yppZ.jpg",
   },
   // 환혼
   {
@@ -89,7 +89,7 @@ export const getDummyPost = (): Prisma.PostCreateManyInput[] => [
     speech: `아무것도 하지 않을 거면 죽어버려`,
     episode: 10,
     thumbnail:
-      "https://w.namu.la/s/b5639e4363bcf6900e2848c738e10dc06bf9c159e5aa3e3600db0b8b4d81afbbb89c5d80482a9f0b4443f662f4cd648900fc21f2deb5a93d94b31f507983f8dc235f2d420982dce119c12fa567fb7655957b70fe9f526e6ce5eceae79e970ff6e5fcd44e65849b134a793e4949745ecd",
+      "https://image.tmdb.org/t/p/w500/6Ehy7pbWQYTfW2ft4uzHqN4mVdU.jpg",
     like: 100,
   },
   // 이번생은 처음이라

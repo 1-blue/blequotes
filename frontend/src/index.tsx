@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -22,6 +21,7 @@ import Book from "@src/components/Page/Book";
 import Search from "@src/components/Page/Search";
 import Post from "@src/components/Page/Post";
 import Write from "@src/components/Page/Write";
+import NotFoundPage from "@src/components/Page/404";
 
 // component
 import Layout from "@src/components/Layout";
@@ -48,7 +48,7 @@ root.render(
             <Route path="/search" element={<Search />}></Route>
             <Route path="/post/:title" element={<Post />}></Route>
             <Route path="/write/:title" element={<Write />}></Route>
-            <Route path="*" element={<div>경로없음</div>}></Route>
+            <Route path="*" element={<NotFoundPage.All />}></Route>
           </Routes>
 
           <ToastContainer

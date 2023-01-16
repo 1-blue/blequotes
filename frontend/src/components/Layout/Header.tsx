@@ -32,57 +32,59 @@ const Header = () => {
   }, []);
 
   return (
-    <header
-      className={combineClassNames(
-        "fixed inset-0 bottom-auto duration-200 z-10",
-        isHide ? "-translate-y-full" : "translate-y-0"
-      )}
-    >
-      <section
-        className="py-2 px-4 flex justify-between items-center text-white backdrop-blur-sm"
-        style={{ backgroundColor: `rgba(0, 0, 0, ${scrollYRatio})` }}
+    <>
+      <header
+        className={combineClassNames(
+          "fixed inset-0 bottom-auto duration-200 z-10",
+          isHide ? "-translate-y-full" : "translate-y-0"
+        )}
       >
-        <Link to="/">
-          <img src="/logo.png" alt="" className="w-10 h-10" />
-        </Link>
-        <Link to="/search" state={{ isShow: true }}>
-          <Icon shape="search" className="w-6 h-6" />
-        </Link>
-      </section>
+        <section
+          className="py-2 px-4 flex justify-between items-center text-white backdrop-blur-sm"
+          style={{ backgroundColor: `rgba(0, 0, 0, ${scrollYRatio})` }}
+        >
+          <Link to="/">
+            <img src="/logo.png" alt="" className="w-10 h-10" />
+          </Link>
+          <Link to="/search" state={{ isShow: true }}>
+            <Icon shape="search" className="w-6 h-6" />
+          </Link>
+        </section>
 
-      <nav
-        className="flex px-8 text-white space-x-4 bg-filter backdrop-blur-sm"
-        style={{ backgroundColor: `rgba(0, 0, 0, ${scrollYRatio})` }}
-      >
-        <Link
-          to="/movie"
-          className={combineClassNames(
-            "pt-2 pb-0.5",
-            pathname.includes("movie") ? "border-b-2" : ""
-          )}
+        <nav
+          className="flex px-8 text-white space-x-4 bg-filter backdrop-blur-sm"
+          style={{ backgroundColor: `rgba(0, 0, 0, ${scrollYRatio})` }}
         >
-          영화
-        </Link>
-        <Link
-          to="/drama"
-          className={combineClassNames(
-            "pt-2 pb-0.5",
-            pathname.includes("drama") ? "border-b-2" : ""
-          )}
-        >
-          드라마
-        </Link>
-        <Link
-          to="/book"
-          className={combineClassNames(
-            "pt-2 pb-0.5",
-            pathname.includes("book") ? "border-b-2" : ""
-          )}
-        >
-          도서
-        </Link>
-      </nav>
-    </header>
+          <Link
+            to="/movie"
+            className={combineClassNames(
+              "pt-2 pb-0.5",
+              pathname.includes("movie") ? "border-b-2" : ""
+            )}
+          >
+            영화
+          </Link>
+          <Link
+            to="/drama"
+            className={combineClassNames(
+              "pt-2 pb-0.5",
+              pathname.includes("drama") ? "border-b-2" : ""
+            )}
+          >
+            드라마
+          </Link>
+          <Link
+            to="/book"
+            className={combineClassNames(
+              "pt-2 pb-0.5",
+              pathname.includes("book") ? "border-b-2" : ""
+            )}
+          >
+            도서
+          </Link>
+        </nav>
+      </header>
+    </>
   );
 };
 

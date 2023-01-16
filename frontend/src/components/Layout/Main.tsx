@@ -3,7 +3,7 @@ type Props = {
 };
 
 const Main = ({ children }: Props) => {
-  return <main>{children}</main>;
+  return <main className="min-h-[calc(100vh-144px)]">{children}</main>;
 };
 
 export default Main;

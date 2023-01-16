@@ -33,6 +33,17 @@
     -webkit-box-orient: vertical;
     word-break: keep-all;
   }
+
+  /* 게시글 명대사 글자 15라인 제한 */
+  .post-speech {
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 15;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+  }
 }
 
 @layer utilities {
