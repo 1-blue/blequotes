@@ -195,25 +195,35 @@ const postSlice = createSlice({
 
         let targetIndex = -1;
 
-        switch (resultPost.category) {
-          case "MOVIE":
-            targetIndex = state.moviePosts.findIndex(
-              (post) => post.id === resultPost.id
-            );
-            state.moviePosts[targetIndex] = resultPost;
-            break;
-          case "DRAMA":
-            targetIndex = state.dramaPosts.findIndex(
-              (drama) => drama.id === resultPost.id
-            );
-            state.dramaPosts[targetIndex] = resultPost;
-            break;
-          case "BOOK":
-            targetIndex = state.bookPosts.findIndex(
-              (book) => book.id === resultPost.id
-            );
-            state.bookPosts[targetIndex] = resultPost;
-            break;
+        // 상세 페이지에서 좋아요/싫어요 누른 경우
+        if (state.targetPosts.length !== 0) {
+          targetIndex = state.targetPosts.findIndex(
+            (book) => book.id === resultPost.id
+          );
+          state.targetPosts[targetIndex] = resultPost;
+        }
+        // 상세 페이지를 제외한 나머지 페이지에서 좋아요/싫어요 누른 경우
+        else {
+          switch (resultPost.category) {
+            case "MOVIE":
+              targetIndex = state.moviePosts.findIndex(
+                (post) => post.id === resultPost.id
+              );
+              state.moviePosts[targetIndex] = resultPost;
+              break;
+            case "DRAMA":
+              targetIndex = state.dramaPosts.findIndex(
+                (drama) => drama.id === resultPost.id
+              );
+              state.dramaPosts[targetIndex] = resultPost;
+              break;
+            case "BOOK":
+              targetIndex = state.bookPosts.findIndex(
+                (book) => book.id === resultPost.id
+              );
+              state.bookPosts[targetIndex] = resultPost;
+              break;
+          }
         }
 
         // 메인 페이지에서 누를 경우
