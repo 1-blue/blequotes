@@ -21,6 +21,7 @@ import useInnerSize from "@src/hooks/useInnerSize";
 import useToastify from "@src/hooks/useToastify";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import RHF from "@src/components/Common/RHF";
 import Image from "@src/components/Common/Image";
 import Icon from "@src/components/Common/Icon";
@@ -251,6 +252,11 @@ const Write = () => {
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
     return (
       <>
+        {/* meta */}
+        <HeadInfo
+          title={`${title} | 로딩중...`}
+          description={`"${title}"에 대한 데이터를 받아오는 중입니다.`}
+        />
         <SkeletonUI.DetailTarget />;
         <div className="my-6" />
         <ul className="mx-4 grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -261,6 +267,13 @@ const Write = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title={`${title} | 명대사 작성`}
+        description={`"${title}"에 대한 명대사를 작성하는 페이지입니다.`}
+        image={data.paths[0]}
+      />
+
       <section className="bg-black text-white">
         {/* 상단 설명부 */}
         <div className="w-[60vw] min-w-[300px] mx-auto space-y-3">

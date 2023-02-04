@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import Icon from "@src/components/Common/Icon";
 
 const All = () => {
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title={`존재하지 않는 페이지`}
+        description={`잘못된 URL로 접근했습니다.`}
+      />
+
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
       <section className="h-[92px] bg-gray-600 mb-6"></section>
 
@@ -38,6 +45,12 @@ type NotFountPostProps = {
 const Post = ({ title }: NotFountPostProps) => {
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title={`존재하지 않는 페이지`}
+        description={`잘못된 URL로 접근했습니다.`}
+      />
+
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
       <section className="h-[92px] bg-gray-600 mb-6"></section>
 

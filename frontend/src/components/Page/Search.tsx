@@ -9,6 +9,7 @@ import {
 } from "@src/store/thunks";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import RHF from "@src/components/Common/RHF";
 import Icon from "@src/components/Common/Icon";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
@@ -206,6 +207,12 @@ const Search = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title={`${watch("title") || currentCategory} | 검색`}
+        description={`특정 영화 / 드라마 / 도서를 검색하는 페이지입니다.`}
+      />
+
       {isShowSearchForm && (
         <RHF.Form
           onSubmit={onSumbit}

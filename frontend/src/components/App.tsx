@@ -8,6 +8,7 @@ import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 import useInnerSize from "@src/hooks/useInnerSize";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
 import Image from "@src/components/Common/Image";
@@ -85,6 +86,13 @@ const App = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title="홈 | 명대사"
+        description="작성된 모든 명대사를 보는 페이지입니다."
+        image={widthThumbnails[randomIndex]}
+      />
+
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
       <section className="h-[92px] bg-gray-600"></section>
 

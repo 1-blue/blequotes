@@ -7,6 +7,7 @@ import { postActions } from "@src/store/reducers/postReducer";
 import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 
 // components
+import HeadInfo from "@src/components/Common/HeadInfo";
 import GridPosts from "@src/components/Posts/GridPosts";
 import PostHeader from "@src/components/Posts/PostHeader";
 
@@ -70,6 +71,12 @@ const Book = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title="도서 | 명대사"
+        description="작성된 도서 명대사를 보는 페이지입니다."
+      />
+
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
       <section className="h-[92px] bg-gray-600 mb-6"></section>
 

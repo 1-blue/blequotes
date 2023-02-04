@@ -1,4 +1,5 @@
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import Spinner from "@src/components/Common/Spinner";
 import Icon from "@src/components/Common/Icon";
 
@@ -8,6 +9,9 @@ import Icon from "@src/components/Common/Icon";
 const Page = () => {
   return (
     <aside>
+      {/* meta */}
+      <HeadInfo title="로딩중..." description="데이터를 불러오는 중입니다." />
+
       <div className="w-full flex flex-col justify-center items-center space-y-2 bg-black/70">
         <Spinner.Relative outerClassName="absolute top-1/3" />
 

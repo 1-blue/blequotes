@@ -21,6 +21,7 @@ import useInnerSize from "@src/hooks/useInnerSize";
 import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import Image from "@src/components/Common/Image";
 import PostHeader from "@src/components/Posts/PostHeader";
 import GridPosts from "@src/components/Posts/GridPosts";
@@ -208,6 +209,11 @@ const Post = () => {
   if (detailMovieLoading || detailDramaLoading || detailBookLoading || !data)
     return (
       <>
+        {/* meta */}
+        <HeadInfo
+          title="드라마 | 로딩중..."
+          description={`"${title}"에 대한 데이터를 받아오는 중입니다.`}
+        />
         <SkeletonUI.DetailTarget />;
         <div className="my-6" />
         <ul className="mx-4 grid gap-4 grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -218,6 +224,13 @@ const Post = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title={`${title} | 명대사`}
+        description={`"${title}"에 대한 상세 정보와 명대사들을 보는 페이지입니다.`}
+        image={data.paths[0]}
+      />
+
       <Image.BackgroundImage
         title={data.title}
         description={data.description}

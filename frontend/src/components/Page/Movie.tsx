@@ -10,6 +10,7 @@ import { getMovieDBImagePath } from "@src/utils";
 import useInfiniteScrolling from "@src/hooks/useInfiniteScrolling";
 
 // component
+import HeadInfo from "@src/components/Common/HeadInfo";
 import Image from "@src/components/Common/Image";
 import SlickSlider from "@src/components/Common/SlickSlider";
 import SkeletonUI from "@src/components/Common/SkeletonUI";
@@ -184,6 +185,13 @@ const Movie = () => {
 
   return (
     <>
+      {/* meta */}
+      <HeadInfo
+        title="영화 | 명대사"
+        description="최근 인기 있는 영화들의 목록과 작성된 영화 명대사를 보는 페이지입니다."
+        image={randomImage}
+      />
+
       <Image.BackgroundImage
         className="w-full h-screen"
         path={randomImage}
