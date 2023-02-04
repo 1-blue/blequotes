@@ -80,7 +80,7 @@ movieRouter.get(
   }
 );
 
-// 영화 추천 검색어 요청
+// 영화 추천 검색어들 요청
 movieRouter.get(
   "/suggested",
   async (
@@ -109,7 +109,7 @@ movieRouter.get(
   }
 );
 
-// 유사 영화 검색어 요청
+// 유사 영화들 요청
 movieRouter.get(
   "/similar",
   async (

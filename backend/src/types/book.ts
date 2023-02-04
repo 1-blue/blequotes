@@ -1,3 +1,4 @@
+import type { AxiosResponse } from "axios";
 import type { ApiResponse } from "./index";
 
 /**
@@ -34,13 +35,20 @@ type ReceiveBook = {
 /**
  * 2022/12/18 - 도서들 검색 api 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
  */
-export type ApiSearchBooksRequest = {
+type ApiSearchBooksRequest = {
   title: string;
 };
 /**
  * 2022/12/18 - 도서들 검색 api 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
  */
-export type ApiSearchBooksResponse = ReceiveBook;
+type ApiSearchBooksResponse = ReceiveBook;
+/**
+ * 2023/02/04 - 도서들 검색 API 요청 함수 시그니처 ( "Kakao" ) - by 1-blue
+ */
+export type ApiSearchBooksHandler = (
+  body: ApiSearchBooksRequest
+) => Promise<AxiosResponse<ApiSearchBooksResponse, any>>;
+
 /**
  * 2022/12/18 - 도서들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -54,13 +62,20 @@ export type SearchBooksResponse = ApiResponse<{ books: Book[] }>;
 /**
  * 2022/12/18 - 도서들의 추천 검색어 검색 api 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
  */
-export type ApiSuggestedBooksRequest = {
+type ApiSuggestedBooksRequest = {
   keyword: string;
 };
 /**
  * 2022/12/18 - 도서들 추천 검색어 api 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
  */
-export type ApiSuggestedBooksResponse = ReceiveBook;
+type ApiSuggestedBooksResponse = ReceiveBook;
+/**
+ * 2023/02/04 - 도서들 추천 검색어 API 요청 함수 시그니처 ( "Kakao" ) - by 1-blue
+ */
+export type ApiSuggestedBooksHandler = (
+  body: ApiSuggestedBooksRequest
+) => Promise<AxiosResponse<ApiSuggestedBooksResponse, any>>;
+
 /**
  * 2022/12/18 - 드라마들 추천 검색어 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -75,13 +90,20 @@ export type SuggestedBooksResponse = ApiResponse<{ titles: string[] }>;
  * 2022/12/18 - 유사 도서들 api 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
  * ( 같은 저자 )
  */
-export type ApiSimilarBooksRequest = {
+type ApiSimilarBooksRequest = {
   author: string;
 };
 /**
  * 2022/12/18 - 유사 도서들 api 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
  */
-export type ApiSimilarBooksResponse = ReceiveBook;
+type ApiSimilarBooksResponse = ReceiveBook;
+/**
+ * 2023/02/04 - 유사 도서들 API 요청 함수 시그니처 ( "Kakao" ) - by 1-blue
+ */
+export type ApiSimilarBooksHandler = (
+  body: ApiSimilarBooksRequest
+) => Promise<AxiosResponse<ApiSimilarBooksResponse, any>>;
+
 /**
  * 2022/12/18 - 유사 도서들 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -93,15 +115,22 @@ export type SimilarBooksResponse = ApiResponse<{ books: Book[] }>;
 
 // ============================== 특정 도서 상세 정보 요청 관련 ==============================
 /**
- * 2022/12/31 - 특정 도서 상세 정보 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
+ * 2022/12/31 - 특정 도서 상세 정보 api 요청 송신 타입 ( B -> "Kakao" ) - by 1-blue
  */
-export type ApiDetailBookRequest = {
+type ApiDetailBookRequest = {
   bookIdx: string;
 };
 /**
- * 2022/12/31 - 특정 도서 상세 정보 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
+ * 2022/12/31 - 특정 도서 상세 정보 api 요청 수신 타입 ( "Kakao" -> B ) - by 1-blue
  */
-export type ApiDetailBookResponse = ReceiveBook;
+type ApiDetailBookResponse = ReceiveBook;
+/**
+ * 2023/02/04 - 특정 도서 상세 정보 API 요청 함수 시그니처 ( "Kakao" ) - by 1-blue
+ */
+export type ApiDetailBookHandler = (
+  body: ApiDetailBookRequest
+) => Promise<AxiosResponse<ApiDetailBookResponse, any>>;
+
 /**
  * 2022/12/31 - 특정 도서 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
  */

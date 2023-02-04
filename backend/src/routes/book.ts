@@ -39,10 +39,7 @@ bookRouter.get(
 
       return res.status(200).json({
         meta: { ok: true },
-        data: {
-          message: `"${title}"인 도서를 검색했습니다."`,
-          books,
-        },
+        data: { message: `"${title}"인 도서를 검색했습니다."`, books },
       });
     } catch (error) {
       next(error);
@@ -50,7 +47,7 @@ bookRouter.get(
   }
 );
 
-// 도서 추천 검색어 요청
+// 도서 추천 검색어들 요청
 bookRouter.get(
   "/suggested",
   async (
@@ -76,7 +73,7 @@ bookRouter.get(
   }
 );
 
-// 유사 도서 요청
+// 특정 도서와 유사한 도서들 요청
 bookRouter.get(
   "/similar",
   async (
@@ -108,7 +105,7 @@ bookRouter.get(
   }
 );
 
-// 특정 도서 상세 정보 요청
+// 특정 도서의 상세 정보 요청
 bookRouter.get(
   "/detail",
   async (
@@ -129,10 +126,7 @@ bookRouter.get(
 
       return res.status(200).json({
         meta: { ok: true },
-        data: {
-          message: `"${book.title}"인 도서를 검색했습니다."`,
-          book,
-        },
+        data: { message: `"${book.title}"인 도서를 검색했습니다."`, book },
       });
     } catch (error) {
       next(error);

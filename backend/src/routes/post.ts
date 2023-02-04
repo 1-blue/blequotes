@@ -32,7 +32,7 @@ postRouter.post(
       // 게시글 생성
       await prisma.post.create({ data });
 
-      return res.json({
+      return res.status(201).json({
         meta: { ok: true },
         data: {
           message:
@@ -76,7 +76,7 @@ postRouter.get(
         orderBy,
       });
 
-      return res.json({
+      return res.status(200).json({
         meta: { ok: true },
         data: { message: "게시글들을 가져왔습니다.", take, category, posts },
       });
@@ -220,7 +220,7 @@ postRouter.get(
         orderBy,
       });
 
-      return res.json({
+      return res.status(200).json({
         meta: { ok: true },
         data: { message: "게시글들을 가져왔습니다.", take, posts },
       });

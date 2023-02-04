@@ -14,92 +14,72 @@ export type ApiErrorResponse = ApiResponse<{}>;
 
 export type {
   //
-  ApiFetchMoviesRequest,
-  ApiFetchMoviesResponse,
+  ApiFetchMoviesHandler,
   FetchMoviesRequest,
   FetchMoviesResponse,
   //
-  ApiSearchMoviesRequest,
-  ApiSearchMoviesResponse,
+  ApiSearchMoviesHandler,
   SearchMoviesRequest,
   SearchMoviesResponse,
   //
-  ApiSuggestMoviesRequest,
-  ApiSuggestMoviesResponse,
+  ApiSuggestMoviesHandler,
   SuggestMoviesRequest,
   SuggestMoviesResponse,
   //
-  ApiSimilarMoviesRequest,
-  ApiSimilarMoviesResponse,
+  ApiSimilarMoviesHandler,
   SimilarMoviesRequest,
   SimilarMoviesResponse,
   //
-  ApiDetailMovieRequest,
-  ApiDetailMovieResponse,
+  ApiDetailMovieHandler,
   DetailMovieRequest,
   DetailMovieResponse,
 } from "./movie";
 
 export type {
   //
-  ApiFetchDramasRequest,
-  ApiFetchDramasResponse,
+  ApiFetchDramasHandler,
   FetchDramasRequest,
   FetchDramasResponse,
   //
-  ApiSearchDramasRequest,
-  ApiSearchDramasResponse,
+  ApiSearchDramasHandler,
   SearchDramasRequest,
   SearchDramasResponse,
   //
-  ApiSuggestDramasRequest,
-  ApiSuggestDramasResponse,
+  ApiSuggestDramasHandler,
   SuggestDramasRequest,
   SuggestDramasResponse,
   //
-  ApiSimilarDramasRequest,
-  ApiSimilarDramasResponse,
+  ApiSimilarDramasHandler,
   SimilarDramasRequest,
   SimilarDramasResponse,
   //
-  ApiDetailDramaRequest,
-  ApiDetailDramaResponse,
+  ApiDetailDramaHandler,
   DetailDramaRequest,
   DetailDramaResponse,
 } from "./drama";
 
 // book type
 export {
-  //
-  ApiSearchBooksRequest,
-  ApiSearchBooksResponse,
+  ApiSearchBooksHandler,
   SearchBooksRequest,
   SearchBooksResponse,
-  //
-  ApiSuggestedBooksRequest,
-  ApiSuggestedBooksResponse,
+  ApiSuggestedBooksHandler,
   SuggestedBooksRequest,
   SuggestedBooksResponse,
-  //
-  ApiSimilarBooksRequest,
-  ApiSimilarBooksResponse,
+  ApiSimilarBooksHandler,
   SimilarBooksRequest,
   SimilarBooksResponse,
-  //
-  ApiDetailBookRequest,
-  ApiDetailBookResponse,
+  ApiDetailBookHandler,
   DetailBookRequest,
   DetailBookResponse,
 } from "./book";
 
 // s3(image) type
 export type {
-  ApiFetchPresignedURLRequest,
-  ApiFetchPresignedURLResponse,
+  ApiFetchPresignedURLHandler,
   FetchPresignedURLRequest,
   FetchPresignedURLResponse,
-  ApiDeleteImageRequest,
-  ApiDeleteImageResponse,
+  ApiDeleteImageHandler,
   DeleteImageRequest,
   DeleteImageResponse,
 } from "./image";

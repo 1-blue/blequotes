@@ -25,7 +25,7 @@ imageRouter.get(
 
       const response = getPresignedURL({ name });
 
-      res.json({
+      res.status(201).json({
         meta: { ok: true },
         data: {
           ...response,

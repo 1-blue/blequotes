@@ -80,7 +80,7 @@ dramaRouter.get(
   }
 );
 
-// 드라마 추천 검색어 요청
+// 드라마 추천 검색어들 요청
 dramaRouter.get(
   "/suggested",
   async (
@@ -109,7 +109,7 @@ dramaRouter.get(
   }
 );
 
-// 유사 드라마 검색어 요청
+// 유사 드라마들 요청
 dramaRouter.get(
   "/similar",
   async (

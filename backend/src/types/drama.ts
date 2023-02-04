@@ -1,6 +1,7 @@
 // "frontend/src/store/types"와 유사한 타입들
 
 // type
+import type { AxiosResponse } from "axios";
 import type { ApiResponse } from ".";
 
 /**
@@ -130,14 +131,21 @@ type DetailDrama = {
 /**
  * 2022/12/17 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 api 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
-export type ApiFetchDramasRequest = {
+type ApiFetchDramasRequest = {
   category: DramaCategory;
   language?: DramaLanguage;
 };
 /**
  * 2022/12/17 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 api 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
  */
-export type ApiFetchDramasResponse = ReceiveDrama;
+type ApiFetchDramasResponse = ReceiveDrama;
+/**
+ * 2023/02/04 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 API 요청 함수 시그니처 ( "MovieDB" ) - by 1-blue
+ */
+export type ApiFetchDramasHandler = (
+  body: ApiFetchDramasRequest
+) => Promise<AxiosResponse<ApiFetchDramasResponse, any>>;
+
 /**
  * 2022/12/17 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -151,14 +159,21 @@ export type FetchDramasResponse = ApiResponse<{ dramas: Drama[] }>;
 /**
  * 2022/12/17 - 드라마들 검색 api 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
-export type ApiSearchDramasRequest = {
+type ApiSearchDramasRequest = {
   title: string;
   language?: DramaLanguage;
 };
 /**
  * 2022/12/17 - 드라마들 검색 api 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
  */
-export type ApiSearchDramasResponse = ReceiveDrama;
+type ApiSearchDramasResponse = ReceiveDrama;
+/**
+ * 2023/02/04 - 드라마들 검색 API 요청 함수 시그니처 ( "MovieDB" ) - by 1-blue
+ */
+export type ApiSearchDramasHandler = (
+  body: ApiSearchDramasRequest
+) => Promise<AxiosResponse<ApiSearchDramasResponse, any>>;
+
 /**
  * 2022/12/17 - 드라마들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -170,16 +185,23 @@ export type SearchDramasResponse = ApiResponse<{ dramas: Drama[] }>;
 
 // ============================== 드라마 추천 검색어 관련 ==============================
 /**
- * 2022/12/17 - 추천 드라마 검색어 검색 송신 타입 ( B -> "MovieDB" ) - by 1-blue
+ * 2022/12/17 - 추천 드라마 검색어들 api 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
-export type ApiSuggestDramasRequest = {
+type ApiSuggestDramasRequest = {
   keyword: string;
   language?: DramaLanguage;
 };
 /**
- * 2022/12/17 - 추천 드라마 검색어 검색 수신 타입 ( "MovieDB" -> B ) - by 1-blue
+ * 2022/12/17 - 추천 드라마 검색어들 api 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
  */
-export type ApiSuggestDramasResponse = ReceiveDrama;
+type ApiSuggestDramasResponse = ReceiveDrama;
+/**
+ * 2023/02/04 - 추천 드라마 검색어들 API 요청 함수 시그니처 ( "MovieDB" ) - by 1-blue
+ */
+export type ApiSuggestDramasHandler = (
+  body: ApiSuggestDramasRequest
+) => Promise<AxiosResponse<ApiSuggestDramasResponse, any>>;
+
 /**
  * 2022/12/17 - 추천 드라마들 검색어 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -191,16 +213,23 @@ export type SuggestDramasResponse = ApiResponse<{ titles: string[] }>;
 
 // ============================== 현재 검색된 드라마와 유사한 드라마들 관련 ==============================
 /**
- * 2022/12/17 - 유사 드라마 검색어 검색 송신 타입 ( B -> "MovieDB" ) - by 1-blue
+ * 2022/12/17 - 유사 드라마 검색어들 api 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
-export type ApiSimilarDramasRequest = {
+type ApiSimilarDramasRequest = {
   dramaIdx: string;
   language?: DramaLanguage;
 };
 /**
- * 2022/12/17 - 유사 드라마 검색어 검색 수신 타입 ( "MovieDB" -> B ) - by 1-blue
+ * 2022/12/17 - 유사 드라마 검색어들 api 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
  */
-export type ApiSimilarDramasResponse = ReceiveDrama;
+type ApiSimilarDramasResponse = ReceiveDrama;
+/**
+ * 2023/02/04 - 유사 드라마 검색어들 API 요청 함수 시그니처 ( "MovieDB" ) - by 1-blue
+ */
+export type ApiSimilarDramasHandler = (
+  body: ApiSimilarDramasRequest
+) => Promise<AxiosResponse<ApiSimilarDramasResponse, any>>;
+
 /**
  * 2022/12/17 - 유사 드라마 검색어 검색 송신 타입 ( F -> B ) - by 1-blue
  */
@@ -212,16 +241,23 @@ export type SimilarDramasResponse = ApiResponse<{ dramas: Drama[] }>;
 
 // ============================== 특정 드라마 상세 정보 요청 관련 ==============================
 /**
- * 2022/12/31 - 특정 드라마 상세 정보 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
+ * 2022/12/31 - 특정 드라마 상세 정보 api 요청 송신 타입 ( B -> "MovieDB" ) - by 1-blue
  */
-export type ApiDetailDramaRequest = {
+type ApiDetailDramaRequest = {
   dramaIdx: string;
   language?: DramaLanguage;
 };
 /**
- * 2022/12/31 - 특정 드라마 상세 정보 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
+ * 2022/12/31 - 특정 드라마 상세 정보 api 요청 수신 타입 ( "MovieDB" -> B ) - by 1-blue
  */
-export type ApiDetailDramaResponse = DetailDrama;
+type ApiDetailDramaResponse = DetailDrama;
+/**
+ * 2023/02/04 - 특정 드라마 상세 정보 API 요청 함수 시그니처 ( "MovieDB" ) - by 1-blue
+ */
+export type ApiDetailDramaHandler = (
+  body: ApiDetailDramaRequest
+) => Promise<AxiosResponse<ApiDetailDramaResponse, any>>;
+
 /**
  * 2022/12/31 - 특정 드라마 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
  */

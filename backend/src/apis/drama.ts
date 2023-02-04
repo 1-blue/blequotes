@@ -2,82 +2,80 @@ import { movieDBInstance } from ".";
 
 // type
 import type {
-  ApiFetchDramasRequest,
-  ApiFetchDramasResponse,
-  ApiSearchDramasRequest,
-  ApiSearchDramasResponse,
-  ApiSuggestDramasRequest,
-  ApiSuggestDramasResponse,
-  ApiSimilarDramasRequest,
-  ApiSimilarDramasResponse,
-  ApiDetailDramaRequest,
-  ApiDetailDramaResponse,
+  ApiFetchDramasHandler,
+  ApiSearchDramasHandler,
+  ApiSuggestDramasHandler,
+  ApiSimilarDramasHandler,
+  ApiDetailDramaHandler,
 } from "../types";
 
 /**
- * 2022/12/17 - 특정 카테고리의 드라마들 요청 - by 1-blue
+ * 2022/12/17 - 특정 카테고리의 드라마들 요청 - by 1-blue ( 2023/02/04 )
  * @param category 인기, 최신 등
  * @param language 언어
- * @returns 특정 카테고리의 드라마들
+ * @returns 특정 카테고리의 드라마들 요청의 Promise
  */
-const apiFetchDramas = async ({
+const apiFetchDramas: ApiFetchDramasHandler = async ({
   category,
   language = "ko-kr",
-}: ApiFetchDramasRequest) =>
-  await movieDBInstance.get<ApiFetchDramasResponse>(`/tv/${category}`, {
+}) =>
+  movieDBInstance.get(`/tv/${category}`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, language },
   });
 
 /**
- * 2022/12/17 - 드라마들 검색 요청 - by 1-blue
+ * 2022/12/17 - 드라마들 검색 요청 - by 1-blue ( 2023/02/04 )
  * @param title 드라마 제목
- * @returns 검색된 드라마들
+ * @param language 언어
+ * @returns 드라마들 검색 요청의 Promise
  */
-const apiSearchDramas = async ({
+const apiSearchDramas: ApiSearchDramasHandler = async ({
   title,
   language = "ko-kr",
-}: ApiSearchDramasRequest) =>
-  await movieDBInstance.get<ApiSearchDramasResponse>(`/search/tv`, {
+}) =>
+  movieDBInstance.get(`/search/tv`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, query: title, language },
   });
 
 /**
- * 2022/12/17 - 추천 드라마 검색어들 요청 - by 1-blue
+ * 2022/12/17 - 추천 드라마 검색어들 요청 - by 1-blue ( 2023/02/04 )
  * @param title 드라마 제목 ( 전체 or 일부분 )
- * @returns 검색된 추천 드라마 검색어들
+ * @param language 언어
+ * @returns 추천 드라마 검색어들 요청의 Promise
  */
-const apiSuggestedDramas = async ({
+const apiSuggestedDramas: ApiSuggestDramasHandler = async ({
   keyword,
   language = "ko-kr",
-}: ApiSuggestDramasRequest) =>
-  await movieDBInstance.get<ApiSuggestDramasResponse>(`/search/tv`, {
+}) =>
+  movieDBInstance.get(`/search/tv`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, query: keyword, language },
   });
 
 /**
- * 2022/12/17 - 유사한 드라마들 요청 - by 1-blue
+ * 2022/12/17 - 유사한 드라마들 요청 - by 1-blue ( 2023/02/04 )
  * @param dramaId "DramaDB"에서 받은 드라마 식별자
- * @returns 유사한 드라마들
+ * @param language 언어
+ * @returns 유사한 드라마들 요청의 Promise
  */
-const apiSimilarDramas = async ({
+const apiSimilarDramas: ApiSimilarDramasHandler = async ({
   dramaIdx,
   language = "ko-kr",
-}: ApiSimilarDramasRequest) =>
-  await movieDBInstance.get<ApiSimilarDramasResponse>(
-    `/tv/${dramaIdx}/similar`,
-    { params: { api_key: process.env.MOVIE_DB_API_KEY, language } }
-  );
+}) =>
+  movieDBInstance.get(`/tv/${dramaIdx}/similar`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, language },
+  });
 
 /**
- * 2022/12/31 - 특정 드라마 상세 정보 요청 - by 1-blue
+ * 2022/12/31 - 특정 드라마 상세 정보 요청 - by 1-blue ( 2023/02/04 )
  * @param dramaIdx "MovieDB"에서 받은 드라마 식별자
- * @returns 특정 드라마 상세 정보
+ * @param language 언어
+ * @returns 특정 드라마 상세 정보 요청의 Promise
  */
-const apiDetailDrama = async ({
+const apiDetailDrama: ApiDetailDramaHandler = async ({
   dramaIdx,
   language = "ko-kr",
-}: ApiDetailDramaRequest) =>
-  await movieDBInstance.get<ApiDetailDramaResponse>(`/tv/${dramaIdx}`, {
+}) =>
+  movieDBInstance.get(`/tv/${dramaIdx}`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, language },
   });
 

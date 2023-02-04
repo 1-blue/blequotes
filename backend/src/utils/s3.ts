@@ -2,8 +2,8 @@ import AWS from "aws-sdk";
 
 // type
 import type {
-  ApiDeleteImageRequest,
-  ApiFetchPresignedURLRequest,
+  ApiFetchPresignedURLHandler,
+  ApiDeleteImageHandler,
 } from "../types";
 
 AWS.config.update({
@@ -31,11 +31,11 @@ const convertS3ImagePath = (name: string) => {
 };
 
 /**
- * S3의 "preSignedURL"을 생성하는 함수
+ * "S3"의 "preSignedURL"을 생성하는 함수
  * @param name 이미지 이름  ("이미지.확장자" 형태 )
- * @returns "preSignedURL"와 "photoURL"을 반환 ( "photoURL"은 정상적으로 완료 시 이미지 url )
+ * @returns "S3"에서 얻은 "preSignedURL" 반환
  */
-export const getPresignedURL = ({ name }: ApiFetchPresignedURLRequest) => {
+export const getPresignedURL: ApiFetchPresignedURLHandler = ({ name }) => {
   const photoURL = convertS3ImagePath(name);
 
   const preSignedURL = S3.getSignedUrl("putObject", {
@@ -51,7 +51,7 @@ export const getPresignedURL = ({ name }: ApiFetchPresignedURLRequest) => {
  * S3의 특정 이미지 제거
  * @param name 이미지 이름 ("이미지.확장자" 형태 )
  */
-export const deleteImage = ({ name }: ApiDeleteImageRequest) =>
+export const deleteImage: ApiDeleteImageHandler = ({ name }) =>
   S3.deleteObject(
     { Bucket: process.env.AWS_BUCKET, Key: name },
     (error, data) => {

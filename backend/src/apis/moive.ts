@@ -2,82 +2,80 @@ import { movieDBInstance } from ".";
 
 // type
 import type {
-  ApiFetchMoviesRequest,
-  ApiFetchMoviesResponse,
-  ApiSearchMoviesRequest,
-  ApiSearchMoviesResponse,
-  ApiSuggestMoviesRequest,
-  ApiSuggestMoviesResponse,
-  ApiSimilarMoviesRequest,
-  ApiSimilarMoviesResponse,
-  ApiDetailMovieRequest,
-  ApiDetailMovieResponse,
+  ApiFetchMoviesHandler,
+  ApiSearchMoviesHandler,
+  ApiSuggestMoviesHandler,
+  ApiSimilarMoviesHandler,
+  ApiDetailMovieHandler,
 } from "../types";
 
 /**
- * 2022/12/17 - 특정 카테고리의 영화들 요청 - by 1-blue
+ * 2022/12/17 - 특정 카테고리의 영화들 요청 - by 1-blue ( 2023/02/04 )
  * @param category 인기, 최신 등
  * @param language 언어
- * @returns 특정 카테고리의 영화들
+ * @returns 특정 카테고리의 영화들 요청 Promise
  */
-const apiFetchMovies = async ({
+const apiFetchMovies: ApiFetchMoviesHandler = async ({
   category,
   language = "ko-kr",
-}: ApiFetchMoviesRequest) =>
-  await movieDBInstance.get<ApiFetchMoviesResponse>(`/movie/${category}`, {
+}) =>
+  movieDBInstance.get(`/movie/${category}`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, language },
   });
 
 /**
- * 2022/12/17 - 영화들 검색 요청 - by 1-blue
+ * 2022/12/17 - 영화들 검색 요청 - by 1-blue ( 2023/02/04 )
  * @param title 영화 제목
+ * @param language 언어
  * @returns 검색된 영화들
  */
-const apiSearchMovies = async ({
+const apiSearchMovies: ApiSearchMoviesHandler = async ({
   title,
   language = "ko-kr",
-}: ApiSearchMoviesRequest) =>
-  await movieDBInstance.get<ApiSearchMoviesResponse>(`/search/movie`, {
+}) =>
+  movieDBInstance.get(`/search/movie`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, query: title, language },
   });
 
 /**
- * 2022/12/17 - 영화 추천 검색어들 요청 - by 1-blue
+ * 2022/12/17 - 영화 추천 검색어들 요청 - by 1-blue ( 2023/02/04 )
  * @param title 영화 제목 ( 전체 or 일부분 )
+ * @param language 언어
  * @returns 영화 추천 검색어들
  */
-const apiSuggestedMovies = async ({
+const apiSuggestedMovies: ApiSuggestMoviesHandler = async ({
   keyword,
   language = "ko-kr",
-}: ApiSuggestMoviesRequest) =>
-  await movieDBInstance.get<ApiSuggestMoviesResponse>(`/search/movie`, {
+}) =>
+  movieDBInstance.get(`/search/movie`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, query: keyword, language },
   });
 
 /**
- * 2022/12/17 - 유사한 영화들 요청 - by 1-blue
+ * 2022/12/17 - 유사한 영화들 요청 - by 1-blue ( 2023/02/04 )
  * @param movieId "MovieDB"에서 받은 영화 식별자
+ * @param language 언어
  * @returns 유사한 영화들
  */
-const apiSimilarMovies = async ({
+const apiSimilarMovies: ApiSimilarMoviesHandler = async ({
   movieIdx,
   language = "ko-kr",
-}: ApiSimilarMoviesRequest) =>
-  await movieDBInstance.get<ApiSimilarMoviesResponse>(
-    `/movie/${movieIdx}/similar`,
-    { params: { api_key: process.env.MOVIE_DB_API_KEY, language } }
-  );
+}) =>
+  movieDBInstance.get(`/movie/${movieIdx}/similar`, {
+    params: { api_key: process.env.MOVIE_DB_API_KEY, language },
+  });
 
 /**
- * 2022/12/31 - 특정 영화 상세 정보 요청 - by 1-blue
+ * 2022/12/31 - 특정 영화 상세 정보 요청 - by 1-blue ( 2023/02/04 )
  * @param movieId "MovieDB"에서 받은 영화 식별자
+ * @param language 언어
  * @returns 특정 영화 상세 정보
  */
-const apiDetailMovie = async ({
+const apiDetailMovie: ApiDetailMovieHandler = async ({
   movieIdx,
   language = "ko-kr",
-}: ApiDetailMovieRequest) =>
-  await movieDBInstance.get<ApiDetailMovieResponse>(`/movie/${movieIdx}`, {
+}) =>
+  movieDBInstance.get(`/movie/${movieIdx}`, {
     params: { api_key: process.env.MOVIE_DB_API_KEY, language },
   });
 
