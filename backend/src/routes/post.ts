@@ -61,9 +61,9 @@ postRouter.get(
       // 게시글 정렬 기준
       let orderBy = {};
       if (sortBy === "popular")
-        orderBy = [{ like: "desc" }, { updatedAt: "desc" }];
+        orderBy = [{ like: "desc" }, { createdAt: "desc" }];
       else if (sortBy === "latest")
-        orderBy = [{ updatedAt: "desc" }, { like: "desc" }];
+        orderBy = [{ createdAt: "desc" }, { like: "desc" }];
 
       // 게시글 카테고리
       let where = category === "ALL" ? {} : { category };

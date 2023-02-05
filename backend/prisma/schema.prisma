@@ -18,13 +18,14 @@ enum PostCategory {
 model Post {
   id Int @id @unique @default(autoincrement())
   idx String @db.VarChar(20)
-  title String @db.VarChar(20)
+  title String @db.VarChar(50)
   category PostCategory
   speech String @db.VarChar(300)
   like Int @default(0)
   hate Int @default(0)
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  time String? @db.VarChar(10)
+  time String? @db.VarChar(12)
   episode Int?
   page Int?
   thumbnail String @db.VarChar(300)
