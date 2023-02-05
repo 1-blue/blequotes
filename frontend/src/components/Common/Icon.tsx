@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 
 // type
 import type { IconShape } from "@src/types";
@@ -146,4 +146,4 @@ const Icon = ({ shape, className, isFill }: Props) => {
   );
 };
 
-export default Icon;
+export default React.memo(Icon);

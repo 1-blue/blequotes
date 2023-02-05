@@ -7,24 +7,24 @@ import { movieApiService } from "../apis";
 // type
 import type {
   CreateAsyncThunkErrorType,
-  FetchMoviesRequest,
+  FetchMoviesHandler,
   FetchMoviesResponse,
-  SearchMoviesRequest,
+  SearchMoviesHandler,
   SearchMoviesResponse,
-  SuggestMoviesRequest,
+  SuggestMoviesHandler,
   SuggestMoviesResponse,
-  SimilarMoviesRequest,
+  SimilarMoviesHandler,
   SimilarMoviesResponse,
   DetailMovieResponse,
-  DetailMovieRequest,
+  DetailMovieHandler,
 } from "../types";
 
 /**
- * 2022/12/05 - 영화 패치 요청 thunk - by 1-blue
+ * 2022/12/05 - 영화 패치 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const fetchMoviesThunk = createAsyncThunk<
   FetchMoviesResponse,
-  FetchMoviesRequest,
+  Parameters<FetchMoviesHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정
@@ -51,11 +51,11 @@ const fetchMoviesThunk = createAsyncThunk<
 );
 
 /**
- * 2022/12/07 - 영화 검색 요청 thunk - by 1-blue
+ * 2022/12/07 - 영화 검색 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const searchMoviesThunk = createAsyncThunk<
   SearchMoviesResponse,
-  SearchMoviesRequest,
+  Parameters<SearchMoviesHandler>[0],
   CreateAsyncThunkErrorType
 >("search/movie", async (body, { rejectWithValue }) => {
   try {
@@ -75,11 +75,11 @@ const searchMoviesThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/13 - 추천 영화 검색어 요청 thunk - by 1-blue
+ * 2022/12/13 - 추천 영화 검색어 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const suggestedMoviesThunk = createAsyncThunk<
   SuggestMoviesResponse,
-  SuggestMoviesRequest,
+  Parameters<SuggestMoviesHandler>[0],
   CreateAsyncThunkErrorType
 >("suggested/movie", async (body, { rejectWithValue }) => {
   try {
@@ -100,11 +100,11 @@ const suggestedMoviesThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/15 - 유사 영화 검색 요청 thunk - by 1-blue
+ * 2022/12/15 - 유사 영화 검색 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const similarMoviesThunk = createAsyncThunk<
   SimilarMoviesResponse,
-  SimilarMoviesRequest,
+  Parameters<SimilarMoviesHandler>[0],
   CreateAsyncThunkErrorType
 >("similar/movie", async (body, { rejectWithValue }) => {
   try {
@@ -125,11 +125,11 @@ const similarMoviesThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/31 - 특정 영화 상세 정보 요청 thunk - by 1-blue
+ * 2022/12/31 - 특정 영화 상세 정보 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const detailMovieThunk = createAsyncThunk<
   DetailMovieResponse,
-  DetailMovieRequest,
+  Parameters<DetailMovieHandler>[0],
   CreateAsyncThunkErrorType
 >("detail/movie", async (body, { rejectWithValue }) => {
   try {

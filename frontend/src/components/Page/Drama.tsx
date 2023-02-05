@@ -46,18 +46,24 @@ const Drama = () => {
     );
   }, [dispatch, sortBy]);
 
-  // 2022/12/15 - 각종 드라마들 패치 - by 1-blue
+  // 2022/12/15 - 인기 드라마들 패치 - by 1-blue ( 2023/02/04 )
   useEffect(() => {
     if (popular.length === 0) {
       dispatch(dramaThunkService.fetchDramasThunk({ category: "popular" }));
     }
+  }, [dispatch, popular]);
+  // 2022/12/15 - 순위가 높은 드라마들 패치 - by 1-blue ( 2023/02/04 )
+  useEffect(() => {
     if (top_rated.length === 0) {
       dispatch(dramaThunkService.fetchDramasThunk({ category: "top_rated" }));
     }
+  }, [dispatch, top_rated]);
+  // 2022/12/15 - 현재 상영중인 드라마들 패치 - by 1-blue ( 2023/02/04 )
+  useEffect(() => {
     if (on_the_air.length === 0) {
       dispatch(dramaThunkService.fetchDramasThunk({ category: "on_the_air" }));
     }
-  }, [dispatch, popular, top_rated, on_the_air]);
+  }, [dispatch, on_the_air]);
 
   // 2022/12/30 - 무한 스크롤링을 위해 관찰할 태그 ref ( 해당 태그가 뷰포트에 들어오면 게시글 추가 패치 실행 ) - by 1-blue
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
@@ -161,12 +167,10 @@ const Drama = () => {
   );
 
   // 2022/12/30 - 게시글들 정렬 순서 변경 - by 1-blue
-  const onChangeSortBy = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement> =
+    useCallback((e) => {
       setSortBy(e.target.value as PostSortBy);
-    },
-    []
-  );
+    }, []);
 
   // 드라마를 패치하는 중이라면
   if (popular.length === 0 || top_rated.length === 0 || on_the_air.length === 0)

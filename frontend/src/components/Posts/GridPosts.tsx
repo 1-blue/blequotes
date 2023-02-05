@@ -42,103 +42,106 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
   useEffect(fetchLikeAndHateDatas, [fetchLikeAndHateDatas]);
 
   // 2022/12/26 - 좋아요/싫어요 버튼 클릭 이벤트 ( 이벤트 버블링 ) - by 1-blue
-  const onClickLikeOrHate = useCallback(
-    (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => {
-      if (!(e.target instanceof HTMLElement)) return;
-      if (!e.target.dataset.type) return;
-      if (!e.target.dataset.id) return;
+  const onClickLikeOrHate: React.MouseEventHandler<HTMLFormElement> =
+    useCallback(
+      (e) => {
+        if (!(e.target instanceof HTMLElement)) return;
+        if (!e.target.dataset.type) return;
+        if (!e.target.dataset.id) return;
 
-      const isLike = e.target.dataset.type === "like" ? true : false;
-      const id = +e.target.dataset.id;
-      let already = false;
-      let isDuplication = false;
+        const isLike = e.target.dataset.type === "like" ? true : false;
+        const id = +e.target.dataset.id;
+        let already = false;
+        let isDuplication = false;
 
-      // 좋아요/싫어요 흔적이 있다면
-      if (likeAndHateDatas) {
-        // 이미 좋아요/싫어요를 누른 데이터 찾기
-        const targetData = likeAndHateDatas.find((data) => data.postId === id);
+        // 좋아요/싫어요 흔적이 있다면
+        if (likeAndHateDatas) {
+          // 이미 좋아요/싫어요를 누른 데이터 찾기
+          const targetData = likeAndHateDatas.find(
+            (data) => data.postId === id
+          );
 
-        // 이미 좋아요/싫어요를 누른 경우
-        if (targetData) {
-          let temporaryData: null | LStorageData[] = null;
+          // 이미 좋아요/싫어요를 누른 경우
+          if (targetData) {
+            let temporaryData: null | LStorageData[] = null;
 
-          // 좋아요인데 좋아요를 누른 경우 -> 좋아요 취소 ( 기록 제거 )
-          if (targetData.isLike === isLike && isLike === true) {
-            temporaryData = likeAndHateDatas.filter(
-              (data) => data.postId !== id
-            );
+            // 좋아요인데 좋아요를 누른 경우 -> 좋아요 취소 ( 기록 제거 )
+            if (targetData.isLike === isLike && isLike === true) {
+              temporaryData = likeAndHateDatas.filter(
+                (data) => data.postId !== id
+              );
 
-            // 좋아요 정보가 없다면
-            if (temporaryData.length === 0) {
-              localStorage.removeItem("quotes");
-            } else {
-              localStorage.setItem("quotes", JSON.stringify(temporaryData));
+              // 좋아요 정보가 없다면
+              if (temporaryData.length === 0) {
+                localStorage.removeItem("quotes");
+              } else {
+                localStorage.setItem("quotes", JSON.stringify(temporaryData));
+              }
+
+              isDuplication = true;
+            }
+            // 싫어요인데 싫어요를 누른 경우 -> 싫어요 취소 ( 기록 제거 )
+            else if (targetData.isLike === isLike && isLike === false) {
+              temporaryData = likeAndHateDatas.filter(
+                (data) => data.postId !== id
+              );
+
+              // 좋아요 정보가 없다면
+              if (temporaryData.length === 0) {
+                localStorage.removeItem("quotes");
+              } else {
+                localStorage.setItem("quotes", JSON.stringify(temporaryData));
+              }
+
+              isDuplication = true;
+            }
+            // 좋아요/싫어요를 누르고 반대로 누른 경우 -> 취소 및 추가
+            else {
+              temporaryData = likeAndHateDatas.filter(
+                (data) => data.postId !== id
+              );
+              targetData.isLike = !targetData.isLike;
+
+              localStorage.setItem(
+                "quotes",
+                JSON.stringify([...temporaryData, targetData])
+              );
             }
 
-            isDuplication = true;
+            already = true;
           }
-          // 싫어요인데 싫어요를 누른 경우 -> 싫어요 취소 ( 기록 제거 )
-          else if (targetData.isLike === isLike && isLike === false) {
-            temporaryData = likeAndHateDatas.filter(
-              (data) => data.postId !== id
-            );
-
-            // 좋아요 정보가 없다면
-            if (temporaryData.length === 0) {
-              localStorage.removeItem("quotes");
-            } else {
-              localStorage.setItem("quotes", JSON.stringify(temporaryData));
-            }
-
-            isDuplication = true;
-          }
-          // 좋아요/싫어요를 누르고 반대로 누른 경우 -> 취소 및 추가
+          // 아직 좋아요/싫어요를 누르지 않은 경우 -> 기존 기록 + 새로운 기록
           else {
-            temporaryData = likeAndHateDatas.filter(
-              (data) => data.postId !== id
-            );
-            targetData.isLike = !targetData.isLike;
-
             localStorage.setItem(
               "quotes",
-              JSON.stringify([...temporaryData, targetData])
+              JSON.stringify([...likeAndHateDatas, { postId: id, isLike }])
             );
           }
-
-          already = true;
         }
-        // 아직 좋아요/싫어요를 누르지 않은 경우 -> 기존 기록 + 새로운 기록
+        // 좋아요/싫어요 흔적이 없다면 -> 기록 추가
         else {
+          // 아예 처음이라면 -> 기록 추가
           localStorage.setItem(
             "quotes",
-            JSON.stringify([...likeAndHateDatas, { postId: id, isLike }])
+            JSON.stringify([{ postId: id, isLike }])
           );
         }
-      }
-      // 좋아요/싫어요 흔적이 없다면 -> 기록 추가
-      else {
-        // 아예 처음이라면 -> 기록 추가
-        localStorage.setItem(
-          "quotes",
-          JSON.stringify([{ postId: id, isLike }])
+
+        // 서버에 변경 요청
+        dispatch(
+          postThunkService.updateLikeOrHate({
+            id,
+            already,
+            isLike,
+            isDuplication,
+          })
         );
-      }
 
-      // 서버에 변경 요청
-      dispatch(
-        postThunkService.updateLikeOrHate({
-          id,
-          already,
-          isLike,
-          isDuplication,
-        })
-      );
-
-      // "localStorage" 데이터 현재 컴포넌트에서 최신화
-      fetchLikeAndHateDatas();
-    },
-    [likeAndHateDatas, dispatch, fetchLikeAndHateDatas]
-  );
+        // "localStorage" 데이터 현재 컴포넌트에서 최신화
+        fetchLikeAndHateDatas();
+      },
+      [likeAndHateDatas, dispatch, fetchLikeAndHateDatas]
+    );
 
   // 2022/12/26 - 좋아요/싫어요 토스트 메시지 - by 1-blue
   useToastify({
@@ -167,23 +170,20 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
     <>
       {posts.length > 0 ? (
         <>
-          <ul
-            className="grid gap-4 grid-cols-1 xsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5"
-            onClick={onClickLikeOrHate}
-          >
+          <ul className="grid gap-4 grid-cols-1 xsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5">
             {posts.map((post) => (
               <li
                 key={post.id}
                 style={{ backgroundImage: `url("${post.thumbnail}")` }}
-                className="group/post relative pt-[110%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2 md:pt-[90%]"
+                className="group/post relative pt-[110%] bg-center bg-cover bg-no-repeat bg-gray-200 rounded-md shadow-xl overflow-hidden text-white transition-all hover:-translate-y-2 focus-within:-translate-y-2 md:pt-[90%]"
               >
-                <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50" />
+                <div className="absolute top-0 left-0 w-full h-full bg-black/20 transition-colors group-hover/post:bg-black/50 group-focus-within/post:bg-black/50" />
 
                 <div className="absolute top-[2%] w-full px-4 space-y-2 z-[1]">
                   <Link
                     to={`/post/${post.title}`}
                     state={{ idx: post.idx, category: post.category }}
-                    className="underline-offset-8 decoration-main-400 hover:underline hover:text-main-400"
+                    className="underline-offset-8 decoration-main-400 hover:underline hover:text-main-400 focus:outline-none focus:text-main-300 focus:underline"
                   >
                     <h4 className="text-2xl text-center">
                       <b>{post.title}</b>
@@ -213,34 +213,34 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
                     </div>
                   )}
 
-                  <form className="space-y-1">
+                  <form className="space-y-1" onClick={onClickLikeOrHate}>
                     <button
                       type="button"
-                      className="group/like flex items-center space-x-1"
+                      className="group/like flex items-center space-x-1 focus:outline-none"
                       data-type="like"
                       data-id={post.id}
                     >
                       <Icon
                         shape="like"
-                        className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400"
+                        className="w-5 h-5 pointer-events-none transition-colors group-hover/like:text-main-400 group-focus-within/like:text-main-400"
                         isFill={likePostIds.includes(post.id)}
                       />
-                      <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400">
+                      <span className="text-sm pointer-events-none transition-colors group-hover/like:text-main-400 group-focus-within/like:text-main-400">
                         <b>{post.like}</b>
                       </span>
                     </button>
                     <button
                       type="button"
-                      className="group/hate flex items-center space-x-1"
+                      className="group/hate flex items-center space-x-1 focus:outline-none"
                       data-type="hate"
                       data-id={post.id}
                     >
                       <Icon
                         shape="hate"
-                        className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400"
+                        className="w-5 h-5 pointer-events-none transition-colors group-hover/hate:text-main-400 group-focus-within/hate:text-main-400"
                         isFill={hatePostIds.includes(post.id)}
                       />
-                      <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400">
+                      <span className="text-sm pointer-events-none transition-colors group-hover/hate:text-main-400 group-focus-within/hate:text-main-400">
                         <b>{post.hate}</b>
                       </span>
                     </button>
@@ -254,7 +254,7 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
 
           <div className="pt-12 pb-10" ref={ref}>
             {getPostsLoading || (
-              <span className="inline-block w-full text-xl font-bold text-main-600 text-center">
+              <span className="inline-block w-full text-xl font-bold text-main-500 text-center">
                 ** 모든 게시글을 불러왔습니다. **
               </span>
             )}
@@ -267,7 +267,7 @@ const GridPosts = React.forwardRef<HTMLDivElement, Props>(({ posts }, ref) => {
               <SkeletonUI.Posts />
             </ul>
           ) : (
-            <span className="inline-block w-full mt-12 mb-10 text-center font-bold text-xl">
+            <span className="inline-block w-full mt-12 mb-10 text-center font-bold text-xl text-main-400">
               ** 첫 번째로 명대사를 작성해보세요...! **
             </span>
           )}

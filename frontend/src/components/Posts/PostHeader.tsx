@@ -1,9 +1,11 @@
+import React from "react";
+
 // type
 import type { PostSortBy } from "@src/types";
 
 type Props = {
   title: string;
-  onChangeSortBy: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement>;
   sortBy: PostSortBy;
 };
 
@@ -31,4 +33,4 @@ const PostHeader = ({ title, onChangeSortBy, sortBy }: Props) => {
   );
 };
 
-export default PostHeader;
+export default React.memo(PostHeader);

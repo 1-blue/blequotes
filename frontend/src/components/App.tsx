@@ -28,12 +28,10 @@ const App = () => {
   // 2023/01/02 - 게시글들 정렬 순서 - by 1-blue
   const [sortBy, setSortBy] = useState<PostSortBy>("popular");
   // 2023/01/02 - 게시글들 정렬 순서 변경 - by 1-blue
-  const onChangeSortBy = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement> =
+    useCallback((e) => {
       setSortBy(e.target.value as PostSortBy);
-    },
-    []
-  );
+    }, []);
   // 2023/01/02 - 모든 게시글들 패치 요청 - by 1-blue
   useEffect(() => {
     dispatch(postActions.reset());
@@ -94,9 +92,9 @@ const App = () => {
       />
 
       {/* 네비게이션 바의 높이가 92px이라서 상단을 띄워주기 위해 사용 */}
-      <section className="h-[92px] bg-gray-600"></section>
+      <section className="h-[92px] bg-gray-600" />
 
-      {/*  */}
+      {/* Banner */}
       <section className="relative">
         <Image.Photo
           className="h-[60vh] bg-no-repeat bg-center bg-contain mb-6"
@@ -104,7 +102,7 @@ const App = () => {
           alt="대표 배경 이미지"
         />
         <div className="absolute top-0 left-0 w-full h-full bg-black/60 flex justify-center items-center">
-          <h3 className="mx-8 text-white text-2xl font-bold">
+          <h3 className="mx-8 text-white text-xl font-bold text-center xs:text-2xl">
             영화 / 드라마 / 도서의 명대사를 등록하는 사이트입니다.
             <br />
             여러분이 생각하는 명대사를 작성해보세요!

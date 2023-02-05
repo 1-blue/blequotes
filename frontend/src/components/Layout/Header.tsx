@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // hook
@@ -43,11 +43,15 @@ const Header = () => {
           className="py-2 px-4 flex justify-between items-center text-white backdrop-blur-sm"
           style={{ backgroundColor: `rgba(0, 0, 0, ${scrollYRatio})` }}
         >
-          <Link to="/">
+          <Link to="/" className="focus-ring-header">
             <img src="/logo.png" alt="" className="w-10 h-10" />
           </Link>
-          <Link to="/search" state={{ isShow: true }}>
-            <Icon shape="search" className="w-6 h-6" />
+          <Link
+            to="/search"
+            state={{ isShow: true }}
+            className="focus-ring-header"
+          >
+            <Icon shape="search" className="w-8 h-8" />
           </Link>
         </section>
 
@@ -58,8 +62,10 @@ const Header = () => {
           <Link
             to="/movie"
             className={combineClassNames(
-              "pt-2 pb-0.5",
-              pathname.includes("movie") ? "border-b-2" : ""
+              "font-bold pt-2 pb-0.5 transition-colors focus:outline-none hover:text-main-500 focus:text-main-500 hover:border-main-500 focus:border-main-500",
+              pathname.includes("movie")
+                ? "border-b-2 text-main-400 border-main-400"
+                : ""
             )}
           >
             영화
@@ -67,8 +73,10 @@ const Header = () => {
           <Link
             to="/drama"
             className={combineClassNames(
-              "pt-2 pb-0.5",
-              pathname.includes("drama") ? "border-b-2" : ""
+              "font-bold pt-2 pb-0.5 transition-colors focus:outline-none hover:text-main-500 focus:text-main-500 hover:border-main-500 focus:border-main-500",
+              pathname.includes("drama")
+                ? "border-b-2 text-main-400 border-main-400"
+                : ""
             )}
           >
             드라마
@@ -76,8 +84,10 @@ const Header = () => {
           <Link
             to="/book"
             className={combineClassNames(
-              "pt-2 pb-0.5",
-              pathname.includes("book") ? "border-b-2" : ""
+              "font-bold pt-2 pb-0.5 transition-colors focus:outline-none hover:text-main-500 focus:text-main-500 hover:border-main-500 focus:border-main-500",
+              pathname.includes("book")
+                ? "border-b-2 text-main-400 border-main-400"
+                : ""
             )}
           >
             도서
@@ -88,4 +98,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

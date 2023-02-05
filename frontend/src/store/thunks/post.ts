@@ -7,22 +7,22 @@ import { postApiService } from "../apis";
 // type
 import type {
   CreateAsyncThunkErrorType,
-  CreatePostRequest,
+  CreatePostHandler,
   CreatePostResponse,
-  GetPostsOfTargetRequest,
+  GetPostsOfTargetHandler,
   GetPostsOfTargetResponse,
-  GetPostsRequest,
+  GetPostsHandler,
   GetPostsResponse,
-  UpdateLikeOrHateRequest,
+  UpdateLikeOrHateHandler,
   UpdateLikeOrHateResponse,
 } from "../types";
 
 /**
- * 2022/12/22 - 게시글 생성 요청 thunk - by 1-blue
+ * 2022/12/22 - 게시글 생성 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const createPostThunk = createAsyncThunk<
   CreatePostResponse["data"],
-  CreatePostRequest,
+  Parameters<CreatePostHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정
@@ -51,11 +51,11 @@ const createPostThunk = createAsyncThunk<
 );
 
 /**
- * 2022/12/24 - 게시글들 가져오기 요청 thunk - by 1-blue
+ * 2022/12/24 - 게시글들 가져오기 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const getPostsThunk = createAsyncThunk<
   GetPostsResponse["data"],
-  GetPostsRequest,
+  Parameters<GetPostsHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정
@@ -84,11 +84,11 @@ const getPostsThunk = createAsyncThunk<
 );
 
 /**
- * 2022/12/26 - 게시글에 좋아요/싫어요 요청 thunk - by 1-blue
+ * 2022/12/26 - 게시글에 좋아요/싫어요 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const updateLikeOrHate = createAsyncThunk<
   UpdateLikeOrHateResponse["data"],
-  UpdateLikeOrHateRequest,
+  Parameters<UpdateLikeOrHateHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정
@@ -117,11 +117,11 @@ const updateLikeOrHate = createAsyncThunk<
 );
 
 /**
- * 2022/12/30 - 특정 대상의 게시글들 요청 thunk - by 1-blue
+ * 2022/12/30 - 특정 대상의 게시글들 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const getPostsOfTarget = createAsyncThunk<
   GetPostsOfTargetResponse["data"],
-  GetPostsOfTargetRequest,
+  Parameters<GetPostsOfTargetHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정

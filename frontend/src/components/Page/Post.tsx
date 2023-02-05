@@ -113,12 +113,10 @@ const Post = () => {
   // 2022/12/30 - 게시글들 정렬 순서 - by 1-blue
   const [sortBy, setSortBy] = useState<PostSortBy>("popular");
   // 2022/12/30 - 게시글들 정렬 순서 변경 - by 1-blue
-  const onChangeSortBy = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement> =
+    useCallback((e) => {
       setSortBy(e.target.value as PostSortBy);
-    },
-    []
-  );
+    }, []);
 
   // 2022/12/30 - 현재 대상의 게시글들 요청 - by 1-blue
   useEffect(() => {
@@ -243,6 +241,17 @@ const Post = () => {
         className="w-full h-screen"
       />
 
+      {/* 명대사 작성 페이지 이동 링크 */}
+      <aside className="absolute bottom-4 right-4">
+        <Link
+          to={`/write/${data.title}`}
+          state={{ ...state }}
+          className="px-3 py-2 text-sm sm:px-4 sm:py-3 sm:text-base text-white bg-main-400 rounded-md font-bold transition-colors hover:bg-main-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-main-500"
+        >
+          명대사 작성하기
+        </Link>
+      </aside>
+
       {/* 게시글들 */}
       <section className="mx-4 mt-8">
         <PostHeader
@@ -253,17 +262,6 @@ const Post = () => {
 
         <GridPosts posts={targetPosts} ref={setObserverRef} />
       </section>
-
-      {/* FIXME: 위치를 우측 하단 fixed로 고정하는 방법 생각해보기 */}
-      <aside className="absolute bottom-4 right-4">
-        <Link
-          to={`/write/${data.title}`}
-          state={{ ...state }}
-          className="text-white bg-main-500 px-3 py-3 rounded-md font-bold transition-colors hover:bg-main-600"
-        >
-          명대사 작성하기
-        </Link>
-      </aside>
     </>
   );
 };

@@ -40,7 +40,7 @@ const BackgroundImage = ({
       <img src={path} alt={alt} hidden />
       {(title || description || date) && (
         <div className="absolute inset-0 flex flex-col justify-end items-center bg-gradient-to-b from-black/0 to-black/80">
-          <div className="max-w-[600px] flex flex-col justify-center text-white">
+          <div className="max-w-[600px] flex flex-col justify-center text-white mb-10">
             {information && (
               <div className="flex flex-col items-end text-xs space-y-1">
                 {/* 한줄 설명 */}
@@ -137,7 +137,7 @@ const SlickPoster = ({
   }, [paths, innerWidth]);
 
   return (
-    <Link to={`/post/${title}`} state={{ idx, category }}>
+    <Link to={`/post/${title}`} state={{ idx, category }} tabIndex={-1}>
       <figure
         className="relative cursor-pointer flex justify-center bg-slate-400"
         onMouseOver={() => setIsShow(true)}

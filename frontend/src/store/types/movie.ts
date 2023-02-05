@@ -1,4 +1,5 @@
 // type
+import type { AxiosResponse } from "axios";
 import type { ApiResponse } from ".";
 
 /**
@@ -86,7 +87,7 @@ export type DetailMovie = {
 /**
  * 2022/12/17 - 인기 / 현재 상영중 / 꾸준한 인기 영화들 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type FetchMoviesRequest = {
+type FetchMoviesRequest = {
   category: MovieCategory;
   language?: MovieLanguage;
 };
@@ -94,12 +95,18 @@ export type FetchMoviesRequest = {
  * 2022/12/17 - 인기 / 현재 상영중 / 꾸준한 인기 영화들 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type FetchMoviesResponse = ApiResponse<{ movies: Movie[] }>;
+/**
+ * 2023/02/05 - 인기 / 현재 상영중 / 꾸준한 인기 영화들 API 요청 함수 시그니처 - by 1-blue
+ */
+export type FetchMoviesHandler = (
+  body: FetchMoviesRequest
+) => Promise<AxiosResponse<FetchMoviesResponse, any>>;
 
 // ============================== 영화 검색 관련 ==============================
 /**
  * 2022/12/17 - 영화들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SearchMoviesRequest = {
+type SearchMoviesRequest = {
   title: string;
   language?: MovieLanguage;
 };
@@ -107,38 +114,56 @@ export type SearchMoviesRequest = {
  * 2022/12/17 - 영화들 검색 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SearchMoviesResponse = ApiResponse<{ movies: Movie[] }>;
+/**
+ * 2023/02/05 - 영화들 검색 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SearchMoviesHandler = (
+  body: SearchMoviesRequest
+) => Promise<AxiosResponse<SearchMoviesResponse, any>>;
 
 // ============================== 영화 추천 검색어 관련 ==============================
 /**
- * 2022/12/17 - 영화들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
+ * 2022/12/17 - 영화 추천 검색어들 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SuggestMoviesRequest = {
+type SuggestMoviesRequest = {
   keyword: string;
   language?: MovieLanguage;
 };
 /**
- * 2022/12/17 - 영화들 검색 요청 수신 타입 ( B -> F ) - by 1-blue
+ * 2022/12/17 - 영화 추천 검색어들 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SuggestMoviesResponse = ApiResponse<{ titles: string[] }>;
+/**
+ * 2023/02/05 - 영화 추천 검색어들 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SuggestMoviesHandler = (
+  body: SuggestMoviesRequest
+) => Promise<AxiosResponse<SuggestMoviesResponse, any>>;
 
 // ============================== 현재 검색된 영화와 유사한 영화들 관련 ==============================
 /**
- * 2022/12/17 - 유사 영화 검색어 검색 송신 타입 ( F -> B ) - by 1-blue
+ * 2022/12/17 - 유사 영화들 검색 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SimilarMoviesRequest = {
+type SimilarMoviesRequest = {
   movieIdx: string;
   language?: MovieLanguage;
 };
 /**
- * 2022/12/17 - 유사 영화 검색어 검색 수신 타입 ( B -> F ) - by 1-blue
+ * 2022/12/17 - 유사 영화들 검색 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SimilarMoviesResponse = ApiResponse<{ movies: Movie[] }>;
+/**
+ * 2023/02/05 - 유사 영화들 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SimilarMoviesHandler = (
+  body: SimilarMoviesRequest
+) => Promise<AxiosResponse<SimilarMoviesResponse, any>>;
 
 // ============================== 특정 영화 상세 정보 요청 관련 ==============================
 /**
  * 2022/12/31 - 특정 영화 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type DetailMovieRequest = {
+type DetailMovieRequest = {
   movieIdx: string;
   language?: MovieLanguage;
 };
@@ -146,3 +171,9 @@ export type DetailMovieRequest = {
  * 2022/12/31 - 특정 영화 상세 정보 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type DetailMovieResponse = ApiResponse<{ movie: DetailMovie }>;
+/**
+ * 2023/02/05 - 특정 영화 상세 정보 API 요청 함수 시그니처 - by 1-blue
+ */
+export type DetailMovieHandler = (
+  body: DetailMovieRequest
+) => Promise<AxiosResponse<DetailMovieResponse, any>>;

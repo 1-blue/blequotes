@@ -45,18 +45,24 @@ const Movie = () => {
     );
   }, [dispatch, sortBy]);
 
-  // 2022/12/05 - 각종 영화들 패치 - by 1-blue
+  // 2022/12/05 - 인기 영화들 패치 - by 1-blue ( 2023/02/04 )
   useEffect(() => {
     if (popular.length === 0) {
       dispatch(movieThunkService.fetchMoviesThunk({ category: "popular" }));
     }
+  }, [dispatch, popular]);
+  // 2022/12/05 - 상위 영화들 패치 - by 1-blue ( 2023/02/04 )
+  useEffect(() => {
     if (top_rated.length === 0) {
       dispatch(movieThunkService.fetchMoviesThunk({ category: "top_rated" }));
     }
+  }, [dispatch, top_rated]);
+  // 2022/12/05 - 현재 상영중인 영화들 패치 - by 1-blue ( 2023/02/04 )
+  useEffect(() => {
     if (now_playing.length === 0) {
       dispatch(movieThunkService.fetchMoviesThunk({ category: "now_playing" }));
     }
-  }, [dispatch, popular, top_rated, now_playing]);
+  }, [dispatch, now_playing]);
 
   // 2022/12/24 - 무한 스크롤링을 위해 관찰할 태그 ref ( 해당 태그가 뷰포트에 들어오면 게시글 추가 패치 실행 ) - by 1-blue
   // ( ref지만 값에 의해 렌더링에 영향을 끼지기 때문에 "useState()""사용 )
@@ -160,12 +166,10 @@ const Movie = () => {
   );
 
   // 2022/12/28 - 게시글들 정렬 순서 변경 - by 1-blue
-  const onChangeSortBy = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement> =
+    useCallback((e) => {
       setSortBy(e.target.value as PostSortBy);
-    },
-    []
-  );
+    }, []);
 
   // 영화를 패치하는 중이라면
   if (

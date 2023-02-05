@@ -7,24 +7,24 @@ import { dramaApiService } from "../apis";
 // type
 import type {
   CreateAsyncThunkErrorType,
-  FetchDramasRequest,
+  FetchDramasHandler,
   FetchDramasResponse,
-  SearchDramasRequest,
+  SearchDramasHandler,
   SearchDramasResponse,
-  SuggestDramasRequest,
+  SuggestDramasHandler,
   SuggestDramasResponse,
-  SimilarDramasRequest,
+  SimilarDramasHandler,
   SimilarDramasResponse,
   DetailDramaResponse,
-  DetailDramaRequest,
+  DetailDramaHandler,
 } from "../types";
 
 /**
- * 2022/12/15 - 드라마 패치 요청 thunk - by 1-blue
+ * 2022/12/15 - 드라마 패치 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const fetchDramasThunk = createAsyncThunk<
   FetchDramasResponse,
-  FetchDramasRequest,
+  Parameters<FetchDramasHandler>[0],
   CreateAsyncThunkErrorType
 >(
   // 액션 타입 결정
@@ -51,11 +51,11 @@ const fetchDramasThunk = createAsyncThunk<
 );
 
 /**
- * 2022/12/15 - 드라마 검색 요청 thunk - by 1-blue
+ * 2022/12/15 - 드라마 검색 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const searchDramasThunk = createAsyncThunk<
   SearchDramasResponse,
-  SearchDramasRequest,
+  Parameters<SearchDramasHandler>[0],
   CreateAsyncThunkErrorType
 >("search/drama", async (body, { rejectWithValue }) => {
   try {
@@ -75,11 +75,11 @@ const searchDramasThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/15 - 추천 드라마 검색어 요청 thunk - by 1-blue
+ * 2022/12/15 - 추천 드라마 검색어 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const suggestedDramasThunk = createAsyncThunk<
   SuggestDramasResponse,
-  SuggestDramasRequest,
+  Parameters<SuggestDramasHandler>[0],
   CreateAsyncThunkErrorType
 >("suggested/drama", async (body, { rejectWithValue }) => {
   try {
@@ -100,11 +100,11 @@ const suggestedDramasThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/15 - 유사 드라마 검색 요청 thunk - by 1-blue
+ * 2022/12/15 - 유사 드라마 검색 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const similarDramasThunk = createAsyncThunk<
   SimilarDramasResponse,
-  SimilarDramasRequest,
+  Parameters<SimilarDramasHandler>[0],
   CreateAsyncThunkErrorType
 >("similar/drama", async (body, { rejectWithValue }) => {
   try {
@@ -125,11 +125,11 @@ const similarDramasThunk = createAsyncThunk<
 });
 
 /**
- * 2022/12/31 - 특정 드라마 상세 정보 요청 thunk - by 1-blue
+ * 2022/12/31 - 특정 드라마 상세 정보 요청 thunk - by 1-blue ( 2023/02/05 )
  */
 const detailDramaThunk = createAsyncThunk<
   DetailDramaResponse,
-  DetailDramaRequest,
+  Parameters<DetailDramaHandler>[0],
   CreateAsyncThunkErrorType
 >("detail/drama", async (body, { rejectWithValue }) => {
   try {

@@ -1,5 +1,5 @@
 .slick-list {
-  marign-right: -10px;
+  margin-right: -10px;
 }
  
 .slick-slide {
@@ -16,6 +16,19 @@ body .slick-dots li {
 }
 
 /* arrow 커스터마이징 */
+body .slick-arrow {
+  height: 100%;
+  z-index: 1;
+  color: white;
+  background-color: #343434;
+  transition: all 0.2s;
+}
+body .slick-arrow:hover {
+  background-color: #000;
+}
+body .slick-arrow:focus {
+  background-color: #000;
+}
 body .slick-prev { left: 0; width: 30px; }
 body .slick-next { right: 0; width: 40px; }
 body .slick-prev::before, body .slick-next::before {

@@ -7,14 +7,14 @@ import { bookApiService } from "../apis";
 // type
 import type {
   CreateAsyncThunkErrorType,
-  DetailBookRequest,
-  DetailBookResponse,
-  SearchBooksRequest,
+  SearchBooksHandler,
   SearchBooksResponse,
-  SimilarBooksRequest,
-  SimilarBooksResponse,
-  SuggestBooksRequest,
+  SuggestBooksHandler,
   SuggestBooksResponse,
+  SimilarBooksHandler,
+  SimilarBooksResponse,
+  DetailBookHandler,
+  DetailBookResponse,
 } from "../types";
 
 /**
@@ -22,7 +22,7 @@ import type {
  */
 const searchBooksThunk = createAsyncThunk<
   SearchBooksResponse,
-  SearchBooksRequest,
+  Parameters<SearchBooksHandler>[0],
   CreateAsyncThunkErrorType
 >("search/book", async (body, { rejectWithValue }) => {
   try {
@@ -47,7 +47,7 @@ const searchBooksThunk = createAsyncThunk<
  */
 const suggestedBooksThunk = createAsyncThunk<
   SuggestBooksResponse,
-  SuggestBooksRequest,
+  Parameters<SuggestBooksHandler>[0],
   CreateAsyncThunkErrorType
 >("suggested/book", async (body, { rejectWithValue }) => {
   try {
@@ -72,7 +72,7 @@ const suggestedBooksThunk = createAsyncThunk<
  */
 const similarBooksThunk = createAsyncThunk<
   SimilarBooksResponse,
-  SimilarBooksRequest,
+  Parameters<SimilarBooksHandler>[0],
   CreateAsyncThunkErrorType
 >("similar/book", async (body, { rejectWithValue }) => {
   try {
@@ -97,7 +97,7 @@ const similarBooksThunk = createAsyncThunk<
  */
 const detailBookThunk = createAsyncThunk<
   DetailBookResponse,
-  DetailBookRequest,
+  Parameters<DetailBookHandler>[0],
   CreateAsyncThunkErrorType
 >("detail/book", async (body, { rejectWithValue }) => {
   try {

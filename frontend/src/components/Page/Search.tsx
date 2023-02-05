@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useRTK";
 import {
   movieThunkService,
@@ -46,7 +47,9 @@ const Search = () => {
   // 2022/12/07 - 링크 이동 ( 히스토리 남기기 위함 ) - by 1-blue
   const onSumbit = handleSubmit(
     useCallback(
-      ({ category, title }: SearchForm) => {
+      ({ category, title }) => {
+        if (!title.trim()) return toast.warn("검색어를 입력해주세요!");
+
         // 첫 검색이라면 현재 페이지 히스토리에 남기지 않기 ( 즉 "/search"인 경우에는 기록 남기지 않기 )
         navigate(`/search?category=${category}&title=${title}`, {
           replace: !queryCategory && !queryTitle,
@@ -58,8 +61,8 @@ const Search = () => {
 
   // 2022/12/07 - 검색창 렌더링 여부 - by 1-blue
   const [isShowSearchForm, setIsShowSearchForm] = useState(true);
-  const onCloseSearchForm = useCallback(
-    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const onCloseSearchForm: React.MouseEventHandler<HTMLElement> = useCallback(
+    (e) => {
       if (!(e.target instanceof HTMLElement)) return alert(">>> 잘못된 접근");
 
       const { type } = e.target.dataset;
@@ -133,8 +136,8 @@ const Search = () => {
   // 2022/12/13 - 링크들의 컨테이너 ref - by 1-blue
   const linkContainerRef = useRef<null | HTMLDivElement>(null);
   // 2022/12/13 - 검색에서 키보드 방향키 및 ESC 누른 경우 추천 검색어 이동 이벤트 - by 1-blue
-  const onMoveKeyword = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const onMoveKeyword: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
       if (!linkContainerRef.current) return;
       if (!linkContainerRef.current.firstElementChild) return;
 
@@ -231,7 +234,7 @@ const Search = () => {
               className="p-1 rounded-sm font-extrabold outline-none focus:ring-2 focus:ring-main-500"
             />
 
-            <div className="w-[250px]" onKeyDown={onMoveKeyword}>
+            <div className="w-[220px] xs:w-[250px]" onKeyDown={onMoveKeyword}>
               <div
                 className="flex rounded-sm overflow-hidden font-bold focus-within:ring-2 focus-within:ring-main-500"
                 ref={inputContainerRef}

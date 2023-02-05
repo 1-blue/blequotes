@@ -16,18 +16,7 @@ type ArrowButtonProps = {
   onClick?: () => void;
 };
 const ArrowButton = ({ className, onClick }: ArrowButtonProps) => {
-  return (
-    <div
-      className={className}
-      onClick={onClick}
-      style={{
-        height: "100%",
-        zIndex: 1,
-        backgroundColor: "#232323",
-        color: "white",
-      }}
-    />
-  );
+  return <button type="button" className={className} onClick={onClick} />;
 };
 
 const settings: Settings = {

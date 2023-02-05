@@ -1,4 +1,5 @@
 // type
+import type { AxiosResponse } from "axios";
 import type { ApiResponse } from ".";
 
 /**
@@ -119,7 +120,7 @@ export type DetailDrama = {
 /**
  * 2022/12/17 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type FetchDramasRequest = {
+type FetchDramasRequest = {
   category: DramaCategory;
   language?: DramaLanguage;
 };
@@ -127,12 +128,18 @@ export type FetchDramasRequest = {
  * 2022/12/17 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type FetchDramasResponse = ApiResponse<{ dramas: Drama[] }>;
+/**
+ * 2023/02/05 - 인기 / 꾸준한 / 현재 방영중인 인기 드라마들 API 요청 함수 시그니처 - by 1-blue
+ */
+export type FetchDramasHandler = (
+  body: FetchDramasRequest
+) => Promise<AxiosResponse<FetchDramasResponse, any>>;
 
 // ============================== 드라마 검색 관련 ==============================
 /**
  * 2022/12/17 - 드라마들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SearchDramasRequest = {
+type SearchDramasRequest = {
   title: string;
   language?: DramaLanguage;
 };
@@ -140,38 +147,56 @@ export type SearchDramasRequest = {
  * 2022/12/17 - 드라마들 검색 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SearchDramasResponse = ApiResponse<{ dramas: Drama[] }>;
+/**
+ * 2023/02/05 - 드라마들 검색 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SearchDramasHandler = (
+  body: SearchDramasRequest
+) => Promise<AxiosResponse<SearchDramasResponse, any>>;
 
 // ============================== 드라마 추천 검색어 관련 ==============================
 /**
- * 2022/12/17 - 드라마들 검색 요청 송신 타입 ( F -> B ) - by 1-blue
+ * 2022/12/17 - 드라마 추천 검색어들 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SuggestDramasRequest = {
+type SuggestDramasRequest = {
   keyword: string;
   language?: DramaLanguage;
 };
 /**
- * 2022/12/17 - 드라마들 검색 요청 수신 타입 ( B -> F ) - by 1-blue
+ * 2022/12/17 - 드라마 추천 검색어들 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SuggestDramasResponse = ApiResponse<{ titles: string[] }>;
+/**
+ * 2023/02/05 - 드라마 추천 검색어들 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SuggestDramasHandler = (
+  body: SuggestDramasRequest
+) => Promise<AxiosResponse<SuggestDramasResponse, any>>;
 
 // ============================== 현재 검색된 드라마와 유사한 드라마들 관련 ==============================
 /**
- * 2022/12/17 - 유사 드라마 검색어 검색 송신 타입 ( F -> B ) - by 1-blue
+ * 2022/12/17 - 유사 드라마들 검색 송신 타입 ( F -> B ) - by 1-blue
  */
-export type SimilarDramasRequest = {
+type SimilarDramasRequest = {
   dramaIdx: string;
   language?: DramaLanguage;
 };
 /**
- * 2022/12/17 - 유사 드라마 검색어 검색 수신 타입 ( B -> F ) - by 1-blue
+ * 2022/12/17 - 유사 드라마들 검색 수신 타입 ( B -> F ) - by 1-blue
  */
 export type SimilarDramasResponse = ApiResponse<{ dramas: Drama[] }>;
+/**
+ * 2023/02/05 - 유사 드라마들 검색 API 요청 함수 시그니처 - by 1-blue
+ */
+export type SimilarDramasHandler = (
+  body: SimilarDramasRequest
+) => Promise<AxiosResponse<SimilarDramasResponse, any>>;
 
 // ============================== 특정 드라마 상세 정보 요청 관련 ==============================
 /**
  * 2022/12/31 - 특정 드라마 상세 정보 요청 송신 타입 ( F -> B ) - by 1-blue
  */
-export type DetailDramaRequest = {
+type DetailDramaRequest = {
   dramaIdx: string;
   language?: DramaLanguage;
 };
@@ -179,3 +204,9 @@ export type DetailDramaRequest = {
  * 2022/12/31 - 특정 드라마 상세 정보 요청 수신 타입 ( B -> F ) - by 1-blue
  */
 export type DetailDramaResponse = ApiResponse<{ drama: DetailDrama }>;
+/**
+ * 2023/02/05 - 특정 드라마 상세 정보 API 요청 함수 시그니처 - by 1-blue
+ */
+export type DetailDramaHandler = (
+  body: DetailDramaRequest
+) => Promise<AxiosResponse<DetailDramaResponse, any>>;

@@ -32,9 +32,9 @@ import ColdOut from "@src/components/Common/ColdOut";
 
 // type
 import type { LinkState, TargetData } from "@src/types";
-import type { CreatePostRequest } from "@src/store/types";
+import type { CreatePostHandler } from "@src/store/types";
 
-type PostForm = Omit<CreatePostRequest, "thumbnail" | "time"> & {
+type PostForm = Omit<Parameters<CreatePostHandler>[0], "thumbnail" | "time"> & {
   thumbnail?: FileList;
   hour?: number;
   minute?: number;
@@ -170,67 +170,69 @@ const Write = () => {
     (state) => state.post
   );
 
-  // 2022/12/22 - 게시글 생성 요청 - by 1-blue
-  const createPost = useCallback(
-    async (e: PostForm) => {
-      if (!data) return;
+  // 2022/12/22 - 게시글 생성 요청 - by 1-blue ( 2023/02/04 )
+  const createPost = handleSubmit(
+    useCallback(
+      async (e) => {
+        if (!data) return;
 
-      // 게시글 생성 시작
-      setIsCreatingPost(true);
+        // 게시글 생성 시작
+        setIsCreatingPost(true);
 
-      try {
-        // 기본 썸네일은 해당 포스터 이미지
-        let thumbnailPath = data.paths[0];
+        try {
+          // 기본 썸네일은 해당 포스터 이미지
+          let thumbnailPath = data.paths[0];
 
-        // 썸네일이 있다면 업로드
-        if (e.thumbnail && e.thumbnail?.length > 0) {
-          // presignedURL 요청
-          const {
-            data: {
-              data: { preSignedURL },
-            },
-          } = await imageApiService.apiFetchPresinedURL({
-            name: e.thumbnail[0].name,
-          });
+          // 썸네일이 있다면 업로드
+          if (e.thumbnail && e.thumbnail?.length > 0) {
+            // presignedURL 요청
+            const {
+              data: {
+                data: { preSignedURL },
+              },
+            } = await imageApiService.apiFetchPresinedURL({
+              name: e.thumbnail[0].name,
+            });
 
-          // 업로드된 이미지의 URL ( "?"를 기준으로 나누면 배포된 URL을 얻을 수 있음 )
-          thumbnailPath = preSignedURL.slice(0, preSignedURL.indexOf("?"));
+            // 업로드된 이미지의 URL ( "?"를 기준으로 나누면 배포된 URL을 얻을 수 있음 )
+            thumbnailPath = preSignedURL.slice(0, preSignedURL.indexOf("?"));
 
-          // 이미지 업로드 요청
-          await imageApiService.apiCreateImage({
-            preSignedURL,
-            file: e.thumbnail[0],
-          });
+            // 이미지 업로드 요청
+            await imageApiService.apiCreateImage({
+              preSignedURL,
+              file: e.thumbnail[0],
+            });
+          }
+
+          const { thumbnail, hour, minute, second, ...rest } = e;
+          let time: undefined | string = undefined;
+          const episode = rest.episode ? +rest.episode : undefined;
+          const page = rest.page ? +rest.page : undefined;
+
+          if (hour || minute || second) {
+            time = `${hour ? hour : 0}시간 ${minute ? minute : 0}분 ${
+              second ? second : 0
+            }초`;
+          }
+
+          dispatch(
+            postThunkService.createPostThunk({
+              ...rest,
+              time,
+              episode,
+              page,
+              thumbnail: thumbnailPath,
+            })
+          );
+        } catch (error) {
+          console.error("게시글 생성 or 이미지 업로드 실패 >> ", error);
+        } finally {
+          // 게시글 생성 끝
+          setIsCreatingPost(false);
         }
-
-        const { thumbnail, hour, minute, second, ...rest } = e;
-        let time: undefined | string = undefined;
-        const episode = rest.episode ? +rest.episode : undefined;
-        const page = rest.page ? +rest.page : undefined;
-
-        if (hour || minute || second) {
-          time = `${hour ? hour : 0}시간 ${minute ? minute : 0}분 ${
-            second ? second : 0
-          }초`;
-        }
-
-        dispatch(
-          postThunkService.createPostThunk({
-            ...rest,
-            time,
-            episode,
-            page,
-            thumbnail: thumbnailPath,
-          })
-        );
-      } catch (error) {
-        console.error("게시글 생성 or 이미지 업로드 실패 >> ", error);
-      } finally {
-        // 게시글 생성 끝
-        setIsCreatingPost(false);
-      }
-    },
-    [data, dispatch]
+      },
+      [data, dispatch]
+    )
   );
 
   // 2022/12/22 - 게시글 생성 토스트 처리 - by 1-blue
@@ -276,7 +278,7 @@ const Write = () => {
 
       <section className="bg-black text-white">
         {/* 상단 설명부 */}
-        <div className="w-[60vw] min-w-[300px] mx-auto space-y-3">
+        <div className="w-[80vw] sm:w-[60vw] min-w-[300px] mx-auto space-y-3">
           <div className="h-[100px]"></div>
           <ColdOut text="작성된 게시글은 관리자에 의해서 임의로 삭제할 수 있으며, 작성자에게 게시글에 대한 권한이 부여되지 않습니다." />
           <h1 className="text-4xl font-bold text-center mx-auto">
@@ -302,7 +304,7 @@ const Write = () => {
 
       {/* 하단 입력부 */}
       <RHF.Form
-        onSubmit={handleSubmit(createPost)}
+        onSubmit={createPost}
         className="flex flex-col w-[90vw] min-w-[250px] mx-auto space-y-2 md:w-[60vw]"
       >
         <RHF.TextArea
@@ -339,13 +341,13 @@ const Write = () => {
             />
             <button
               type="button"
-              className="group w-full relative border-2 border-gray-300 pt-[100%] rounded-md transition-colors hover:border-main-400"
+              className="group w-full relative border-2 border-gray-300 pt-[100%] rounded-md transition-colors hover:border-main-400 focus:outline-main-400"
               onClick={() => thumbnailRef.current?.click()}
             >
-              <div className="group-hover:bg-black/40 group-hover:z-[1] absolute top-[1%] left-[1%] w-[98%] h-[98%] bg-black/10 transition-colors" />
+              <div className="group-hover:bg-black/40 group-hover:z-[1] group-focus-within:bg-black/40 group-focus-within:z-[1] absolute top-[1%] left-[1%] w-[98%] h-[98%] bg-black/10 transition-colors" />
               <Icon
                 shape={previewThumbnail ? "change" : "plus"}
-                className="group-hover:text-main-400 group-hover:z-[1] absolute inset-[50%] translate-center h-10 w-10 text-gray-500"
+                className="group-hover:text-main-400 group-focus:text-main-400 group-hover:z-[1] group-focus:z-[1] absolute inset-[50%] translate-center h-10 w-10 text-gray-500"
               />
               {previewThumbnail && (
                 <Image.Photo
@@ -390,7 +392,7 @@ const Write = () => {
                 <RHF.Input
                   register={register}
                   options={{
-                    max: { value: 2, message: "59초 이하로 입력해주세요!" },
+                    max: { value: 59, message: "59초 이하로 입력해주세요!" },
                   }}
                   error={errors.second}
                   name="second"
@@ -474,7 +476,7 @@ const Write = () => {
             {/* 게시글 생성 버튼  */}
             <RHF.Button
               type="submit"
-              className="self-end bg-main-400 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors hover:bg-main-300 active:bg-main-500"
+              className="self-end bg-main-400 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors hover:bg-main-500 active:bg-main-500 focus-ring"
             >
               생성하기
             </RHF.Button>

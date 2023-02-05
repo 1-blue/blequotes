@@ -62,12 +62,10 @@ const Book = () => {
   });
 
   // 2022/12/30 - 게시글들 정렬 순서 변경 - by 1-blue
-  const onChangeSortBy = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSortBy: React.ChangeEventHandler<HTMLSelectElement> =
+    useCallback((e) => {
       setSortBy(e.target.value as PostSortBy);
-    },
-    []
-  );
+    }, []);
 
   return (
     <>

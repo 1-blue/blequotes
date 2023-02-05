@@ -5,6 +5,7 @@
 @layer base {
   html {
     font-family: 'Nanum Gothic', sans-serif;
+    font-size: 16px;
   }
 
   /* 스크롤바 스타일링 */
@@ -21,6 +22,9 @@
   /*  */
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main-500;
+  }
+  .focus-ring-header {
+    @apply rounded-sm focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-main-500 focus:ring-offset-gray-600 transition-colors hover:text-main-500 focus:text-main-500;
   }
 
   /* 포스터 hover시 나타나는 글자 4라인 제한 */
@@ -43,6 +47,13 @@
     -webkit-line-clamp: 15;
     -webkit-box-orient: vertical;
     word-break: keep-all;
+  }
+
+  @media (max-width: 400px) {
+    /* font-size 14px */
+    html {
+      font-size: 14px;
+    }
   }
 }
 
