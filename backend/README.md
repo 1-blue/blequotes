@@ -25,7 +25,7 @@
 # 🕹️ 구현 기능
 1. [`Movie DB API`](https://developers.themoviedb.org/3)를 이용한 영화 및 드라마들의 각종 정보 패치 및 검색 
 2. [`Kakao Book API`](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-book)를 이용한 도서 검색
-3. 명대사 등록 기능 ( `AWS-S3`의 `presignedURL` 기능을 이용한 이미지 등록 ) FIXME: URL 등록
+3. 명대사 등록 기능 ( [`AWS-S3`의 `presignedURL`](https://1-blue.github.io/posts/AWS-S3-presignedURL/)를 이용한 이미지 등록 )
 4. 명대사에 좋아요 및 싫어요 기능
 5. 영화 / 드라마 / 도서 검색 기능 ( [`Debouncing`](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-) 사용 )
 
@@ -87,7 +87,8 @@ npx prisma migrate dev
 npx prisma migrate reset
 ```
 
-# ✍️ 프로젝트 진행 중에 작성한 포스트들
+# ✍️ 프로젝트와 관련된 포스트들
 1. [`AWS-S3` - `presignedURL` 사용 방법](https://1-blue.github.io/posts/AWS-S3-presignedURL/)
 2. [`Node.js` + `TypeScript` 세팅 방법](https://1-blue.github.io/posts/Setting-NodeJs/)
 3. [`prisma` 사용법 정리](https://1-blue.github.io/posts/prisma/)
+4. [`Debouncing`과 사용 예시](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-)

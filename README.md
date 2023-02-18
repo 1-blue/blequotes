@@ -31,11 +31,11 @@
 1. [`Movie DB API`](https://developers.themoviedb.org/3)를 이용한 영화 및 드라마들의 각종 정보 패치 및 검색 
 2. [`Kakao Book API`](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-book)를 이용한 도서 검색
 3. `Image Carousel` ( `react-slick` 사용 )
-4. 명대사 등록 기능 ( `AWS-S3`의 `presignedURL` 기능을 이용한 이미지 등록 ) FIXME: URL 등록
+4. 명대사 등록 기능 ( [`AWS-S3`의 `presignedURL`](https://1-blue.github.io/posts/AWS-S3-presignedURL/)를 이용한 이미지 등록 )
 5. 명대사에 좋아요 및 싫어요 기능
 6. 영화 / 드라마 / 도서 검색 기능 ( [`Debouncing`](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-) 사용 )
-7. 무한 스크롤링 ( [`Intersection-Observer`](https://1-blue.github.io/posts/Intersection-Observer-API/) 사용 )
-8. `React-ToolKit`을 이용한 전역 상태 관리
+7. 무한 스크롤링 ( [`IntersectionObserver API`](https://1-blue.github.io/posts/Intersection-Observer-API/) 사용 )
+8. [`Redux-ToolKit`](https://1-blue.github.io/posts/Redux-Toolkit/)을 이용한 전역 상태 관리
 9. [`Prisma`](https://1-blue.github.io/posts/prisma/)를 이용한 `DB`관리 및 데이터 관리
 
 # 🍀 제작 환경
@@ -122,19 +122,17 @@ npx prisma migrate dev
 npx prisma migrate reset
 ```
 
-# ✍️ 프로젝트 진행 중에 작성한 포스트들
+# ✍️ 프로젝트와 관련된 포스트들
 1. [`Redux`](https://1-blue.github.io/posts/Redux/)
 2. [`React` 스크롤 방향 찾기](https://1-blue.github.io/posts/React-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%B0%A9%ED%96%A5/)
 3. [`React-Router-Dom`의 `replace`](https://1-blue.github.io/posts/React-Router-Dom/)
 4. [`AWS-S3` - `presignedURL` 사용 방법](https://1-blue.github.io/posts/AWS-S3-presignedURL/)
 5. [`Node.js` + `TypeScript` 세팅 방법](https://1-blue.github.io/posts/Setting-NodeJs/)
-6. [`Intersection-Observer-API`와 무한 스크롤링](https://1-blue.github.io/posts/Intersection-Observer-API/)
-7. [`prisma` 사용법 정리](https://1-blue.github.io/posts/prisma/)
-8. [`blequotes` 마무리 포스트](https://1-blue.github.io/posts/bleqoutes-%EB%A7%88%EB%AC%B4%EB%A6%AC/)
-
-+ 미완성
-  1. react-hook-form
-  2. 마무리 포스트
+6. [`IntersectionObserver API`와 무한 스크롤링](https://1-blue.github.io/posts/Intersection-Observer-API/)
+7. [`Debouncing`과 사용 예시](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-)
+8. [`prisma` 사용법 정리](https://1-blue.github.io/posts/prisma/)
+9. [`Redux-ToolKit` + `TypeScript` + `React` 사용 방법](https://1-blue.github.io/posts/Redux-Toolkit/)
+10. [`blequotes` 마무리 포스트](https://1-blue.github.io/posts/bleqoutes-%EB%A7%88%EB%AC%B4%EB%A6%AC/)
 
 # 📸 실행 영상
 ## 0️⃣ 반응형 레이아웃 1

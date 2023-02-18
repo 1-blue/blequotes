@@ -23,11 +23,11 @@
 
 # 🕹️ 구현 기능
 1. `Image Carousel` ( `react-slick` 사용 )
-2. 명대사 등록 기능 ( `AWS-S3`의 `presignedURL` 기능을 이용한 이미지 등록 ) FIXME: URL 등록
+2. 명대사 등록 기능 ( [`AWS-S3`의 `presignedURL`](https://1-blue.github.io/posts/AWS-S3-presignedURL/)를 이용한 이미지 등록 )
 3. 명대사에 좋아요 및 싫어요 기능
 4. 영화 / 드라마 / 도서 검색 기능 ( [`Debouncing`](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-) 사용 )
-5. 무한 스크롤링 ( [`Intersection-Observer`](https://1-blue.github.io/posts/Intersection-Observer-API/) 사용 )
-6. `React-ToolKit`을 이용한 전역 상태 관리
+5. 무한 스크롤링 ( [`IntersectionObserver API`](https://1-blue.github.io/posts/Intersection-Observer-API/) 사용 )
+6. [`Redux-ToolKit`](https://1-blue.github.io/posts/Redux-Toolkit/) 사용
 
 # 🍀 제작 환경
 1. OS: `Window11`
@@ -66,12 +66,13 @@ npm start
 npm run build
 ```
 
-# ✍️ 프로젝트 진행 중에 작성한 포스트들
+# ✍️ 프로젝트와 관련된 포스트들
 1. [`Redux`](https://1-blue.github.io/posts/Redux/)
 2. [`React` 스크롤 방향 찾기](https://1-blue.github.io/posts/React-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%B0%A9%ED%96%A5/)
 3. [`React-Router-Dom`의 `replace`](https://1-blue.github.io/posts/React-Router-Dom/)
 4. [`AWS-S3` - `presignedURL` 사용 방법](https://1-blue.github.io/posts/AWS-S3-presignedURL/)
-5. [`Intersection-Observer-API`와 무한 스크롤링](https://1-blue.github.io/posts/Intersection-Observer-API/)
+5. [`IntersectionObserver API`와 무한 스크롤링](https://1-blue.github.io/posts/Intersection-Observer-API/)
+6. [`Redux-ToolKit` + `TypeScript` + `React` 사용 방법](https://1-blue.github.io/posts/Redux-Toolkit/)
 
 # 📸 실행 영상
 ## 0️⃣ 반응형 레이아웃 1
