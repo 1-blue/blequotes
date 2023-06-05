@@ -31,12 +31,13 @@
 1. [`Movie DB API`](https://developers.themoviedb.org/3)를 이용한 영화 및 드라마들의 각종 정보 패치 및 검색 
 2. [`Kakao Book API`](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-book)를 이용한 도서 검색
 3. `Image Carousel` ( `react-slick` 사용 )
-4. 명대사 등록 기능 ( [`AWS-S3`의 `presignedURL`](https://1-blue.github.io/posts/AWS-S3-presignedURL/)를 이용한 이미지 등록 )
+4. 명대사 등록 기능 ( [`AWS-S3`의 `presignedURL`](https://1-blue.github.io/posts/AWS-S3-presignedURL)를 이용한 이미지 등록 )
 5. 명대사에 좋아요 및 싫어요 기능
 6. 영화 / 드라마 / 도서 검색 기능 ( [`Debouncing`](https://1-blue.github.io/posts/%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1-%EC%93%B0%EB%A1%9C%ED%8B%80%EB%A7%81-%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98/#%EF%B8%8F-%EB%94%94%EB%B0%94%EC%9A%B4%EC%8B%B1--debouncing-) 사용 )
-7. 무한 스크롤링 ( [`IntersectionObserver API`](https://1-blue.github.io/posts/Intersection-Observer-API/) 사용 )
-8. [`Redux-ToolKit`](https://1-blue.github.io/posts/Redux-Toolkit/)을 이용한 전역 상태 관리
-9. [`Prisma`](https://1-blue.github.io/posts/prisma/)를 이용한 `DB`관리 및 데이터 관리
+7. 무한 스크롤링 ( [`IntersectionObserver API`](https://1-blue.github.io/posts/Intersection-Observer-API) 사용 )
+8. [`Redux-ToolKit`](https://1-blue.github.io/posts/Redux-Toolkit)을 이용한 전역 상태 관리
+9. [`Prisma`](https://1-blue.github.io/posts/prisma)를 이용한 `DB`관리 및 데이터 관리
+10. [AWS-EC2 + nginx + certbot을 이용한 배포](https://1-blue.github.io/posts/deploy)
 
 # 🍀 제작 환경
 1. OS: `Window11`
@@ -47,7 +48,7 @@
 7. Front: `React.js`
 8. Back: `Node`의 `Express`
 9. 이미지 저장소: `AWS S3`
-10. 배포: AWS-EC2 예정 ( 배포후 수정 )
+10. 배포: `AWS-EC2`
 
 # 📝 가이드라인
 ## 🙂 프론트 엔드
